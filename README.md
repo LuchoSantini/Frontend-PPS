@@ -17,12 +17,9 @@ Este proyecto de frontend está construido utilizando tecnologías modernas como
 
 ## Cómo Empezar
 
-Para comenzar a trabajar en el frontend de nuestro eCommerce, sigue estos pasos:
+Para visualizar nuestro Ecommerce:
 
-1. Clona este repositorio en tu máquina local.
-2. Instala las dependencias utilizando `npm install`.
-3. Ejecuta el comando `npm start` para iniciar la aplicación en modo de desarrollo.
-4. Abre [https://pps-rss.web.app/](https://pps-rss.web.app/) en tu navegador para ver la aplicación.
+1. Abre [https://pps-rss.web.app/](https://pps-rss.web.app/) en tu navegador para ver la aplicación.
 
 ## Contacto
 

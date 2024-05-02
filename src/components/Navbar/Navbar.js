@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, Button } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
 
 const Navbar = () => {
@@ -13,6 +14,7 @@ const Navbar = () => {
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const navigation = useNavigate();
 
   const showDrawerSearch = () => {
     setOpen(true);
@@ -24,6 +26,10 @@ const Navbar = () => {
     setOpenCart(true);
     setTitle("Carrito de compra");
     setPlacement("right");
+  };
+
+  const adminPageClickHandler = () => {
+    navigation("/admin");
   };
 
   return (
@@ -91,6 +97,7 @@ const Navbar = () => {
             <p style={{ fontSize: 18 }}>RSS</p>
           </div>
           <div style={{ display: "flex", gap: 20 }}>
+            <Button onClick={adminPageClickHandler}>ADMIN</Button>
             <UserOutlined style={{ fontSize: 30 }} className="buttons-navbar" />
             <div>
               <ShoppingCartOutlined

@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
-import ApiCalls from "./components/ApiCalls/ApiCalls";
+import PostProducts from "./components/ApiCalls/PostProducts";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<ApiCalls/>} />
+        <Route path="/admin" element={<PostProducts />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

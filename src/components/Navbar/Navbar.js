@@ -7,6 +7,8 @@ import {
 } from "@ant-design/icons";
 import { useMediaQuery, Button } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
+import { Link } from "react-router-dom";
+import Home from "../Home/Home";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -52,13 +54,15 @@ const Navbar = () => {
               />
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <div style={{ marginRight: 2 }}>
-                <lord-icon
-                  src="https://cdn.lordicon.com/lzgmgrnn.json"
-                  trigger="hover"
-                  style={{ width: 40, height: 40 }}
-                ></lord-icon>
-              </div>
+              <Link to="/">
+                <div style={{ marginRight: 2 }}>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/lzgmgrnn.json"
+                    trigger="hover"
+                    style={{ width: 40, height: 40 }}
+                  ></lord-icon>
+                </div>
+              </Link>
               <p style={{ fontSize: 18 }}>RSS</p>
             </div>
             <div style={{ gap: 5, display: "flex" }}>
@@ -87,13 +91,15 @@ const Navbar = () => {
             />
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{ marginRight: 10 }}>
-              <lord-icon
-                src="https://cdn.lordicon.com/lzgmgrnn.json"
-                trigger="hover"
-                style={{ width: 40, height: 40 }}
-              ></lord-icon>
-            </div>
+            <Link to="/">
+              <div style={{ marginRight: 10 }}>
+                <lord-icon
+                  src="https://cdn.lordicon.com/lzgmgrnn.json"
+                  trigger="hover"
+                  style={{ width: 40, height: 40 }}
+                ></lord-icon>
+              </div>
+            </Link>
             <p style={{ fontSize: 18 }}>RSS</p>
           </div>
           <div style={{ display: "flex", gap: 20 }}>

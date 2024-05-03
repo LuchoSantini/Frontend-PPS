@@ -3,6 +3,7 @@ import PostProducts from "./PostProducts";
 import PostColoursSizes from "./PostColoursAndSizes";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@mui/material";
+import Navbar from "../Navbar/Navbar";
 
 const Admin = () => {
   const navigation = useNavigate();
@@ -13,12 +14,7 @@ const Admin = () => {
 
   return (
     <Box position="relative">
-      <Button
-        onClick={homePageClickHandler}
-        sx={{ position: "absolute", top: 0, right: 0, m: 2 }}
-      >
-        Home
-      </Button>
+      <Navbar />
       <Box
         display="flex"
         justifyContent="center"

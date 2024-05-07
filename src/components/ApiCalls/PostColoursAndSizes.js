@@ -18,6 +18,7 @@ const PostColoursSizes = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const colourNameValidationScheme = yup.object().shape({
     ColourName: yup
@@ -31,6 +32,13 @@ const PostColoursSizes = () => {
       .string()
       .min(1, "Escribe un talle")
       .required("Escribe un talle"),
+  });
+
+  const categoryNameValidationScheme = yup.object().shape({
+    CategoryName: yup
+      .string()
+      .min(3, "Escribe una categoría")
+      .required("Escribe una categoría"),
   });
 
   const formikColours = useFormik({
@@ -68,6 +76,23 @@ const PostColoursSizes = () => {
     },
   });
 
+  const formikCategories = useFormik({
+    initialValues: {
+      CategoryName: "",
+    },
+    validationSchema: categoryNameValidationScheme,
+    onSubmit: async (values) => {
+      try {
+        const response = await api.post("/api/Product/categories", values);
+        setCategories([...categories, response.data]);
+        formikCategories.resetForm();
+        console.log(response.data);
+      } catch (error) {
+        setErrorMessage(errorMessage.data.title);
+      }
+    },
+  });
+
   return (
     <Box>
       <FormControl
@@ -94,12 +119,6 @@ const PostColoursSizes = () => {
                     formikColours.errors.ColourName
                 )}
               />
-              {formikColours.touched.ColourName &&
-              formikColours.errors.ColourName ? (
-                <Typography color="error">
-                  {formikColours.errors.ColourName}
-                </Typography>
-              ) : null}
             </FormControl>
           </Box>
           <Button variant="contained" type="submit">
@@ -111,7 +130,7 @@ const PostColoursSizes = () => {
       <FormControl
         component="form"
         onSubmit={formikSizes.handleSubmit}
-        sx={{ mb: 5 }}
+        sx={{ mr: 5 }}
       >
         <Typography variant="h5" gutterBottom align="center">
           Agregar Talle
@@ -131,15 +150,42 @@ const PostColoursSizes = () => {
                   formikSizes.touched.SizeName && formikSizes.errors.SizeName
                 )}
               />
-              {formikSizes.touched.SizeName && formikSizes.errors.SizeName ? (
-                <Typography color="error">
-                  {formikSizes.errors.SizeName}
-                </Typography>
-              ) : null}
             </FormControl>
           </Box>
           <Button variant="contained" type="submit">
             Agregar Talle
+          </Button>
+        </FormGroup>
+      </FormControl>
+
+      <FormControl
+        component="form"
+        onSubmit={formikCategories.handleSubmit}
+        sx={{ mr: 5 }}
+      >
+        <Typography variant="h5" gutterBottom align="center">
+          Agregar Categoría
+        </Typography>
+        <FormGroup>
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="CategoryName">Categoría:</InputLabel>
+              <Input
+                id="CategoryName"
+                type="text"
+                name="CategoryName"
+                value={formikCategories.values.CategoryName}
+                onChange={formikCategories.handleChange}
+                onBlur={formikCategories.handleBlur}
+                error={Boolean(
+                  formikCategories.touched.CategoryName &&
+                    formikCategories.errors.CategoryName
+                )}
+              />
+            </FormControl>
+          </Box>
+          <Button variant="contained" type="submit">
+            Agregar Categoría
           </Button>
         </FormGroup>
       </FormControl>

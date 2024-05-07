@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import api from "../ApiCalls/Api";
 import ProductCard from "../Card/ProductCard";
 import { useMediaQuery } from "@mui/material";
 import Filters from "../Filters/Filters";
@@ -47,6 +48,22 @@ const products = [
 ];
 function ProductMapped({ isMobile }) {
   const gridTemplateColumns = isMobile ? "1fr" : "repeat(3, 1fr)"; // Si es móvil, una columna; de lo contrario, 3 columnas
+
+  // Testeado by Lucho je
+  // const [productos, setProductos] = useState([]);
+
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     try {
+  //       const response = await api.get("/api/Product/products");
+  //       setProductos(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       setProductos("Error.");
+  //     }
+  //   };
+  //   getProducts();
+  // }, [productos]);
 
   return (
     <>

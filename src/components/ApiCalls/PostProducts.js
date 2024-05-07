@@ -20,6 +20,7 @@ const ApiCalls = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   // Usar un Toast para mostrar el mensaje.
   const productFormValidationScheme = yup.object().shape({
@@ -48,7 +49,7 @@ const ApiCalls = () => {
         setColours(response.data);
       } catch (error) {
         console.log(error);
-        setErrorMessage("Error");
+        setErrorMessage("Error.");
       }
     };
     getColours();
@@ -61,18 +62,31 @@ const ApiCalls = () => {
         setSizes(response.data);
       } catch (error) {
         console.log(error);
-        setErrorMessage("Error");
+        setErrorMessage("Error.");
       }
     };
     getSizes();
   }, [sizes]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await api.get("/api/Product/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.log(error);
+        setErrorMessage("Error.");
+      }
+    };
+    getCategories();
+  }, [categories]);
 
   const formik = useFormik({
     initialValues: {
       description: "",
       price: 0,
       image: "",
-      category: "",
+      CategoryId: null,
       genre: "",
       ColourId: null,
       SizeId: null,
@@ -91,7 +105,11 @@ const ApiCalls = () => {
 
   const handleChange = (e) => {
     let value;
-    if (e.target.name === "ColourId" || e.target.name === "SizeId") {
+    if (
+      e.target.name === "ColourId" ||
+      e.target.name === "SizeId" ||
+      e.target.name === "CategoryId"
+    ) {
       value = [parseInt(e.target.value)];
       if (isNaN(value[0])) {
         value = [];
@@ -162,19 +180,21 @@ const ApiCalls = () => {
                 id="category-input"
                 select
                 label="Categoría"
-                defaultValue="Remera"
+                defaultValue=""
                 type="text"
                 name="category"
-                value={formik.values.category}
+                value={formik.values.category || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.category && formik.errors.category
                 )}
               >
-                <MenuItem value={"Remera"}>Remera</MenuItem>
-                <MenuItem value={"Pantalón"}>Pantalón</MenuItem>
-                <MenuItem value={"Zapatilla"}>Zapatilla</MenuItem>
+                {categories.map((categories) => (
+                  <MenuItem key={categories.id} value={categories.id}>
+                    {categories.categoryName}
+                  </MenuItem>
+                ))}
               </TextField>
             </FormControl>
           </Box>
@@ -184,7 +204,6 @@ const ApiCalls = () => {
                 id="genre-input"
                 select
                 label="Género"
-                defaultValue="Hombre"
                 type="text"
                 name="genre"
                 value={formik.values.genre}

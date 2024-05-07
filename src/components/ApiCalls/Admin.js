@@ -1,17 +1,10 @@
 import React from "react";
 import PostProducts from "./PostProducts";
 import PostColoursSizes from "./PostColoursAndSizes";
-import { useNavigate } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 
 const Admin = () => {
-  const navigation = useNavigate();
-
-  const homePageClickHandler = () => {
-    navigation("/");
-  };
-
   return (
     <Box position="relative">
       <Navbar />

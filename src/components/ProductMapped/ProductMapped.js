@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../ApiCalls/Api";
 import ProductCard from "../Card/ProductCard";
-import { useMediaQuery } from "@mui/material";
-import Filters from "../Filters/Filters";
+import { Select, Spin } from "antd";
+import { SlidersOutlined } from "@ant-design/icons";
 
-const products = [
+const productssd = [
   {
     id: "01",
     image:
@@ -47,52 +47,111 @@ const products = [
   },
 ];
 function ProductMapped({ isMobile }) {
-  const gridTemplateColumns = isMobile ? "1fr" : "repeat(3, 1fr)"; // Si es móvil, una columna; de lo contrario, 3 columnas
-
+  const gridTemplateColumns = isMobile ? "1fr" : "repeat(3, 1fr)";
   // Testeado by Lucho je
-  // const [productos, setProductos] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sortMethod, setSortMethod] = useState("default");
 
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     try {
-  //       const response = await api.get("/api/Product/products");
-  //       setProductos(response.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //       setProductos("Error.");
-  //     }
-  //   };
-  //   getProducts();
-  // }, [productos]);
+  const handleSortChange = (value) => {
+    setSortMethod(value);
+  };
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        let response;
+        if (sortMethod === "low") {
+          response = await api.get("/api/Product/productsOrderBy?orderBy=true");
+        } else if (sortMethod === "high") {
+          response = await api.get("/api/Product/productsOrderBy?orderBy=false");
+        } else {
+          response = await api.get("/api/Product/products");
+        }
+        setProductos(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProducts();
+  }, [sortMethod]);
 
   return (
     <>
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
+          justifyContent: "space-around",
           alignItems: "center",
+          width: "auto",
+          padding: 40,
         }}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns,
-            gap: 110,
-            width: "auto",
-          }}
-        >
-          {products.map((product) => (
-            <ProductCard
-              title={product.description}
-              price={product.price}
-              colors={product.colours}
-              image={product.image}
-            />
-          ))}
+        <div style={{ display: "flex", gap: 8, cursor: "pointer" }}>
+          <SlidersOutlined style={{ fontSize: 20 }} />
+          <p>FILTRAR</p>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <p>ORDENAR</p>
+          <Select
+            defaultValue="Mas vendidos"
+            style={{ width: 130 }}
+            options={[
+              {
+                value: "high",
+                label: "Mayor precio",
+              },
+              {
+                value: "low",
+                label: "Menor precio",
+              },
+            ]}
+            onChange={handleSortChange}
+          />
         </div>
       </div>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          {" "}
+          <Spin size="large" />
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns,
+              gap: 110,
+              width: "auto",
+            }}
+          >
+            {productos.map((product) => (
+              <ProductCard
+                title={product.description}
+                price={product.price}
+                colors={product.colours}
+                image={product.image}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

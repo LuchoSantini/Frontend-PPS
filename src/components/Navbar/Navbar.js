@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useMediaQuery, Button } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
 import { Link } from "react-router-dom";
-import Home from "../Home/Home";
+import { Dropdown } from "antd";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -16,7 +15,6 @@ const Navbar = () => {
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const navigation = useNavigate();
 
   const showDrawerSearch = () => {
     setOpen(true);
@@ -30,9 +28,16 @@ const Navbar = () => {
     setPlacement("right");
   };
 
-  const adminPageClickHandler = () => {
-    navigation("/admin");
-  };
+  const items = [
+    {
+      label: <a href="/admin"> Admin </a>,
+      key: "0",
+    },
+    {
+      label: <a href="/asd"> Mi Cuenta </a>,
+      key: "1",
+    },
+  ];
 
   return (
     <div>
@@ -55,18 +60,22 @@ const Navbar = () => {
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <Link to="/">
-                <div style={{ marginRight: 2 }}>
-                  <lord-icon
-                    src="https://cdn.lordicon.com/lzgmgrnn.json"
-                    trigger="hover"
-                    style={{ width: 40, height: 40 }}
-                  ></lord-icon>
-                </div>
+                <p style={{ fontSize: 18 }}>RSS</p>
               </Link>
-              <p style={{ fontSize: 18 }}>RSS</p>
             </div>
             <div style={{ gap: 5, display: "flex" }}>
-              <UserOutlined style={{ fontSize: 30 }} />
+              <Dropdown
+                placement="bottomRight"
+                menu={{
+                  items,
+                }}
+                trigger={["click"]}
+              >
+                <UserOutlined
+                  style={{ fontSize: 30 }}
+                  className="buttons-navbar"
+                />
+              </Dropdown>
               <ShoppingCartOutlined
                 style={{ fontSize: 30 }}
                 onClick={showDrawerCart}
@@ -92,19 +101,23 @@ const Navbar = () => {
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Link to="/">
-              <div style={{ marginRight: 10 }}>
-                <lord-icon
-                  src="https://cdn.lordicon.com/lzgmgrnn.json"
-                  trigger="hover"
-                  style={{ width: 40, height: 40 }}
-                ></lord-icon>
-              </div>
+              <p style={{ fontSize: 18 }}>RSS</p>
             </Link>
-            <p style={{ fontSize: 18 }}>RSS</p>
           </div>
           <div style={{ display: "flex", gap: 20 }}>
-            <Button onClick={adminPageClickHandler}>ADMIN</Button>
-            <UserOutlined style={{ fontSize: 30 }} className="buttons-navbar" />
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <UserOutlined
+                style={{ fontSize: 30 }}
+                className="buttons-navbar"
+              />
+            </Dropdown>
+
             <div>
               <ShoppingCartOutlined
                 style={{ fontSize: 30 }}

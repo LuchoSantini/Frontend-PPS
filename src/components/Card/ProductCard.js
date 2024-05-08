@@ -1,13 +1,26 @@
-import { Card, Tag } from "antd";
+import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
-import React, { useState } from "react";
+import React from "react";
+import api from "../ApiCalls/Api";
 
 const ProductCard = ({ image, title, price, colors }) => {
+  // ver si necesita loguearse para agregar al carrito..
+  const AddOrder = async () => {
+    try {
+      const response = await api.post("/api/Order/order");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+
   return (
     <Card
       bordered={false}
       style={{ boxShadow: "none", height: "100%", maxWidth: "250px" }}
-      cover={<img src={image} alt={title} style={{ maxWidth: "100%" }} />} 
+      cover={<img src={image} alt={title} style={{ maxWidth: "100%" }} />}
     >
       <div>
         <Meta title={title} style={{ fontFamily: "monospace" }} />
@@ -17,7 +30,7 @@ const ProductCard = ({ image, title, price, colors }) => {
             <div
               key={index}
               style={{
-                backgroundColor: color,
+                backgroundColor: "#000000",
                 width: "20px",
                 height: "20px",
                 borderRadius: "50%",

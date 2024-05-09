@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import api from "./Api";
+import api from "../Api/Api";
 import * as yup from "yup";
 
 import {
@@ -126,11 +126,11 @@ const ApiCalls = () => {
   return (
     <Box>
       <FormControl component="form" onSubmit={formik.handleSubmit}>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h6" gutterBottom align="center">
           Agregar Producto
         </Typography>
         <FormGroup>
-          <Box mb={2}>
+          <Box mb={2} mt={1}>
             <FormControl fullWidth>
               <InputLabel htmlFor="description">Descripción:</InputLabel>
               <Input
@@ -262,7 +262,7 @@ const ApiCalls = () => {
               </TextField>
             </FormControl>
           </Box>
-          <Box mb={2}>
+          <Box>
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           </Box>
         </FormGroup>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "./Api";
+import api from "../Api/Api";
 import * as yup from "yup";
 
 import {
@@ -14,7 +14,7 @@ import {
 
 import { useFormik } from "formik";
 
-const PostColoursSizes = () => {
+const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -94,17 +94,13 @@ const PostColoursSizes = () => {
   });
 
   return (
-    <Box>
-      <FormControl
-        component="form"
-        onSubmit={formikColours.handleSubmit}
-        sx={{ mr: 5 }}
-      >
-        <Typography variant="h5" gutterBottom align="center">
+    <Box display="flex" flexDirection="column" alignItems="center">
+      <FormControl component="form" onSubmit={formikColours.handleSubmit}>
+        <Typography variant="h6" gutterBottom align="center">
           Agregar Color
         </Typography>
         <FormGroup>
-          <Box mb={2}>
+          <Box mb={2} mt={1}>
             <FormControl fullWidth>
               <InputLabel htmlFor="ColourName">Color:</InputLabel>
               <Input
@@ -127,12 +123,8 @@ const PostColoursSizes = () => {
         </FormGroup>
       </FormControl>
 
-      <FormControl
-        component="form"
-        onSubmit={formikSizes.handleSubmit}
-        sx={{ mr: 5 }}
-      >
-        <Typography variant="h5" gutterBottom align="center">
+      <FormControl component="form" onSubmit={formikSizes.handleSubmit}>
+        <Typography variant="h6" gutterBottom align="center">
           Agregar Talle
         </Typography>
         <FormGroup>
@@ -158,12 +150,8 @@ const PostColoursSizes = () => {
         </FormGroup>
       </FormControl>
 
-      <FormControl
-        component="form"
-        onSubmit={formikCategories.handleSubmit}
-        sx={{ mr: 5 }}
-      >
-        <Typography variant="h5" gutterBottom align="center">
+      <FormControl component="form" onSubmit={formikCategories.handleSubmit}>
+        <Typography variant="h6" gutterBottom align="center">
           Agregar Categoría
         </Typography>
         <FormGroup>
@@ -193,4 +181,4 @@ const PostColoursSizes = () => {
   );
 };
 
-export default PostColoursSizes;
+export default PostColoursSizesCategories;

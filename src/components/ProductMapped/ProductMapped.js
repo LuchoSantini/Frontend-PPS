@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../ApiCalls/Api";
+import api from "../Api/Api";
 import ProductCard from "../Card/ProductCard";
 import { Select, Spin } from "antd";
 import { SlidersOutlined } from "@ant-design/icons";
@@ -49,7 +49,7 @@ const productssd = [
 function ProductMapped({ isMobile }) {
   const gridTemplateColumns = isMobile ? "1fr" : "repeat(3, 1fr)";
   // Testeado by Lucho je
-  const [productos, setProductos] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortMethod, setSortMethod] = useState("default");
 
@@ -64,11 +64,13 @@ function ProductMapped({ isMobile }) {
         if (sortMethod === "low") {
           response = await api.get("/api/Product/productsOrderBy?orderBy=true");
         } else if (sortMethod === "high") {
-          response = await api.get("/api/Product/productsOrderBy?orderBy=false");
+          response = await api.get(
+            "/api/Product/productsOrderBy?orderBy=false"
+          );
         } else {
           response = await api.get("/api/Product/products");
         }
-        setProductos(response.data);
+        setProducts(response.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -141,7 +143,7 @@ function ProductMapped({ isMobile }) {
               width: "auto",
             }}
           >
-            {productos.map((product) => (
+            {products.map((product) => (
               <ProductCard
                 title={product.description}
                 price={product.price}

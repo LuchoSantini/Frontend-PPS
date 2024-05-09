@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import React from "react";
-import api from "../ApiCalls/Api";
+import api from "../Api/Api";
 
 const ProductCard = ({ image, title, price, colors }) => {
   // ver si necesita loguearse para agregar al carrito..
@@ -13,8 +13,6 @@ const ProductCard = ({ image, title, price, colors }) => {
       console.log(error);
     }
   };
-
-  
 
   return (
     <Card

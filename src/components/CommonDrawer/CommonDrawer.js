@@ -31,9 +31,7 @@ const CommonDrawer = ({
         </Space>
       }
     >
-      {placement === "left" ? (
-        null
-      ) : (
+      {placement === "left" ? null : (
         <div>
           <p>Product 423 $$$ cant:</p>
         </div>

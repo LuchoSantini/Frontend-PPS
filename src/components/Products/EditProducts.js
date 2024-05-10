@@ -89,7 +89,7 @@ const EditProducts = () => {
         );
         const selectedSize = sizes.find((size) => size.id === values.SizeId);
         const selectedCategory = categories.find(
-          (category) => category.id === values.CategoryId
+          (category) => category.categoryName === values.category
         );
 
         const response = await api.put(
@@ -140,6 +140,7 @@ const EditProducts = () => {
         ToastifyToShow({ message: "Producto editado correctamente" });
       } catch (error) {
         ToastifyToShow({ message: error.response.data });
+        console.log(errorMessage);
       }
     },
   });
@@ -251,8 +252,8 @@ const EditProducts = () => {
                 id="category-input"
                 select
                 label="Categoría"
-                name="CategoryId"
-                value={formik.values.CategoryId || ""}
+                name="category"
+                value={formik.values.category || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
@@ -260,7 +261,7 @@ const EditProducts = () => {
                 )}
               >
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
+                  <MenuItem key={category.id} value={category.categoryName}>
                     {category.categoryName}
                   </MenuItem>
                 ))}

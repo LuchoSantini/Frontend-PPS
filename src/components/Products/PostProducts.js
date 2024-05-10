@@ -42,42 +42,24 @@ const ApiCalls = () => {
       .required("Selecciona un tamaño"),
   });
 
-  useEffect(() => {
-    const getColours = async () => {
-      try {
-        const response = await api.get("/api/Product/colours");
-        setColours(response.data);
-      } catch (error) {
-        setErrorMessage("Error.");
-      }
-    };
-    getColours();
-  }, [colours]);
+  const fetchData = async () => {
+    try {
+      const coloursResponse = await api.get("/api/Product/colours");
+      const sizesResponse = await api.get("/api/Product/sizes");
+      const categoriesResponse = await api.get("/api/Product/categories");
+
+      setColours(coloursResponse.data);
+      setSizes(sizesResponse.data);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Error al cargar los datos");
+    }
+  };
 
   useEffect(() => {
-    const getSizes = async () => {
-      try {
-        const response = await api.get("/api/Product/sizes");
-        setSizes(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSizes();
-  }, [sizes]);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const response = await api.get("/api/Product/categories");
-        setCategories(response.data);
-      } catch (error) {
-        console.log(error);
-        setErrorMessage("Error.");
-      }
-    };
-    getCategories();
-  }, [categories]);
+    fetchData();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -88,6 +70,7 @@ const ApiCalls = () => {
       genre: "",
       ColourId: null,
       SizeId: null,
+      CategoryId: null,
     },
     validationSchema: productFormValidationScheme,
     onSubmit: async (values) => {
@@ -99,7 +82,6 @@ const ApiCalls = () => {
         console.log(error);
         setErrorMessage("Error al agregar un producto");
         ToastifyToShow({ message: error.response.data });
-
         console.log(errorMessage);
       }
     },

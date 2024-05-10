@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import api from "../Api/Api";
 import * as yup from "yup";
+import ToastifyToShow from "../hooks/ToastifyToShow";
 
 import {
   FormControl,
@@ -11,7 +12,6 @@ import {
   Button,
   Box,
   Typography,
-  Alert,
   MenuItem,
   TextField,
 } from "@mui/material";
@@ -48,7 +48,6 @@ const ApiCalls = () => {
         const response = await api.get("/api/Product/colours");
         setColours(response.data);
       } catch (error) {
-        console.log(error);
         setErrorMessage("Error.");
       }
     };
@@ -62,7 +61,6 @@ const ApiCalls = () => {
         setSizes(response.data);
       } catch (error) {
         console.log(error);
-        setErrorMessage("Error.");
       }
     };
     getSizes();
@@ -86,7 +84,7 @@ const ApiCalls = () => {
       description: "",
       price: 0,
       image: "",
-      CategoryId: null,
+      category: "",
       genre: "",
       ColourId: null,
       SizeId: null,
@@ -96,9 +94,13 @@ const ApiCalls = () => {
       try {
         const response = await api.post("/api/Product/products", values);
         console.log(response.data);
+        ToastifyToShow({ message: response.data });
       } catch (error) {
         console.log(error);
         setErrorMessage("Error al agregar un producto");
+        ToastifyToShow({ message: error.response.data });
+
+        console.log(errorMessage);
       }
     },
   });
@@ -191,7 +193,7 @@ const ApiCalls = () => {
                 )}
               >
                 {categories.map((categories) => (
-                  <MenuItem key={categories.id} value={categories.id}>
+                  <MenuItem key={categories.id} value={categories.categoryName}>
                     {categories.categoryName}
                   </MenuItem>
                 ))}
@@ -261,9 +263,6 @@ const ApiCalls = () => {
                 ))}
               </TextField>
             </FormControl>
-          </Box>
-          <Box>
-            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           </Box>
         </FormGroup>
         <Button variant="contained" type="submit">

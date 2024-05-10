@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import api from "../Api/Api";
@@ -14,7 +14,6 @@ import {
   Typography,
   MenuItem,
   TextField,
-  CircularProgress,
 } from "@mui/material";
 
 const EditProducts = () => {
@@ -25,7 +24,6 @@ const EditProducts = () => {
   const [sizes, setSizes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -40,14 +38,11 @@ const EditProducts = () => {
       setCategories(categoriesResponse.data);
 
       if (productsResponse.data.length > 0) {
-        setSelectedProductId(productsResponse.data[1].id);
+        setSelectedProductId(productsResponse.data[0].id);
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(errorMessage);
-      console.log(errorMessage);
-    } finally {
-      setLoading(false);
+      setErrorMessage("Error al cargar los datos");
     }
   };
 
@@ -62,7 +57,7 @@ const EditProducts = () => {
       .min(1, "Ingresa un precio válido.")
       .required("Ingrese un precio"),
     image: yup.string().required("Ingrese una URL"),
-    CategoryId: yup.string().required("Selecciona una categoría"),
+    category: yup.string().required("Selecciona una categoría"),
     genre: yup.string().required("Selecciona un género"),
     ColourId: yup
       .number()
@@ -80,6 +75,7 @@ const EditProducts = () => {
       description: "",
       price: 0,
       image: "",
+      category: "",
       CategoryId: null,
       genre: "",
       ColourId: null,
@@ -97,13 +93,14 @@ const EditProducts = () => {
         );
 
         const response = await api.put(
-          `/api/Product/products/${selectedProductId}`,
+          `/api/Product/products/edit/${selectedProductId}`,
           {
             description: values.description,
             status: true,
             price: values.price,
             image: values.image,
             genre: values.genre,
+            category: values.category,
             colourId: [
               {
                 id: selectedColour.id,
@@ -140,8 +137,7 @@ const EditProducts = () => {
         fetchData();
         formik.resetForm();
         setErrorMessage("");
-        setErrorMessage("");
-        ToastifyToShow({ message: response.data });
+        ToastifyToShow({ message: "Producto editado correctamente" });
       } catch (error) {
         ToastifyToShow({ message: error.response.data });
       }
@@ -173,15 +169,12 @@ const EditProducts = () => {
       price: selectedProduct.price,
       image: selectedProduct.image,
       genre: selectedProduct.genre,
+      category: selectedProduct.category,
       ColourId: selectedColourId,
       SizeId: selectedSizeId,
       CategoryId: selectedCategoryId,
     });
   };
-
-  if (loading) {
-    return <CircularProgress />;
-  }
 
   return (
     <Box>
@@ -263,7 +256,7 @@ const EditProducts = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
-                  formik.touched.CategoryId && formik.errors.CategoryId
+                  formik.touched.category && formik.errors.category
                 )}
               >
                 {categories.map((category) => (

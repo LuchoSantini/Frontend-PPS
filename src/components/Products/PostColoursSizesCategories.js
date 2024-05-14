@@ -54,7 +54,7 @@ const PostColoursSizesCategories = () => {
         console.log(response.data);
       } catch (error) {
         console.log(error);
-        setErrorMessage(errorMessage.data.title);
+        setErrorMessage(error.message);
       }
     },
   });
@@ -71,7 +71,7 @@ const PostColoursSizesCategories = () => {
         formikSizes.resetForm();
         console.log(response.data);
       } catch (error) {
-        setErrorMessage(errorMessage.data.title);
+        setErrorMessage(error.message);
       }
     },
   });
@@ -88,7 +88,8 @@ const PostColoursSizesCategories = () => {
         formikCategories.resetForm();
         console.log(response.data);
       } catch (error) {
-        setErrorMessage(errorMessage.data.title);
+        setErrorMessage(error.message);
+        console.log(error);
       }
     },
   });
@@ -100,7 +101,7 @@ const PostColoursSizesCategories = () => {
           Agregar Color
         </Typography>
         <FormGroup>
-          <Box mb={2} mt={1}>
+          <Box mb={2} mt={1} textAlign="center">
             <FormControl fullWidth>
               <InputLabel htmlFor="ColourName">Color:</InputLabel>
               <Input
@@ -118,7 +119,7 @@ const PostColoursSizesCategories = () => {
             </FormControl>
           </Box>
           <Button variant="contained" type="submit">
-            Agregar Color
+            Agregar
           </Button>
         </FormGroup>
       </FormControl>
@@ -145,7 +146,7 @@ const PostColoursSizesCategories = () => {
             </FormControl>
           </Box>
           <Button variant="contained" type="submit">
-            Agregar Talle
+            Agregar
           </Button>
         </FormGroup>
       </FormControl>
@@ -173,7 +174,7 @@ const PostColoursSizesCategories = () => {
             </FormControl>
           </Box>
           <Button variant="contained" type="submit">
-            Agregar Categoría
+            Agregar
           </Button>
         </FormGroup>
       </FormControl>

@@ -96,7 +96,6 @@ const EditProducts = () => {
           `/api/Product/products/edit/${selectedProductId}`,
           {
             description: values.description,
-            status: true,
             price: values.price,
             image: values.image,
             genre: values.genre,
@@ -170,6 +169,7 @@ const EditProducts = () => {
       price: selectedProduct.price,
       image: selectedProduct.image,
       genre: selectedProduct.genre,
+      status: selectedProduct.status,
       category: selectedProduct.category,
       ColourId: selectedColourId,
       SizeId: selectedSizeId,
@@ -330,6 +330,7 @@ const EditProducts = () => {
               </TextField>
             </FormControl>
           </Box>
+
           {/* <Box mb={1}>
             {(formik.touched.description && formik.errors.description) ||
             (formik.touched.price && formik.errors.price) ||

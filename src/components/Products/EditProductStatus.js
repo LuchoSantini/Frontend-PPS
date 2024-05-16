@@ -15,6 +15,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
+import { allProducts } from "../Api/ApiServices";
 
 const EditProductStatus = () => {
   const [products, setProducts] = useState([]);
@@ -23,7 +24,7 @@ const EditProductStatus = () => {
 
   const fetchData = async () => {
     try {
-      const productsResponse = await api.get("/api/Product/allProducts");
+      const productsResponse = await allProducts();
       setProducts(productsResponse.data);
       if (productsResponse.data.length > 0) {
         setSelectedProductId(productsResponse.data[0].id);
@@ -50,7 +51,7 @@ const EditProductStatus = () => {
     onSubmit: async (values) => {
       try {
         const response = await api.put(
-          `/api/Product/products/status/${selectedProductId}`,
+          `/api/products/status/${selectedProductId}`,
           {
             status: values.status,
           }

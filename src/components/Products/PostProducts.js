@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import api from "../Api/Api";
 import * as yup from "yup";
 import ToastifyToShow from "../hooks/ToastifyToShow";
-
 import {
   FormControl,
   FormGroup,
@@ -15,6 +13,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
+import { getCategories, getColours, getSizes, postProduct } from "../Api/ApiServices";
 
 const ApiCalls = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -44,9 +43,9 @@ const ApiCalls = () => {
 
   const fetchData = async () => {
     try {
-      const coloursResponse = await api.get("/api/Product/colours");
-      const sizesResponse = await api.get("/api/Product/sizes");
-      const categoriesResponse = await api.get("/api/Product/categories");
+      const coloursResponse = await getColours()
+      const sizesResponse = await getSizes()
+      const categoriesResponse = await getCategories()
 
       setColours(coloursResponse.data);
       setSizes(sizesResponse.data);
@@ -75,7 +74,7 @@ const ApiCalls = () => {
     validationSchema: productFormValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/Product/products", values);
+        const response = await postProduct(values);
         console.log(response.data);
         ToastifyToShow({ message: response.data });
       } catch (error) {

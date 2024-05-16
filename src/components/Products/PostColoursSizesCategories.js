@@ -48,7 +48,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: colourNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/Product/colours", values);
+        const response = await api.post("/api/colours", values);
         setColours([...colours, response.data]);
         formikColours.resetForm();
         console.log(response.data);
@@ -66,7 +66,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: sizeNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/Product/sizes", values);
+        const response = await api.post("/api/sizes", values);
         setSizes([...sizes, response.data]);
         formikSizes.resetForm();
         console.log(response.data);
@@ -83,7 +83,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: categoryNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/Product/categories", values);
+        const response = await api.post("/api/categories", values);
         setCategories([...categories, response.data]);
         formikCategories.resetForm();
         console.log(response.data);

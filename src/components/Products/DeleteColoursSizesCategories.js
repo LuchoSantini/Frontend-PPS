@@ -22,9 +22,9 @@ const DeleteColoursSizesCategories = () => {
 
   const fetchData = async () => {
     try {
-      const coloursResponse = await api.get("/api/Product/colours");
-      const sizesResponse = await api.get("/api/Product/sizes");
-      const categoriesResponse = await api.get("/api/Product/categories");
+      const coloursResponse = await api.get("/api/colours");
+      const sizesResponse = await api.get("/api/sizes");
+      const categoriesResponse = await api.get("/api/categories");
 
       setColours(coloursResponse.data);
       setSizes(sizesResponse.data);
@@ -41,7 +41,7 @@ const DeleteColoursSizesCategories = () => {
 
   const handleDeleteColours = async () => {
     try {
-      await api.delete(`/api/Product/colours/${selectedColourId}`);
+      await api.delete(`/api/colours/${selectedColourId}`);
       setColours(colours.filter((colour) => colour.id !== selectedColourId));
       setSelectedColourId("");
     } catch (error) {
@@ -52,7 +52,7 @@ const DeleteColoursSizesCategories = () => {
 
   const handleDeleteSizes = async () => {
     try {
-      await api.delete(`/api/Product/sizes/${selectedSizeId}`);
+      await api.delete(`/api/sizes/${selectedSizeId}`);
       setSizes(sizes.filter((size) => size.id !== selectedSizeId));
       setSelectedSizeId("");
     } catch (error) {
@@ -63,7 +63,7 @@ const DeleteColoursSizesCategories = () => {
 
   const handleDeleteCategory = async () => {
     try {
-      await api.delete(`/api/Product/categories/${selectedCategoryId}`);
+      await api.delete(`/api/categories/${selectedCategoryId}`);
       setCategories(
         categories.filter((category) => category.id !== selectedCategoryId)
       );

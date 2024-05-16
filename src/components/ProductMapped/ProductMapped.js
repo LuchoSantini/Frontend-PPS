@@ -3,56 +3,14 @@ import api from "../Api/Api";
 import ProductCard from "../Card/ProductCard";
 import { Select, Spin } from "antd";
 import { SlidersOutlined } from "@ant-design/icons";
+import { Option } from "antd/es/mentions";
 
-const productssd = [
-  {
-    id: "01",
-    image:
-      "https://http2.mlstatic.com/D_NQ_NP_766940-MLA73611188794_122023-O.webp",
-    description: "Remera 1",
-    price: 25000,
-    colours: ["black", "white"],
-  },
-  {
-    id: "02",
-    description: "imagestring",
-    image:
-      "https://http2.mlstatic.com/D_NQ_NP_766940-MLA73611188794_122023-O.webp",
-    price: 260,
-    colours: ["black", "white"],
-  },
-  {
-    id: "03",
-    description: "imagestring",
-    image:
-      "https://http2.mlstatic.com/D_NQ_NP_766940-MLA73611188794_122023-O.webp",
-    price: 260,
-    colours: ["black", "white"],
-  },
-  {
-    id: "04",
-    description: "imagestring",
-    image:
-      "https://http2.mlstatic.com/D_NQ_NP_766940-MLA73611188794_122023-O.webp",
-    price: 260,
-    colours: ["black", "white"],
-  },
-  {
-    id: "05",
-    description: "imagestring",
-    image:
-      "https://http2.mlstatic.com/D_NQ_NP_766940-MLA73611188794_122023-O.webp",
-    price: 260,
-    colours: ["black", "white"],
-  },
-];
 function ProductMapped({ isMobile }) {
-  const gridTemplateColumns = isMobile ? "1fr" : "repeat(3, 1fr)";
-  // Testeado by Lucho je
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortMethod, setSortMethod] = useState("default");
 
+  const gridTemplateColumns = isMobile ? " repeat(2,1fr)" : "repeat(3, 1fr)";
   const handleSortChange = (value) => {
     setSortMethod(value);
   };
@@ -61,14 +19,12 @@ function ProductMapped({ isMobile }) {
     const getProducts = async () => {
       try {
         let response;
-        if (sortMethod === "low") {
-          response = await api.get("/api/Product/productsOrderBy?orderBy=true");
-        } else if (sortMethod === "high") {
-          response = await api.get(
-            "/api/Product/productsOrderBy?orderBy=false"
-          );
+        if (sortMethod === "price-descending") {
+          response = await api.get("api/products?priceOrder=asc");
+        } else if (sortMethod === "price-ascending") {
+          response = await api.get("/api/products?priceOrder=desc");
         } else {
-          response = await api.get("/api/Product/products");
+          response = await api.get("/api/products");
         }
         setProducts(response.data);
         setLoading(false);
@@ -84,34 +40,30 @@ function ProductMapped({ isMobile }) {
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-around",
           alignItems: "center",
           width: "auto",
           padding: 40,
         }}
       >
-        <div style={{ display: "flex", gap: 8, cursor: "pointer" }}>
-          <SlidersOutlined style={{ fontSize: 20 }} />
+        <div style={{ display: "flex", gap: 8, cursor: "pointer", width: 240, justifyContent:"center" }}>
           <p>FILTRAR</p>
+          <SlidersOutlined style={{ fontSize: 20 }} />
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <p>ORDENAR</p>
           <Select
-            defaultValue="Mas vendidos"
-            style={{ width: 130 }}
-            options={[
-              {
-                value: "high",
-                label: "Mayor precio",
-              },
-              {
-                value: "low",
-                label: "Menor precio",
-              },
-            ]}
+            size="small"
+            defaultValue="ORDENAR POR MAS VENDIDOS"
+            style={{ width: 240 }}
             onChange={handleSortChange}
-          />
+          >
+            <Option value="price-ascending">PRECIO: MAYOR A MENOR</Option>
+            <Option value="price-descending">PRECIO: MENOR A MAYOR</Option>
+            <Option value="created-descending">MAS VIEJO AL MAS NUEVO</Option>
+            <Option value="created-ascending">MAS NUEVO AL MAS VIEJO</Option>
+          </Select>
         </div>
       </div>
       {loading ? (
@@ -139,7 +91,7 @@ function ProductMapped({ isMobile }) {
             style={{
               display: "grid",
               gridTemplateColumns,
-              gap: 110,
+              gap: isMobile ? "50px" : "110px",
               width: "auto",
             }}
           >

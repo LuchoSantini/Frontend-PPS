@@ -58,12 +58,15 @@ const Navbar = () => {
                 onClick={showDrawerSearch}
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div>
               <Link to="/">
-                <p style={{ fontSize: 18 }}>RSS</p>
+                <img
+                  style={{ width: 80 }}
+                  src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
+                />
               </Link>
             </div>
-            <div style={{ gap: 5, display: "flex" }}>
+            <div style={{ display: "flex" }}>
               <Dropdown
                 placement="bottomRight"
                 menu={{
@@ -99,12 +102,15 @@ const Navbar = () => {
               className="buttons-navbar"
             />
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div>
             <Link to="/">
-              <p style={{ fontSize: 18 }}>RSS</p>
+              <img
+                style={{ width: 80 }}
+                src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
+              />
             </Link>
           </div>
-          <div style={{ display: "flex", gap: 20 }}>
+          <div style={{ display: "flex" }}>
             <Dropdown
               menu={{
                 items,

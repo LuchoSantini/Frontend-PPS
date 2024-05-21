@@ -14,7 +14,7 @@ const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  const isMobile = useMediaQuery("(max-width: 632px)");
 
   const showDrawerSearch = () => {
     setOpen(true);
@@ -40,22 +40,112 @@ const Navbar = () => {
   ];
 
   return (
-    <div>
-      {isMobile ? (
-        <div style={{}}>
+    <>
+      <div
+        style={{
+          display: "block",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "100%",
+          zIndex: 1000,
+          background: "#76949F",
+          alignItems: "center",
+          height: 27,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            textAlign: "center",
+            margin: 0,
+          }}
+        >
+          <p style={{ lineHeight: 0, color: "#fff" }}>
+            20% OFF Codigo: OT2024
+          </p>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "block",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "100%",
+          zIndex: 1000,
+          marginTop: 27,
+          background: "#fff",
+        }}
+      >
+        {isMobile ? (
+          <div style={{}}>
+            <div
+              style={{
+                padding:5,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <SearchOutlined
+                  style={{ fontSize: 30 }}
+                  onClick={showDrawerSearch}
+                />
+              </div>
+              <div>
+                <Link to="/">
+                  <img
+                    style={{ width: 80 }}
+                    src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
+                  />
+                </Link>
+              </div>
+              <div style={{ display: "flex" }}>
+                <Dropdown
+                  placement="bottomRight"
+                  menu={{
+                    items,
+                  }}
+                  trigger={["click"]}
+                >
+                  <UserOutlined
+                    style={{ fontSize: 30 }}
+                    className="buttons-navbar"
+                  />
+                </Dropdown>
+                <ShoppingCartOutlined
+                  style={{ fontSize: 30 }}
+                  onClick={showDrawerCart}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
           <div
             style={{
-              paddingRight: 0,
-              paddingLeft: 0,
+              alignItems: "center",
+              padding: 10,
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center",
             }}
           >
             <div>
               <SearchOutlined
-                style={{ fontSize: 30 }}
+                style={{ fontSize: 30, transition: "all 0.3s ease" }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = "#abbec4";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = "black";
+                }}
                 onClick={showDrawerSearch}
+                className="buttons-navbar"
               />
             </div>
             <div>
@@ -68,86 +158,54 @@ const Navbar = () => {
             </div>
             <div style={{ display: "flex" }}>
               <Dropdown
-                placement="bottomRight"
                 menu={{
                   items,
                 }}
+                placement="bottomRight"
                 trigger={["click"]}
               >
                 <UserOutlined
-                  style={{ fontSize: 30 }}
+                  style={{ fontSize: 30, transition: "all 0.3s ease" }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.color = "#abbec4";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.color = "black";
+                  }}
                   className="buttons-navbar"
                 />
               </Dropdown>
-              <ShoppingCartOutlined
-                style={{ fontSize: 30 }}
-                onClick={showDrawerCart}
-              />
+
+              <div>
+                <ShoppingCartOutlined
+                  style={{ fontSize: 30, transition: "all 0.3s ease" }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.color = "#abbec4";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.color = "black";
+                  }}
+                  onClick={showDrawerCart}
+                  className="buttons-navbar"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div
-          style={{
-            alignItems: "center",
-            padding: 15,
-            display: "flex",
-            justifyContent: "space-between",
+        )}
+        <CommonDrawer
+          title={title}
+          placement={placement}
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            setOpenCart(false);
           }}
-        >
-          <div>
-            <SearchOutlined
-              style={{ fontSize: 30 }}
-              onClick={showDrawerSearch}
-              className="buttons-navbar"
-            />
-          </div>
-          <div>
-            <Link to="/">
-              <img
-                style={{ width: 80 }}
-                src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
-              />
-            </Link>
-          </div>
-          <div style={{ display: "flex" }}>
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomRight"
-              trigger={["click"]}
-            >
-              <UserOutlined
-                style={{ fontSize: 30 }}
-                className="buttons-navbar"
-              />
-            </Dropdown>
-
-            <div>
-              <ShoppingCartOutlined
-                style={{ fontSize: 30 }}
-                onClick={showDrawerCart}
-                className="buttons-navbar"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <CommonDrawer
-        title={title}
-        placement={placement}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setOpenCart(false);
-        }}
-        openCart={openCart}
-        setOpenCart={setOpenCart}
-        setOpen={setOpen}
-      />
-    </div>
+          openCart={openCart}
+          setOpenCart={setOpenCart}
+          setOpen={setOpen}
+        />
+      </div>
+    </>
   );
 };
 

@@ -80,11 +80,11 @@ console.log(products);
     genre: product.genre,
     category: product.category,
     status: product.status ? "Disponible" : "No Disponible",
-    colours: product.colours.map((colour) => colour.colourName).join(", "),
+    colours: product.colours.map((colour) => colour.description).join(", "),
   }));
 
   return (
-    <div>
+    <div style={{marginTop:30}}>
       <Box position="relative">
         <Navbar />
         <Box display="flex" style={{ padding: 50 }}>

@@ -1,31 +1,59 @@
 import { useEffect, useState } from "react";
-import api from "../Api/Api";
 import ProductCard from "../Card/ProductCard";
 import { Select, Spin } from "antd";
-import { SlidersOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
+import Filters from "./Filters";
+import { getProductsByFilter } from "../Api/ApiServices";
 
 function ProductMapped({ isMobile }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [sortMethod, setSortMethod] = useState("default");
-
   const gridTemplateColumns = isMobile ? " repeat(2,1fr)" : "repeat(3, 1fr)";
+
   const handleSortChange = (value) => {
     setSortMethod(value);
   };
+
+  const filterSelected = (filterType, description) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: description,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const query = Object.entries(selectedFilters) // {colour - negro, size - L}
+          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+          .join("&");
+
+        const response = await getProductsByFilter(query);
+        setProducts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [selectedFilters]);
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         let response;
         if (sortMethod === "price-descending") {
-          response = await api.get("api/products?priceOrder=asc");
+          filterSelected("priceOrder", "asc");
         } else if (sortMethod === "price-ascending") {
-          response = await api.get("/api/products?priceOrder=desc");
+          filterSelected("priceOrder", "desc");
         } else {
-          response = await api.get("/api/products");
+          response = await getProducts();
         }
+
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
@@ -45,12 +73,14 @@ function ProductMapped({ isMobile }) {
           alignItems: "center",
           width: "auto",
           padding: 40,
+          marginTop: 30,
         }}
       >
-        <div style={{ display: "flex", gap: 8, cursor: "pointer", width: 240, justifyContent:"center" }}>
-          <p>FILTRAR</p>
-          <SlidersOutlined style={{ fontSize: 20 }} />
-        </div>
+        <Filters
+          setSelectedFilters={setSelectedFilters}
+          onFilterSelected={filterSelected}
+          onSetSortMethod={setSortMethod}
+        />
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <Select
@@ -75,7 +105,6 @@ function ProductMapped({ isMobile }) {
             textAlign: "center",
           }}
         >
-          {" "}
           <Spin size="large" />
         </div>
       ) : (
@@ -91,7 +120,7 @@ function ProductMapped({ isMobile }) {
             style={{
               display: "grid",
               gridTemplateColumns,
-              gap: isMobile ? "50px" : "110px",
+              gap: isMobile ? "20px" : "40px",
               width: "auto",
             }}
           >

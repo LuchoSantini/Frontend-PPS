@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import { useFormik } from "formik";
+import { postCategories, postColours, postSizes } from "../Api/ApiServices";
 
 const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,21 +22,21 @@ const PostColoursSizesCategories = () => {
   const [categories, setCategories] = useState([]);
 
   const colourNameValidationScheme = yup.object().shape({
-    ColourName: yup
+    description: yup
       .string()
       .min(3, "Escribe un color")
       .required("Escribe un color"),
   });
 
   const sizeNameValidationScheme = yup.object().shape({
-    SizeName: yup
+    description: yup
       .string()
       .min(1, "Escribe un talle")
       .required("Escribe un talle"),
   });
 
   const categoryNameValidationScheme = yup.object().shape({
-    CategoryName: yup
+    description: yup
       .string()
       .min(3, "Escribe una categoría")
       .required("Escribe una categoría"),
@@ -43,12 +44,12 @@ const PostColoursSizesCategories = () => {
 
   const formikColours = useFormik({
     initialValues: {
-      ColourName: "",
+      description: "",
     },
     validationSchema: colourNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/colours", values);
+        const response = await postColours(values);
         setColours([...colours, response.data]);
         formikColours.resetForm();
         console.log(response.data);
@@ -61,12 +62,12 @@ const PostColoursSizesCategories = () => {
 
   const formikSizes = useFormik({
     initialValues: {
-      SizeName: "",
+      description: "",
     },
     validationSchema: sizeNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/sizes", values);
+        const response = await postSizes(values);
         setSizes([...sizes, response.data]);
         formikSizes.resetForm();
         console.log(response.data);
@@ -78,12 +79,12 @@ const PostColoursSizesCategories = () => {
 
   const formikCategories = useFormik({
     initialValues: {
-      CategoryName: "",
+      description: "",
     },
     validationSchema: categoryNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/api/categories", values);
+        const response = await postCategories(values);
         setCategories([...categories, response.data]);
         formikCategories.resetForm();
         console.log(response.data);
@@ -103,17 +104,17 @@ const PostColoursSizesCategories = () => {
         <FormGroup>
           <Box mb={2} mt={1} textAlign="center">
             <FormControl fullWidth>
-              <InputLabel htmlFor="ColourName">Color:</InputLabel>
+              <InputLabel htmlFor="description">Color:</InputLabel>
               <Input
-                id="ColourName"
+                id="description"
                 type="text"
-                name="ColourName"
-                value={formikColours.values.ColourName}
+                name="description"
+                value={formikColours.values.description}
                 onChange={formikColours.handleChange}
                 onBlur={formikColours.handleBlur}
                 error={Boolean(
-                  formikColours.touched.ColourName &&
-                    formikColours.errors.ColourName
+                  formikColours.touched.description &&
+                    formikColours.errors.description
                 )}
               />
             </FormControl>
@@ -131,16 +132,16 @@ const PostColoursSizesCategories = () => {
         <FormGroup>
           <Box mb={2}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="SizeName">Talle:</InputLabel>
+              <InputLabel htmlFor="description">Talle:</InputLabel>
               <Input
-                id="SizeName"
+                id="description"
                 type="text"
-                name="SizeName"
-                value={formikSizes.values.SizeName}
+                name="description"
+                value={formikSizes.values.description}
                 onChange={formikSizes.handleChange}
                 onBlur={formikSizes.handleBlur}
                 error={Boolean(
-                  formikSizes.touched.SizeName && formikSizes.errors.SizeName
+                  formikSizes.touched.description && formikSizes.errors.description
                 )}
               />
             </FormControl>
@@ -158,17 +159,17 @@ const PostColoursSizesCategories = () => {
         <FormGroup>
           <Box mb={2}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="CategoryName">Categoría:</InputLabel>
+              <InputLabel htmlFor="description">Categoría:</InputLabel>
               <Input
-                id="CategoryName"
+                id="description"
                 type="text"
-                name="CategoryName"
-                value={formikCategories.values.CategoryName}
+                name="description"
+                value={formikCategories.values.description}
                 onChange={formikCategories.handleChange}
                 onBlur={formikCategories.handleBlur}
                 error={Boolean(
-                  formikCategories.touched.CategoryName &&
-                    formikCategories.errors.CategoryName
+                  formikCategories.touched.description &&
+                    formikCategories.errors.description
                 )}
               />
             </FormControl>

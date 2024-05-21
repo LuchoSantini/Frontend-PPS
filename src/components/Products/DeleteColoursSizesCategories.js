@@ -94,7 +94,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.colourName}
+                    {colour.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -132,7 +132,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.sizeName}
+                    {size.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -170,7 +170,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {categories.map((category) => (
                   <MenuItem key={category.id} value={category.id}>
-                    {category.categoryName}
+                    {category.description}
                   </MenuItem>
                 ))}
               </TextField>

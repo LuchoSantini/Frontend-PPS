@@ -173,9 +173,9 @@ const ApiCalls = () => {
                   formik.touched.category && formik.errors.category
                 )}
               >
-                {categories.map((categories) => (
-                  <MenuItem key={categories.id} value={categories.categoryName}>
-                    {categories.categoryName}
+                {categories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -217,7 +217,7 @@ const ApiCalls = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.colourName}
+                    {colour.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -239,7 +239,7 @@ const ApiCalls = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.sizeName}
+                    {size.description}
                   </MenuItem>
                 ))}
               </TextField>

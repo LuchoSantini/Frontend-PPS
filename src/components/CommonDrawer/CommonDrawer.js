@@ -18,6 +18,7 @@ const CommonDrawer = ({
         setOpen(false);
         setOpenCart(false);
       }}
+      style={{zIndex:1001}}
       open={placement === "left" ? open : openCart}
       extra={
         <Space>

@@ -90,7 +90,7 @@ const EditProducts = () => {
         );
         const selectedSize = sizes.find((size) => size.id === values.SizeId);
         const selectedCategory = categories.find(
-          (category) => category.categoryName === values.category
+          (category) => category.description === values.category
         );
 
         const response = await api.put(
@@ -104,19 +104,19 @@ const EditProducts = () => {
             colourId: [
               {
                 id: selectedColour.id,
-                colourName: selectedColour.colourName,
+                description: selectedColour.description,
               },
             ],
             sizeId: [
               {
                 id: selectedSize.id,
-                sizeName: selectedSize.sizeName,
+                description: selectedSize.description,
               },
             ],
             categoryId: [
               {
                 id: selectedCategory.id,
-                categoryName: selectedCategory.categoryName,
+                description: selectedCategory.description,
               },
             ],
           }
@@ -262,8 +262,8 @@ const EditProducts = () => {
                 )}
               >
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.categoryName}>
-                    {category.categoryName}
+                  <MenuItem key={category.id} value={category.description}>
+                    {category.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -304,7 +304,7 @@ const EditProducts = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.colourName}
+                    {colour.description}
                   </MenuItem>
                 ))}
               </TextField>
@@ -325,7 +325,7 @@ const EditProducts = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.sizeName}
+                    {size.description}
                   </MenuItem>
                 ))}
               </TextField>

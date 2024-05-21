@@ -10,8 +10,9 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import { getCategories, getColours, getSizes } from "../Api/ApiServices";
 
-const DeleteColoursSizesCategories = () => {
+const ChangeStatusColoursSizesCategories = () => {
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -20,28 +21,29 @@ const DeleteColoursSizesCategories = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchData = async () => {
-    try {
-      const coloursResponse = await api.get("/api/colours");
-      const sizesResponse = await api.get("/api/sizes");
-      const categoriesResponse = await api.get("/api/categories");
-
-      setColours(coloursResponse.data);
-      setSizes(sizesResponse.data);
-      setCategories(categoriesResponse.data);
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("Error");
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const coloursResponse = await getColours();
+        const sizesResponse = await getSizes();
+        const categoriesResponse = await getCategories();
+
+        console.log(coloursResponse.data);
+        setColours(coloursResponse.data);
+        setSizes(sizesResponse.data);
+        setCategories(categoriesResponse.data);
+      } catch (error) {
+        console.log(error);
+        setErrorMessage("Error");
+      }
+    };
+
     fetchData();
   }, []);
 
   const handleDeleteColours = async () => {
     try {
-      await api.delete(`/api/colours/${selectedColourId}`);
+      await api.put(`/api/colours/${selectedColourId}`);
       setColours(colours.filter((colour) => colour.id !== selectedColourId));
       setSelectedColourId("");
     } catch (error) {
@@ -52,7 +54,7 @@ const DeleteColoursSizesCategories = () => {
 
   const handleDeleteSizes = async () => {
     try {
-      await api.delete(`/api/sizes/${selectedSizeId}`);
+      await api.put(`/api/sizes/${selectedSizeId}`);
       setSizes(sizes.filter((size) => size.id !== selectedSizeId));
       setSelectedSizeId("");
     } catch (error) {
@@ -63,7 +65,7 @@ const DeleteColoursSizesCategories = () => {
 
   const handleDeleteCategory = async () => {
     try {
-      await api.delete(`/api/categories/${selectedCategoryId}`);
+      await api.put(`/api/categories/${selectedCategoryId}`);
       setCategories(
         categories.filter((category) => category.id !== selectedCategoryId)
       );
@@ -94,7 +96,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.description}
+                    {colour.colourName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -132,7 +134,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.description}
+                    {size.sizeName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -170,7 +172,7 @@ const DeleteColoursSizesCategories = () => {
               >
                 {categories.map((category) => (
                   <MenuItem key={category.id} value={category.id}>
-                    {category.description}
+                    {category.categoryName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -192,4 +194,4 @@ const DeleteColoursSizesCategories = () => {
   );
 };
 
-export default DeleteColoursSizesCategories;
+export default ChangeStatusColoursSizesCategories;

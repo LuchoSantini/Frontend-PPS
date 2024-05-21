@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
+import api from "../Api/Api";
 import * as yup from "yup";
 import ToastifyToShow from "../hooks/ToastifyToShow";
+
 import {
   FormControl,
   FormGroup,
@@ -13,7 +15,12 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { getCategories, getColours, getSizes, postProduct } from "../Api/ApiServices";
+import {
+  getCategories,
+  getColours,
+  getSizes,
+  postProduct,
+} from "../Api/ApiServices";
 
 const ApiCalls = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -29,7 +36,6 @@ const ApiCalls = () => {
       .min(1, "Ingresa un precio válido.")
       .required("Ingrese un precio"),
     image: yup.string().required("Ingrese una URL"),
-    category: yup.string().required("Selecciona una categoría"),
     genre: yup.string().required("Selecciona un género"),
     ColourId: yup
       .number()
@@ -43,9 +49,9 @@ const ApiCalls = () => {
 
   const fetchData = async () => {
     try {
-      const coloursResponse = await getColours()
-      const sizesResponse = await getSizes()
-      const categoriesResponse = await getCategories()
+      const coloursResponse = await getColours();
+      const sizesResponse = await getSizes();
+      const categoriesResponse = await getCategories();
 
       setColours(coloursResponse.data);
       setSizes(sizesResponse.data);
@@ -65,8 +71,8 @@ const ApiCalls = () => {
       description: "",
       price: 0,
       image: "",
-      category: "",
       genre: "",
+      category: "",
       ColourId: null,
       SizeId: null,
       CategoryId: null,
@@ -88,22 +94,16 @@ const ApiCalls = () => {
 
   const handleChange = (e) => {
     let value;
-    if (
-      e.target.name === "ColourId" ||
-      e.target.name === "SizeId" ||
-      e.target.name === "CategoryId"
-    ) {
-      value = [parseInt(e.target.value)];
-      if (isNaN(value[0])) {
-        value = [];
-      }
+    const { name, value: targetValue, type } = e.target;
+
+    if (name === "ColourId" || name === "SizeId" || name === "CategoryId") {
+      const id = parseInt(targetValue);
+      value = isNaN(id) ? [] : [id]; // Convertir el número entero en un array con un solo elemento
     } else {
-      value =
-        e.target.type === "number"
-          ? parseFloat(e.target.value)
-          : e.target.value;
+      value = type === "number" ? parseFloat(targetValue) : targetValue; // Manejar correctamente valores numéricos
     }
-    formik.setFieldValue(e.target.name, value);
+
+    formik.setFieldValue(name, value);
   };
 
   return (
@@ -165,17 +165,17 @@ const ApiCalls = () => {
                 label="Categoría"
                 defaultValue=""
                 type="text"
-                name="category"
-                value={formik.values.category || ""}
+                name="CategoryId"
+                value={formik.values.CategoryId || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.category && formik.errors.category
                 )}
               >
-                {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.description}
+                {categories.map((categories) => (
+                  <MenuItem key={categories.id} value={categories.id}>
+                    {categories.categoryName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -217,7 +217,7 @@ const ApiCalls = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.description}
+                    {colour.colourName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -239,7 +239,7 @@ const ApiCalls = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.description}
+                    {size.sizeName}
                   </MenuItem>
                 ))}
               </TextField>

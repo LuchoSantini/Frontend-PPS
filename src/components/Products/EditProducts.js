@@ -15,7 +15,12 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { getProducts } from "../Api/ApiServices";
+import {
+  getCategories,
+  getColours,
+  getProducts,
+  getSizes,
+} from "../Api/ApiServices";
 
 const EditProducts = () => {
   const [products, setProducts] = useState([]);
@@ -29,9 +34,9 @@ const EditProducts = () => {
   const fetchData = async () => {
     try {
       const productsResponse = await getProducts();
-      const coloursResponse = await api.get("/api/colours");
-      const sizesResponse = await api.get("/api/sizes");
-      const categoriesResponse = await api.get("/api/categories");
+      const coloursResponse = await getColours();
+      const sizesResponse = await getSizes();
+      const categoriesResponse = await getCategories();
 
       setProducts(productsResponse.data);
       setColours(coloursResponse.data);
@@ -90,7 +95,7 @@ const EditProducts = () => {
         );
         const selectedSize = sizes.find((size) => size.id === values.SizeId);
         const selectedCategory = categories.find(
-          (category) => category.description === values.category
+          (category) => category.categoryName === values.category
         );
 
         const response = await api.put(
@@ -104,19 +109,19 @@ const EditProducts = () => {
             colourId: [
               {
                 id: selectedColour.id,
-                description: selectedColour.description,
+                colourName: selectedColour.colourName,
               },
             ],
             sizeId: [
               {
                 id: selectedSize.id,
-                description: selectedSize.description,
+                sizeName: selectedSize.sizeName,
               },
             ],
             categoryId: [
               {
                 id: selectedCategory.id,
-                description: selectedCategory.description,
+                categoryName: selectedCategory.categoryName,
               },
             ],
           }
@@ -262,8 +267,8 @@ const EditProducts = () => {
                 )}
               >
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.description}>
-                    {category.description}
+                  <MenuItem key={category.id} value={category.categoryName}>
+                    {category.categoryName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -304,7 +309,7 @@ const EditProducts = () => {
               >
                 {colours.map((colour) => (
                   <MenuItem key={colour.id} value={colour.id}>
-                    {colour.description}
+                    {colour.colourName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -325,7 +330,7 @@ const EditProducts = () => {
               >
                 {sizes.map((size) => (
                   <MenuItem key={size.id} value={size.id}>
-                    {size.description}
+                    {size.sizeName}
                   </MenuItem>
                 ))}
               </TextField>

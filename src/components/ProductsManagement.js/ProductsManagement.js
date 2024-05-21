@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PostProducts from "../Products/PostProducts";
-import {
-  Box,
-  Modal,
-  Button,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Modal, Button, Typography, useMediaQuery } from "@mui/material";
 import PostColoursSizesCategories from "../Products/PostColoursSizesCategories";
 import EditProducts from "../Products/EditProducts";
 import Navbar from "../Navbar/Navbar";
 import { Table } from "antd";
 
 import EditProductStatus from "../Products/EditProductStatus";
-import DeleteColoursSizesCategories from "../Products/DeleteColoursSizesCategories";
+import ChangeStatusColoursSizesCategories from "../Products/ChangeStatusColoursSizesCategories";
 
-function ProductsManagement({loading, products}) {
+function ProductsManagement({ loading, products }) {
   const [openProducts, setOpenProducts] = useState(false);
   const [openCSC, setOpenCSC] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -36,7 +30,6 @@ function ProductsManagement({loading, products}) {
     setOpenCSC(false);
   };
 
-  
   const columns = [
     {
       title: "ID",
@@ -71,7 +64,7 @@ function ProductsManagement({loading, products}) {
     },
   ];
 
-console.log(products);
+  console.log(products);
 
   const data = products.map((product) => ({
     id: product.id,
@@ -84,7 +77,7 @@ console.log(products);
   }));
 
   return (
-    <div style={{marginTop:30}}>
+    <div style={{ marginTop: 30 }}>
       <Box position="relative">
         <Navbar />
         <Box display="flex" style={{ padding: 50 }}>
@@ -246,7 +239,7 @@ console.log(products);
                   minHeight="60vh"
                   mr={3}
                 >
-                  <DeleteColoursSizesCategories />
+                  <ChangeStatusColoursSizesCategories />
                 </Box>
               </Box>
               <Button

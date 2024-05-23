@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../Api/Api";
+import api from "../../Api/Api";
 import * as yup from "yup";
 
 import {
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { useFormik } from "formik";
-import { postCategories, postColours, postSizes } from "../Api/ApiServices";
+import { postCategories, postColours, postSizes } from "../../Api/ApiServices";
 
 const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -141,7 +141,8 @@ const PostColoursSizesCategories = () => {
                 onChange={formikSizes.handleChange}
                 onBlur={formikSizes.handleBlur}
                 error={Boolean(
-                  formikSizes.touched.description && formikSizes.errors.description
+                  formikSizes.touched.description &&
+                    formikSizes.errors.description
                 )}
               />
             </FormControl>

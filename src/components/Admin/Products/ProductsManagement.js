@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import PostProducts from "../Products/PostProducts";
+import PostProducts from "./PostProducts";
 import { Box, Modal, Button, Typography, useMediaQuery } from "@mui/material";
-import PostColoursSizesCategories from "../Products/PostColoursSizesCategories";
-import EditProducts from "../Products/EditProducts";
-import Navbar from "../Navbar/Navbar";
+import PostColoursSizesCategories from "./PostColoursSizesCategories";
+import EditProducts from "./EditProducts";
+import Navbar from "../../Navbar/Navbar";
 import { Table } from "antd";
 
-import EditProductStatus from "../Products/EditProductStatus";
-import ChangeStatusColoursSizesCategories from "../Products/ChangeStatusColoursSizesCategories";
+import EditProductStatus from "./EditProductStatus";
+import ChangeStatusColoursSizesCategories from "./ChangeStatusColoursSizesCategories";
 
 function ProductsManagement({ loading, products }) {
   const [openProducts, setOpenProducts] = useState(false);

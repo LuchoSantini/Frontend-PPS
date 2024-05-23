@@ -41,3 +41,17 @@ export const postSizes = (values) => {
 export const postCategories = (values) => {
   return api.post("/api/categories", values);
 };
+
+export const postUser = (values) => {
+  return api.post("/api/register", values);
+};
+
+export const loginUser = async (credentials) => {
+  try {
+    const response = await api.post("/api/authenticate", credentials);
+    return response.data;
+    console.log(response.data);
+  } catch (error) {
+    throw error.response.data;
+  }
+};

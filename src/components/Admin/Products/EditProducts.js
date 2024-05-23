@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import api from "../Api/Api";
-import ToastifyToShow from "../hooks/ToastifyToShow";
+import ToastifyToShow from "../../hooks/ToastifyToShow";
 
 import {
   FormControl,
@@ -20,7 +19,8 @@ import {
   getColours,
   getProducts,
   getSizes,
-} from "../Api/ApiServices";
+} from "../../Api/ApiServices";
+import api from "../../Api/Api";
 
 const EditProducts = () => {
   const [products, setProducts] = useState([]);

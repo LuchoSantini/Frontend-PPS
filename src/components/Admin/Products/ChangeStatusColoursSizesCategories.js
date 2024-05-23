@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../Api/Api";
+import api from "../../Api/Api";
 
 import {
   FormControl,
@@ -10,7 +10,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import { getCategories, getColours, getSizes } from "../Api/ApiServices";
+import { getCategories, getColours, getSizes } from "../../Api/ApiServices";
 
 const ChangeStatusColoursSizesCategories = () => {
   const [colours, setColours] = useState([]);

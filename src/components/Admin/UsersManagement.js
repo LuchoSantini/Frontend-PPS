@@ -3,9 +3,8 @@ import { Box, Button, Typography } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
 import { Table } from "antd";
 
-function UsersManagement({users,loading}) {
+function UsersManagement({ users, loading }) {
   const [open, setOpen] = useState(false);
-
 
   const handleOpen = () => {
     setOpen(true);

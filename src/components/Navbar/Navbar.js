@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import {
-  SearchOutlined,
-  ShoppingCartOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
 import { Link } from "react-router-dom";
-import { Dropdown } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/store/authSlice";
+import UserIcon from "./UserIcon"; // Importar el nuevo componente
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -15,6 +13,8 @@ const Navbar = () => {
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 632px)");
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
 
   const showDrawerSearch = () => {
     setOpen(true);
@@ -28,16 +28,9 @@ const Navbar = () => {
     setPlacement("right");
   };
 
-  const items = [
-    {
-      label: <a href="/admin"> Admin </a>,
-      key: "0",
-    },
-    {
-      label: <a href="/asd"> Mi Cuenta </a>,
-      key: "1",
-    },
-  ];
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <>
@@ -64,9 +57,7 @@ const Navbar = () => {
             margin: 0,
           }}
         >
-          <p style={{ lineHeight: 0, color: "#fff" }}>
-            20% OFF Codigo: OT2024
-          </p>
+          <p style={{ lineHeight: 0, color: "#fff" }}>20% OFF Codigo: OT2024</p>
         </div>
       </div>
 
@@ -83,10 +74,10 @@ const Navbar = () => {
         }}
       >
         {isMobile ? (
-          <div style={{}}>
+          <div>
             <div
               style={{
-                padding:5,
+                padding: 5,
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -107,18 +98,8 @@ const Navbar = () => {
                 </Link>
               </div>
               <div style={{ display: "flex" }}>
-                <Dropdown
-                  placement="bottomRight"
-                  menu={{
-                    items,
-                  }}
-                  trigger={["click"]}
-                >
-                  <UserOutlined
-                    style={{ fontSize: 30 }}
-                    className="buttons-navbar"
-                  />
-                </Dropdown>
+                <UserIcon token={token} handleLogout={handleLogout} />{" "}
+                {/* Mostrar el UserIcon directamente */}
                 <ShoppingCartOutlined
                   style={{ fontSize: 30 }}
                   onClick={showDrawerCart}
@@ -157,25 +138,8 @@ const Navbar = () => {
               </Link>
             </div>
             <div style={{ display: "flex" }}>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                placement="bottomRight"
-                trigger={["click"]}
-              >
-                <UserOutlined
-                  style={{ fontSize: 30, transition: "all 0.3s ease" }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.color = "#abbec4";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.color = "black";
-                  }}
-                  className="buttons-navbar"
-                />
-              </Dropdown>
-
+              <UserIcon token={token} handleLogout={handleLogout} />{" "}
+              {/* Mostrar el UserIcon directamente */}
               <div>
                 <ShoppingCartOutlined
                   style={{ fontSize: 30, transition: "all 0.3s ease" }}

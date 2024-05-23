@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import api from "../Api/Api";
+import api from "../../Api/Api";
 import * as yup from "yup";
-import ToastifyToShow from "../hooks/ToastifyToShow";
+import ToastifyToShow from "../../hooks/ToastifyToShow";
 
 import {
   FormControl,
@@ -20,7 +20,7 @@ import {
   getColours,
   getSizes,
   postProduct,
-} from "../Api/ApiServices";
+} from "../../Api/ApiServices";
 
 const ApiCalls = () => {
   const [errorMessage, setErrorMessage] = useState("");

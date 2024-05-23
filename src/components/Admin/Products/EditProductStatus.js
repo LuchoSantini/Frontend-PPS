@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import api from "../Api/Api";
-import ToastifyToShow from "../hooks/ToastifyToShow";
+import api from "../../Api/Api";
+import ToastifyToShow from "../../hooks/ToastifyToShow";
 
 import {
   FormControl,
@@ -15,7 +15,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { allProducts } from "../Api/ApiServices";
+import { allProducts } from "../../Api/ApiServices";
 
 const EditProductStatus = () => {
   const [products, setProducts] = useState([]);

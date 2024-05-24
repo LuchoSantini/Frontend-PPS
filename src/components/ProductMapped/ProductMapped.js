@@ -89,10 +89,18 @@ function ProductMapped({ isMobile }) {
             style={{ width: 240 }}
             onChange={handleSortChange}
           >
-            <Option value="price-ascending">PRECIO: MAYOR A MENOR</Option>
-            <Option value="price-descending">PRECIO: MENOR A MAYOR</Option>
-            <Option value="created-descending">MAS VIEJO AL MAS NUEVO</Option>
-            <Option value="created-ascending">MAS NUEVO AL MAS VIEJO</Option>
+            <Select.Option value="price-ascending">
+              PRECIO: MAYOR A MENOR
+            </Select.Option>
+            <Select.Option value="price-descending">
+              PRECIO: MENOR A MAYOR
+            </Select.Option>
+            <Select.Option value="created-descending">
+              MAS VIEJO AL MAS NUEVO
+            </Select.Option>
+            <Select.Option value="created-ascending">
+              MAS NUEVO AL MAS VIEJO
+            </Select.Option>
           </Select>
         </div>
       </div>
@@ -126,6 +134,7 @@ function ProductMapped({ isMobile }) {
           >
             {products.map((product) => (
               <ProductCard
+                key={product.id}
                 title={product.description}
                 price={product.price}
                 colors={product.colours}

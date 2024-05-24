@@ -4,8 +4,9 @@ import Admin from "./components/Admin/Admin";
 import { useEffect, useState } from "react";
 import { getProducts, getUsers } from "./components/Api/ApiServices";
 import ProductsManagement from "./components/Admin/Products/ProductsManagement";
-import UsersManagement from "./components/Admin/UsersManagement";
+import UsersManagement from "./components/Admin/Users/UsersManagement";
 import CheckAdmin from "./context/CheckAdmin";
+import OrdersManagement from "./components/Admin/Orders/OrdersManagement";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,17 @@ function App() {
             <CheckAdmin>
               {" "}
               <UsersManagement users={users} loading={loading} />
+            </CheckAdmin>
+          }
+        />
+        <Route path="*" element={<Home />} />
+
+        <Route
+          path="/admin/ordenes"
+          element={
+            <CheckAdmin>
+              {" "}
+              <OrdersManagement />
             </CheckAdmin>
           }
         />

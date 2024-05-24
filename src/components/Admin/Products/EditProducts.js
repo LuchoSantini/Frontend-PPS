@@ -43,9 +43,9 @@ const EditProducts = () => {
       setSizes(sizesResponse.data);
       setCategories(categoriesResponse.data);
 
-      if (productsResponse.data.length > 0) {
-        setSelectedProductId(productsResponse.data[0].id);
-      }
+      // if (productsResponse.data.length > 0) {
+      //   setSelectedProductId(productsResponse.data[0].id);
+      // }
     } catch (error) {
       console.log(error);
       setErrorMessage("Error al cargar los datos");

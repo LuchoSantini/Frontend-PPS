@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, Box } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/store/authSlice";
 import UserIcon from "./UserIcon"; // Importar el nuevo componente
+import ProductDrawer from "../Admin/Products/ProductDrawer";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -108,7 +109,7 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <div
+          <Box
             style={{
               alignItems: "center",
               padding: 10,
@@ -116,7 +117,15 @@ const Navbar = () => {
               justifyContent: "space-between",
             }}
           >
-            <div>
+            <Box
+              style={{
+                fontSize: 30,
+                transition: "all 0.3s ease",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <ProductDrawer />
               <SearchOutlined
                 style={{ fontSize: 30, transition: "all 0.3s ease" }}
                 onMouseOver={(e) => {
@@ -128,7 +137,7 @@ const Navbar = () => {
                 onClick={showDrawerSearch}
                 className="buttons-navbar"
               />
-            </div>
+            </Box>
             <div>
               <Link to="/">
                 <img
@@ -154,7 +163,7 @@ const Navbar = () => {
                 />
               </div>
             </div>
-          </div>
+          </Box>
         )}
         <CommonDrawer
           title={title}

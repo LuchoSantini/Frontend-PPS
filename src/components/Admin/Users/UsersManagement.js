@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import Navbar from "../Navbar/Navbar";
+import { Box, Typography, IconButton, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import Navbar from "../../Navbar/Navbar";
 import { Table } from "antd";
+import UserTabs from "./UserTabs";
 
 function UsersManagement({ users, loading }) {
   const [open, setOpen] = useState(false);
@@ -40,32 +43,34 @@ function UsersManagement({ users, loading }) {
     userType: user.userType,
   }));
   return (
-    <div>
+    <Box style={{ marginTop: 30 }}>
       <Box position="relative">
         <Navbar />
-        <Box display="flex" style={{ padding: 50 }}>
+        <Box display="flex" style={{ padding: 50 }} flexDirection="column">
           <Box
             display="flex"
-            justifyContent="left"
+            justifyContent="space-between"
             alignItems="center"
-            flexDirection="column"
-            mb={2}
           >
-            <Typography variant="h6" htmlFor="handleProducts">
-              Usuarios
+            <Link to="/admin/productos">
+              <IconButton>
+                <ArrowBackIos />
+              </IconButton>
+            </Link>
+            <Typography variant="h4" gutterBottom>
+              Gestión de Usuarios
             </Typography>
-            <Button
-              id="handleProducts"
-              variant="contained"
-              onClick={handleOpen}
-            >
-              Usuarios
-            </Button>
+            <Link to="/admin/ordenes">
+              <IconButton>
+                <ArrowForwardIos />
+              </IconButton>
+            </Link>
           </Box>
+          <UserTabs />
         </Box>
       </Box>
 
-      <div>
+      <Box>
         <Table
           columns={columns}
           dataSource={data}
@@ -75,8 +80,8 @@ function UsersManagement({ users, loading }) {
           }}
           loading={loading}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

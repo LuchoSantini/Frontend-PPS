@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Modal, Button } from "antd";
 import LoginForm from "./LoginMenu/LoginForm";
 import SignupForm from "./LoginMenu/SignupForm";
 import { jwtDecode } from "jwt-decode";
-
+import React, { useState, useEffect } from "react";
 const UserIcon = ({ token, handleLogout }) => {
   const [showModal, setShowModal] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -33,7 +32,7 @@ const UserIcon = ({ token, handleLogout }) => {
 
   const userMenu = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item key="1">
         <div>
           {userData && (
             <>
@@ -45,13 +44,15 @@ const UserIcon = ({ token, handleLogout }) => {
         </div>
       </Menu.Item>
       {userData && userData.role === "Admin" && (
-        <Menu.Item>
+        <Menu.Item key="2">
           <Button href="/admin" type="link">
             Panel de Administrador
           </Button>
         </Menu.Item>
       )}
-      <Menu.Item onClick={handleLogout}>Cerrar Sesión</Menu.Item>
+      <Menu.Item key="3" onClick={handleLogout}>
+        Cerrar Sesión
+      </Menu.Item>
     </Menu>
   );
 

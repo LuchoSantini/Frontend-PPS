@@ -22,7 +22,7 @@ import {
   postProduct,
 } from "../../Api/ApiServices";
 
-const ApiCalls = () => {
+const PostProducts = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -167,7 +167,7 @@ const ApiCalls = () => {
                 type="text"
                 name="CategoryId"
                 value={formik.values.CategoryId || ""}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.category && formik.errors.category
@@ -254,4 +254,4 @@ const ApiCalls = () => {
   );
 };
 
-export default ApiCalls;
+export default PostProducts;

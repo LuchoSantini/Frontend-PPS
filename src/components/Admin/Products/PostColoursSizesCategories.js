@@ -98,7 +98,7 @@ const PostColoursSizesCategories = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <FormControl component="form" onSubmit={formikColours.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Color
         </Typography>
         <FormGroup>
@@ -126,7 +126,7 @@ const PostColoursSizesCategories = () => {
       </FormControl>
 
       <FormControl component="form" onSubmit={formikSizes.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Talle
         </Typography>
         <FormGroup>
@@ -154,7 +154,7 @@ const PostColoursSizesCategories = () => {
       </FormControl>
 
       <FormControl component="form" onSubmit={formikCategories.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Categoría
         </Typography>
         <FormGroup>

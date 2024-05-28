@@ -35,7 +35,7 @@ function ProductMapped({ isMobile }) {
         setLoading(false);
       } catch (error) {
         console.error(error);
-        setLoading(false);
+
       }
     };
 
@@ -50,14 +50,19 @@ function ProductMapped({ isMobile }) {
           filterSelected("priceOrder", "asc");
         } else if (sortMethod === "price-ascending") {
           filterSelected("priceOrder", "desc");
-        } else {
-          response = await getProducts();
+        } 
+        else if(sortMethod == "created-descending"){
+          filterSelected("dateOrder", "desc");
         }
-
+        else if(sortMethod == "created-ascending"){
+          filterSelected("dateOrder", "asc");
+        }
+        response = await getProducts();
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
         //console.log(error);
+        
       }
     };
     getProducts();

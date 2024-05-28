@@ -3,9 +3,9 @@ import {
   DeleteOutlined,
   SlidersOutlined,
 } from "@ant-design/icons";
-import { Collapse, Popover, Spin } from "antd";
+import { Collapse, Popover } from "antd";
 import React, { useEffect, useState } from "react";
-import { getCategories, getColours, getSizes } from "../Api/ApiServices";
+import { getMColours, getMCategories, getMSizes } from "../Api/ApiServices";
 import CustomFilters from "./CustomFilters";
 
 function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
@@ -26,9 +26,9 @@ function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
   useEffect(() => {
     const getSizesFilter = async () => {
       try {
-        const resSize = await getSizes();
-        const resColour = await getColours();
-        const resCategory = await getCategories();
+        const resSize = await getMSizes();
+        const resColour = await getMColours();
+        const resCategory = await getMCategories();
         setSizes(resSize.data);
         setColours(resColour.data);
         setCategories(resCategory.data);

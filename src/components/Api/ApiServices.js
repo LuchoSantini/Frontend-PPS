@@ -23,6 +23,18 @@ export const getCategories = () => {
   return api.get("api/categories");
 };
 
+//MAPPED VARIANTS FOR FILTER
+export const getMSizes = () => {
+  return api.get("api/mappedSizes");
+};
+
+export const getMColours = () => {
+  return api.get("api/mappedColours");
+};
+export const getMCategories = () => {
+  return api.get("api/mappedCategories");
+};
+
 // FILTER
 export const getProductsByFilter = (query) => {
   return api.get(`/api/products?${query}`);

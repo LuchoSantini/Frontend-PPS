@@ -1,4 +1,3 @@
-import React from "react";
 import Toastify from "toastify-js";
 
 const ToastifyToShow = ({ message }) => {

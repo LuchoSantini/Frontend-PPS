@@ -54,7 +54,7 @@ function ProductsManagement({ loading, products }) {
     genre: product.genre,
     category: product.category,
     status: product.status ? "Disponible" : "No Disponible",
-    colours: product.colours.map((colour) => colour.colourName).join(", "),
+    //colours: product.colours.map((colour) => colour.colourName).join(", "),
   }));
 
   return (

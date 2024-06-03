@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import api from "../../Api/Api";
-
 import {
   FormControl,
   FormGroup,
@@ -10,71 +7,25 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import { getCategories, getColours, getSizes } from "../../Api/ApiServices";
 
-const ChangeStatusColoursSizesCategories = () => {
-  const [colours, setColours] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedColourId, setSelectedColourId] = useState("");
-  const [selectedSizeId, setSelectedSizeId] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+import useFetchDataCSC from "../../hooks/Products/useFetchDataCSC";
+import useHandleStatusCSC from "../../hooks/Products/useHandleStatusCSC";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const coloursResponse = await getColours();
-        const sizesResponse = await getSizes();
-        const categoriesResponse = await getCategories();
+const ChangeStatusCSC = () => {
+  const {
+    handleStatusColours,
+    handleStatusSizes,
+    handleStatusCategory,
+    setSelectedColourId,
+    setSelectedSizeId,
+    setSelectedCategoryId,
+    selectedColourId,
+    selectedSizeId,
+    selectedCategoryId,
+  } = useHandleStatusCSC();
 
-        console.log(coloursResponse.data);
-        setColours(coloursResponse.data);
-        setSizes(sizesResponse.data);
-        setCategories(categoriesResponse.data);
-      } catch (error) {
-        console.log(error);
-        setErrorMessage("Error");
-      }
-    };
+  const { colours, sizes, categories } = useFetchDataCSC();
 
-    fetchData();
-  }, []);
-
-  const handleDeleteColours = async () => {
-    try {
-      await api.put(`/api/colours/${selectedColourId}`);
-      setColours(colours.filter((colour) => colour.id !== selectedColourId));
-      setSelectedColourId("");
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("Error");
-    }
-  };
-
-  const handleDeleteSizes = async () => {
-    try {
-      await api.put(`/api/sizes/${selectedSizeId}`);
-      setSizes(sizes.filter((size) => size.id !== selectedSizeId));
-      setSelectedSizeId("");
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("Error");
-    }
-  };
-
-  const handleDeleteCategory = async () => {
-    try {
-      await api.put(`/api/categories/${selectedCategoryId}`);
-      setCategories(
-        categories.filter((category) => category.id !== selectedCategoryId)
-      );
-      setSelectedCategoryId("");
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("Error");
-    }
-  };
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <FormControl component="form">
@@ -105,7 +56,7 @@ const ChangeStatusColoursSizesCategories = () => {
               <Button
                 variant="contained"
                 type="button"
-                onClick={handleDeleteColours}
+                onClick={handleStatusColours}
                 disabled={!selectedColourId}
               >
                 Eliminar
@@ -143,7 +94,7 @@ const ChangeStatusColoursSizesCategories = () => {
               <Button
                 variant="contained"
                 type="button"
-                onClick={handleDeleteSizes}
+                onClick={handleStatusSizes}
                 disabled={!selectedSizeId}
               >
                 Eliminar
@@ -181,7 +132,7 @@ const ChangeStatusColoursSizesCategories = () => {
               <Button
                 variant="contained"
                 type="button"
-                onClick={handleDeleteCategory}
+                onClick={handleStatusCategory}
                 disabled={!selectedCategoryId}
               >
                 Eliminar
@@ -194,4 +145,4 @@ const ChangeStatusColoursSizesCategories = () => {
   );
 };
 
-export default ChangeStatusColoursSizesCategories;
+export default ChangeStatusCSC;

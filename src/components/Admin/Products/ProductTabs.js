@@ -7,7 +7,7 @@ import PostProducts from "../Products/PostProducts";
 import EditProducts from "../Products/EditProducts";
 import EditProductStatus from "../Products/EditProductStatus";
 import PostColoursSizesCategories from "../Products/PostColoursSizesCategories";
-import ChangeStatusColoursSizesCategories from "../Products/ChangeStatusColoursSizesCategories";
+import ChangeStatusCSC from "./ChangeStatusCSC";
 
 const ProductsTabs = () => {
   const [value, setValue] = React.useState("1");
@@ -156,7 +156,7 @@ const ProductsTabs = () => {
               alignItems: "center",
             }}
           >
-            <ChangeStatusColoursSizesCategories />
+            <ChangeStatusCSC />
           </Modal>
         </TabPanel>
 

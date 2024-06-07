@@ -59,7 +59,16 @@ const UserIcon = ({ token, handleLogout }) => {
     <>
       {token ? (
         <Dropdown overlay={userMenu} trigger={["click"]}>
-          <UserOutlined style={{ fontSize: 30 }} className="buttons-navbar" />
+          <UserOutlined
+            style={{ fontSize: 30 }}
+            className="buttons-navbar"
+            onMouseOver={(e) => {
+              e.currentTarget.style.color = "#abbec4";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.color = "black";
+            }}
+          />
         </Dropdown>
       ) : (
         <UserOutlined

@@ -55,7 +55,8 @@ export const signup = (userData) => async (dispatch) => {
     // Realiza la solicitud al backend para registrar al usuario
     const response = await postUser(userData);
     // Si la solicitud es exitosa, realiza el inicio de sesión del usuario con los datos devueltos por el backend
-    dispatch(login(response.data));
+    //dispatch(login(response.data));
+    window.location.reload();
   } catch (error) {
     // Maneja cualquier error que pueda ocurrir durante la solicitud
     console.error("Error al registrar usuario:", error);

@@ -50,7 +50,6 @@ export const loginUser = async (credentials) => {
   try {
     const response = await api.post("/api/authenticate", credentials);
     return response.data;
-    console.log(response.data);
   } catch (error) {
     throw error.response.data;
   }

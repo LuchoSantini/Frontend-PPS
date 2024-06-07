@@ -35,7 +35,7 @@ function ProductMapped({ isMobile }) {
         setLoading(false);
       } catch (error) {
         console.error(error);
-        setLoading(false);
+
       }
     };
 
@@ -50,14 +50,19 @@ function ProductMapped({ isMobile }) {
           filterSelected("priceOrder", "asc");
         } else if (sortMethod === "price-ascending") {
           filterSelected("priceOrder", "desc");
-        } else {
-          response = await getProducts();
+        } 
+        else if(sortMethod == "created-descending"){
+          filterSelected("dateOrder", "desc");
         }
-
+        else if(sortMethod == "created-ascending"){
+          filterSelected("dateOrder", "asc");
+        }
+        response = await getProducts();
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
         //console.log(error);
+        
       }
     };
     getProducts();
@@ -89,10 +94,18 @@ function ProductMapped({ isMobile }) {
             style={{ width: 240 }}
             onChange={handleSortChange}
           >
-            <Option value="price-ascending">PRECIO: MAYOR A MENOR</Option>
-            <Option value="price-descending">PRECIO: MENOR A MAYOR</Option>
-            <Option value="created-descending">MAS VIEJO AL MAS NUEVO</Option>
-            <Option value="created-ascending">MAS NUEVO AL MAS VIEJO</Option>
+            <Select.Option value="price-ascending">
+              PRECIO: MAYOR A MENOR
+            </Select.Option>
+            <Select.Option value="price-descending">
+              PRECIO: MENOR A MAYOR
+            </Select.Option>
+            <Select.Option value="created-descending">
+              MAS VIEJO AL MAS NUEVO
+            </Select.Option>
+            <Select.Option value="created-ascending">
+              MAS NUEVO AL MAS VIEJO
+            </Select.Option>
           </Select>
         </div>
       </div>
@@ -126,6 +139,7 @@ function ProductMapped({ isMobile }) {
           >
             {products.map((product) => (
               <ProductCard
+                key={product.id}
                 title={product.description}
                 price={product.price}
                 colors={product.colours}

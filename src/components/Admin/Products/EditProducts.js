@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import ToastifyToShow from "../../hooks/ToastifyToShow";
+import ToastifyToShow from "../../hooks/Toastify/ToastifyToShow";
 
 import {
   FormControl,
@@ -43,9 +43,9 @@ const EditProducts = () => {
       setSizes(sizesResponse.data);
       setCategories(categoriesResponse.data);
 
-      if (productsResponse.data.length > 0) {
-        setSelectedProductId(productsResponse.data[0].id);
-      }
+      // if (productsResponse.data.length > 0) {
+      //   setSelectedProductId(productsResponse.data[0].id);
+      // }
     } catch (error) {
       console.log(error);
       setErrorMessage("Error al cargar los datos");

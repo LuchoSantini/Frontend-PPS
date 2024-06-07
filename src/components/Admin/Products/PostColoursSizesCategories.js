@@ -1,5 +1,4 @@
 import { useState } from "react";
-import api from "../../Api/Api";
 import * as yup from "yup";
 
 import {
@@ -22,21 +21,21 @@ const PostColoursSizesCategories = () => {
   const [categories, setCategories] = useState([]);
 
   const colourNameValidationScheme = yup.object().shape({
-    description: yup
+    colourName: yup
       .string()
       .min(3, "Escribe un color")
       .required("Escribe un color"),
   });
 
   const sizeNameValidationScheme = yup.object().shape({
-    description: yup
+    sizeName: yup
       .string()
       .min(1, "Escribe un talle")
       .required("Escribe un talle"),
   });
 
   const categoryNameValidationScheme = yup.object().shape({
-    description: yup
+    categoryName: yup
       .string()
       .min(3, "Escribe una categoría")
       .required("Escribe una categoría"),
@@ -44,7 +43,7 @@ const PostColoursSizesCategories = () => {
 
   const formikColours = useFormik({
     initialValues: {
-      description: "",
+      colourName: "",
     },
     validationSchema: colourNameValidationScheme,
     onSubmit: async (values) => {
@@ -62,7 +61,7 @@ const PostColoursSizesCategories = () => {
 
   const formikSizes = useFormik({
     initialValues: {
-      description: "",
+      sizeName: "",
     },
     validationSchema: sizeNameValidationScheme,
     onSubmit: async (values) => {
@@ -79,7 +78,7 @@ const PostColoursSizesCategories = () => {
 
   const formikCategories = useFormik({
     initialValues: {
-      description: "",
+      categoryName: "",
     },
     validationSchema: categoryNameValidationScheme,
     onSubmit: async (values) => {
@@ -98,23 +97,23 @@ const PostColoursSizesCategories = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <FormControl component="form" onSubmit={formikColours.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Color
         </Typography>
         <FormGroup>
           <Box mb={2} mt={1} textAlign="center">
             <FormControl fullWidth>
-              <InputLabel htmlFor="description">Color:</InputLabel>
+              <InputLabel htmlFor="colourName">Color:</InputLabel>
               <Input
-                id="description"
+                id="colourName"
                 type="text"
-                name="description"
-                value={formikColours.values.description}
+                name="colourName"
+                value={formikColours.colourName}
                 onChange={formikColours.handleChange}
                 onBlur={formikColours.handleBlur}
                 error={Boolean(
-                  formikColours.touched.description &&
-                    formikColours.errors.description
+                  formikColours.touched.colourName &&
+                    formikColours.errors.colourName
                 )}
               />
             </FormControl>
@@ -126,23 +125,22 @@ const PostColoursSizesCategories = () => {
       </FormControl>
 
       <FormControl component="form" onSubmit={formikSizes.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Talle
         </Typography>
         <FormGroup>
           <Box mb={2}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="description">Talle:</InputLabel>
+              <InputLabel htmlFor="sizeName">Talle:</InputLabel>
               <Input
-                id="description"
+                id="sizeName"
                 type="text"
-                name="description"
-                value={formikSizes.values.description}
+                name="sizeName"
+                value={formikSizes.values.sizeName}
                 onChange={formikSizes.handleChange}
                 onBlur={formikSizes.handleBlur}
                 error={Boolean(
-                  formikSizes.touched.description &&
-                    formikSizes.errors.description
+                  formikSizes.touched.sizeName && formikSizes.errors.sizeName
                 )}
               />
             </FormControl>
@@ -154,23 +152,23 @@ const PostColoursSizesCategories = () => {
       </FormControl>
 
       <FormControl component="form" onSubmit={formikCategories.handleSubmit}>
-        <Typography variant="h6" gutterBottom align="center">
+        <Typography variant="h6" align="center">
           Agregar Categoría
         </Typography>
         <FormGroup>
           <Box mb={2}>
             <FormControl fullWidth>
-              <InputLabel htmlFor="description">Categoría:</InputLabel>
+              <InputLabel htmlFor="categoryName">Categoría:</InputLabel>
               <Input
-                id="description"
+                id="categoryName"
                 type="text"
-                name="description"
-                value={formikCategories.values.description}
+                name="categoryName"
+                value={formikCategories.categoryName}
                 onChange={formikCategories.handleChange}
                 onBlur={formikCategories.handleBlur}
                 error={Boolean(
-                  formikCategories.touched.description &&
-                    formikCategories.errors.description
+                  formikCategories.touched.categoryName &&
+                    formikCategories.errors.categoryName
                 )}
               />
             </FormControl>

@@ -7,6 +7,7 @@ import ProductsManagement from "./components/Admin/Products/ProductsManagement";
 import UsersManagement from "./components/Admin/Users/UsersManagement";
 import CheckAdmin from "./context/CheckAdmin";
 import OrdersManagement from "./components/Admin/Orders/OrdersManagement";
+import ProductDetail from "./components/Home/Products/ProductMapped/ProductDetail";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -70,6 +71,7 @@ function App() {
           }
         />
         <Route path="*" element={<Home />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
     </BrowserRouter>
   );

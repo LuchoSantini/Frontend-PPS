@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../Card/ProductCard";
 import { Select, Spin } from "antd";
-import { Option } from "antd/es/mentions";
 import Filters from "./Filters";
-import { getProductsByFilter } from "../Api/ApiServices";
+import { getProductsByFilter } from "../../../Api/ApiServices";
 
 function ProductMapped({ isMobile }) {
   const [products, setProducts] = useState([]);
@@ -35,7 +34,6 @@ function ProductMapped({ isMobile }) {
         setLoading(false);
       } catch (error) {
         console.error(error);
-
       }
     };
 
@@ -50,11 +48,9 @@ function ProductMapped({ isMobile }) {
           filterSelected("priceOrder", "asc");
         } else if (sortMethod === "price-ascending") {
           filterSelected("priceOrder", "desc");
-        } 
-        else if(sortMethod == "created-descending"){
+        } else if (sortMethod == "created-descending") {
           filterSelected("dateOrder", "desc");
-        }
-        else if(sortMethod == "created-ascending"){
+        } else if (sortMethod == "created-ascending") {
           filterSelected("dateOrder", "asc");
         }
         response = await getProducts();
@@ -62,7 +58,6 @@ function ProductMapped({ isMobile }) {
         setLoading(false);
       } catch (error) {
         //console.log(error);
-        
       }
     };
     getProducts();
@@ -140,6 +135,7 @@ function ProductMapped({ isMobile }) {
             {products.map((product) => (
               <ProductCard
                 key={product.id}
+                id={product.id}
                 title={product.description}
                 price={product.price}
                 colors={product.colours}

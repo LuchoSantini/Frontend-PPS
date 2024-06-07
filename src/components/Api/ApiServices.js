@@ -7,6 +7,11 @@ export const allProducts = () => {
 export const getProducts = () => {
   return api.get("api/products");
 };
+
+export const getProductById = (id) => {
+  return api.get(`api/products/${id}`);
+};
+
 export const getUsers = () => {
   return api.get("api/users");
 };

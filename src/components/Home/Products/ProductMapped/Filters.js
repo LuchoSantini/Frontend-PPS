@@ -5,7 +5,11 @@ import {
 } from "@ant-design/icons";
 import { Collapse, Popover } from "antd";
 import React, { useEffect, useState } from "react";
-import { getMColours, getMCategories, getMSizes } from "../Api/ApiServices";
+import {
+  getMColours,
+  getMCategories,
+  getMSizes,
+} from "../../../Api/ApiServices";
 import CustomFilters from "./CustomFilters";
 
 function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {

@@ -78,12 +78,7 @@ const UserIcon = ({ token, handleLogout }) => {
           onClick={handleOpenModal}
         />
       )}
-      <Modal
-        title={showLoginForm ? "Iniciar Sesión" : "Registrarse"}
-        visible={showModal}
-        onCancel={handleCloseModal}
-        footer={null}
-      >
+      <Modal visible={showModal} onCancel={handleCloseModal} footer={null}>
         {showLoginForm ? (
           <LoginForm toggleForm={toggleForm} />
         ) : (

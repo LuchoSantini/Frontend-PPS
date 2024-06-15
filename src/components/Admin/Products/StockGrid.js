@@ -9,53 +9,10 @@ import {
   TableRow,
   Typography,
   Paper,
-  Link,
 } from "@mui/material";
+import { Button } from "antd";
 
-export default function StockGrid() {
-  const productStock = [
-    {
-      color: "Negro",
-      size: "S",
-      quantity: 15,
-      images: [
-        "https://example.com/product-image-1.jpg",
-        "https://example.com/product-image-2.jpg",
-        "https://example.com/product-image-3.jpg",
-      ],
-    },
-    {
-      color: "Negro",
-      size: "M",
-      quantity: 20,
-      images: [
-        "https://example.com/product-image-4.jpg",
-        "https://example.com/product-image-5.jpg",
-        "https://example.com/product-image-6.jpg",
-      ],
-    },
-    {
-      color: "Azul",
-      size: "L",
-      quantity: 8,
-      images: [
-        "https://example.com/product-image-7.jpg",
-        "https://example.com/product-image-8.jpg",
-        "https://example.com/product-image-9.jpg",
-      ],
-    },
-    {
-      color: "Rojo",
-      size: "XL",
-      quantity: 12,
-      images: [
-        "https://example.com/product-image-10.jpg",
-        "https://example.com/product-image-11.jpg",
-        "https://example.com/product-image-12.jpg",
-      ],
-    },
-  ];
-
+const StockGrid = ({ stocks, colours, sizes, handleDeleteStock }) => {
   return (
     <Box
       sx={{
@@ -66,54 +23,137 @@ export default function StockGrid() {
         py: 4,
       }}
     >
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         Stock
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h6">Color</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Talle</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Cantidad</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Imágenes</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {productStock.map((item, index) => (
-              <TableRow
-                key={index}
-                sx={{ bgcolor: index % 2 === 0 ? "grey.100" : "white" }}
-              >
-                <TableCell>{item.color}</TableCell>
-                <TableCell>{item.size}</TableCell>
-                <TableCell>{item.quantity}</TableCell>
+      {stocks && stocks.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  {item.images.map((image, imageIndex) => (
-                    <Link
-                      key={imageIndex}
-                      href={image}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ mr: 2, color: "primary.main" }}
-                    >
-                      {image}
-                    </Link>
-                  ))}
+                  <Typography variant="h6">Color</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Talle</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Cantidad</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Imágenes</Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {stocks.map((item, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ bgcolor: index % 2 === 0 ? "grey.100" : "white" }}
+                >
+                  <TableCell
+                    sx={{
+                      minWidth: 120,
+                      maxWidth: 200,
+                    }}
+                  >
+                    <Typography noWrap>
+                      {item.ColourId
+                        ? colours.find((c) => c.id === item.ColourId)
+                            ?.colourName
+                        : ""}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ minWidth: 120, maxWidth: 200 }}>
+                    {item.stockSizes.map((size, sizeIndex) => (
+                      <Box
+                        key={sizeIndex}
+                        sx={{ minWidth: 120, maxWidth: 200 }}
+                      >
+                        <Typography noWrap>
+                          {size.SizeId
+                            ? sizes.find((s) => s.id === size.SizeId)?.sizeName
+                            : ""}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell sx={{ minWidth: 100, maxWidth: 150 }}>
+                    {item.stockSizes.map((size, sizeIndex) => (
+                      <Box
+                        key={sizeIndex}
+                        sx={{ minWidth: 100, maxWidth: 150 }}
+                      >
+                        <Typography noWrap>{size.quantity}</Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell sx={{ minWidth: 150 }}>
+                    {item.images.map((image, imageIndex) => (
+                      <Box
+                        key={imageIndex}
+                        sx={{ minWidth: 100, maxWidth: 300 }}
+                      >
+                        <Typography noWrap>
+                          {image.image ? (
+                            <a
+                              href={image.image}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Imagen {imageIndex + 1}
+                            </a>
+                          ) : (
+                            ""
+                          )}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        danger
+                        onClick={() => handleDeleteStock(index)}
+                      >
+                        X
+                      </Button>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography
+          variant="h7"
+          component="h2"
+          gutterBottom
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          No hay Stocks agregados.
+        </Typography>
+      )}
     </Box>
   );
-}
+};
+
+export default StockGrid;

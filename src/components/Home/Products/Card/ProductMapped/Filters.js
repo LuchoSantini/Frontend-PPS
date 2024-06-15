@@ -5,14 +5,11 @@ import {
 } from "@ant-design/icons";
 import { Collapse, Popover } from "antd";
 import React, { useEffect, useState } from "react";
-import {
-  getMColours,
-  getMCategories,
-  getMSizes,
-} from "../../../Api/ApiServices";
-import CustomFilters from "./CustomFilters";
 
-function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
+import CustomFilters from "./CustomFilters";
+import { getMCategories, getMColours, getMSizes } from "../../../../Api/ApiServices";
+
+function Filters ({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
   const [open, setOpen] = useState(false);
   const [sizes, setSizes] = useState();
   const [colours, setColours] = useState();
@@ -45,7 +42,7 @@ function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
 
   const genres = [
     { id: 1, description: "Hombre" },
-    { id: 2, description: "Ambos" },
+    { id: 2, description: "Unisex" },
     { id: 3, description: "Mujer" },
   ];
   const getItems = () => [
@@ -128,7 +125,7 @@ function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
       <Collapse
         bordered={true}
         defaultActiveKey={["0"]}
-        style={{ width: 320, background: "#e5e2d9", color: "#fff" }}
+        style={{ width: 320, background: "rgb(137 174 188 / 72%)", color: "#fff" }}
         expandIcon={({ isActive }) => (
           <CaretRightOutlined rotate={isActive ? 90 : 0} />
         )}

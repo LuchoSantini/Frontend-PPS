@@ -8,7 +8,7 @@ import { logout } from "../../redux/store/authSlice";
 import UserIcon from "./UserIcon"; // Importar el nuevo componente
 import ProductDrawer from "../Admin/Products/ProductDrawer";
 
-const Navbar = () => {
+const Navbar = ({products}) => {
   const [open, setOpen] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [title, setTitle] = useState();
@@ -135,7 +135,7 @@ const Navbar = () => {
                   e.currentTarget.style.color = "black";
                 }}
                 onClick={showDrawerSearch}
-                className="buttons-navbar"
+                
               />
             </Box>
             <div>
@@ -176,6 +176,7 @@ const Navbar = () => {
           openCart={openCart}
           setOpenCart={setOpenCart}
           setOpen={setOpen}
+          products={products}
         />
       </div>
     </>

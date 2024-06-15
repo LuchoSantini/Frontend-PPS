@@ -7,7 +7,7 @@ import ProductsManagement from "./components/Admin/Products/ProductsManagement";
 import UsersManagement from "./components/Admin/Users/UsersManagement";
 import CheckAdmin from "./context/CheckAdmin";
 import OrdersManagement from "./components/Admin/Orders/OrdersManagement";
-import ProductDetail from "./components/Home/Products/ProductMapped/ProductDetail";
+import ProductDetail from "./components/Home/Products/Card/ProductMapped/ProductDetail";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home products={products} />} />
         <Route
           path="/admin"
           element={
@@ -59,7 +59,7 @@ function App() {
             </CheckAdmin>
           }
         />
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Home products={products} />} />
 
         <Route
           path="/admin/ordenes"
@@ -70,8 +70,8 @@ function App() {
             </CheckAdmin>
           }
         />
-        <Route path="*" element={<Home />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="*" element={<Home products={products} />} />
+        <Route path="/product/:id" element={<ProductDetail products={products} />} />
       </Routes>
     </BrowserRouter>
   );

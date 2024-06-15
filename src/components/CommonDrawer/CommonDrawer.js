@@ -1,5 +1,6 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Drawer, Space } from "antd";
+import ProductSearch from "../Home/Products/ProductSearch";
 
 const CommonDrawer = ({
   title,
@@ -8,36 +9,40 @@ const CommonDrawer = ({
   openCart,
   setOpen,
   setOpenCart,
+  products,
 }) => {
   return (
     <Drawer
-      title={title}
+      title={
+        placement === "left" ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <ProductSearch products={products} setOpen={setOpen} />
+            <CloseOutlined
+              onClick={() => {
+                setOpen(false);
+                setOpenCart(false);
+              }}
+              style={{ fontSize: "16px", cursor: "pointer", marginLeft:5 }}
+            />
+          </div>
+        ) : (<div>CARRITO</div>)
+      }
+      closeIcon={false}
       placement={placement}
-      closable={false}
       onClose={() => {
         setOpen(false);
         setOpenCart(false);
       }}
-      style={{zIndex:1001}}
+      style={{ zIndex: 1001 }}
       open={placement === "left" ? open : openCart}
-      extra={
-        <Space>
-          <CloseOutlined
-            onClick={() => {
-              setOpen(false);
-              setOpenCart(false);
-            }}
-            style={{ paddingLeft: 10 }}
-          />
-        </Space>
-      }
-    >
-      {placement === "left" ? null : (
-        <div>
-          <p>Product 423 $$$ cant:</p>
-        </div>
-      )}
-    </Drawer>
+    ></Drawer>
   );
 };
 

@@ -12,10 +12,10 @@ import {
   FormLabel,
   Chip,
 } from "@mui/material";
-import { getProductById } from "../../../Api/ApiServices";
-import Navbar from "../../../Navbar/Navbar";
+import { getProductById } from "../../../../Api/ApiServices";
+import Navbar from "../../../../Navbar/Navbar";
 
-const ProductDetail = () => {
+const ProductDetail = ({products}) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ const ProductDetail = () => {
 
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
-      <Navbar />
+      <Navbar products={products} />
       <Grid container spacing={6} marginTop={"20px"}>
         <Grid item xs={12} md={6} container>
           <Grid item xs={3} container direction="column" spacing={2}>

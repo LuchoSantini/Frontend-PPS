@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../Card/ProductCard";
+import ProductCard from "../ProductCard"
 import { Select, Spin } from "antd";
-import Filters from "./Filters";
-import { getProductsByFilter } from "../../../Api/ApiServices";
 
+import { getProductsByFilter } from "../../../../Api/ApiServices"
+import Filters from "./Filters";
 function ProductMapped({ isMobile }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,9 +48,9 @@ function ProductMapped({ isMobile }) {
           filterSelected("priceOrder", "asc");
         } else if (sortMethod === "price-ascending") {
           filterSelected("priceOrder", "desc");
-        } else if (sortMethod == "created-descending") {
+        } else if (sortMethod === "created-descending") {
           filterSelected("dateOrder", "desc");
-        } else if (sortMethod == "created-ascending") {
+        } else if (sortMethod === "created-ascending") {
           filterSelected("dateOrder", "asc");
         }
         response = await getProducts();

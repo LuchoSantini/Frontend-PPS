@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useFormik } from "formik";
-import api from "../../Api/Api";
-import * as yup from "yup";
-
 import {
   FormControl,
   FormGroup,
@@ -14,18 +10,12 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import {
-  getCategories,
-  getColours,
-  getSizes,
-  postProduct,
-} from "../../Api/ApiServices";
-import ToastifyToShow from "../../hooks/Toastify/ToastifyToShow";
+import { getCategories, getColours, getSizes } from "../../Api/ApiServices";
 import { Modal } from "antd";
 import StockGrid from "./StockGrid";
+import useProductsFormik from "../../hooks/Products/useProductsFormik";
 
 const PostProducts = () => {
-  const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -43,7 +33,6 @@ const PostProducts = () => {
       setCategories(categoriesResponse.data);
     } catch (error) {
       console.log(error);
-      setErrorMessage("Error al cargar los datos");
     }
   };
 
@@ -51,111 +40,25 @@ const PostProducts = () => {
     fetchData();
   }, []);
 
-  const productFormValidationScheme = yup.object().shape({
-    description: yup.string().required("Ingrese una descripción"),
-    price: yup
-      .number()
-      .min(0.01, "Ingresa un precio válido.")
-      .required("Ingrese un precio"),
-    image: yup.string().required("Ingrese una URL"),
-    genre: yup.string().required("Selecciona un género"),
-    category: yup
-      .number()
-      .min(1, "Selecciona una categoría")
-      .required("Selecciona una categoría"),
-    stocks: yup.array().of(
-      yup.object().shape({
-        ColourId: yup
-          .number()
-          .min(1, "Selecciona un color")
-          .required("Selecciona un color"),
-        stockSizes: yup.array().of(
-          yup.object().shape({
-            SizeId: yup
-              .number()
-              .min(1, "Selecciona un tamaño")
-              .required("Selecciona un tamaño"),
-            quantity: yup
-              .number()
-              .min(1, "Ingresa una cantidad válida.")
-              .required("Ingresa una cantidad"),
-          })
-        ),
-        images: yup.array().of(
-          yup.object().shape({
-            image: yup.string().url("Ingrese una URL válida"),
-          })
-        ),
-      })
-    ),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      description: "",
-      price: 0,
-      image: "",
-      genre: "",
-      category: null,
-      stocks: [
-        {
-          ColourId: null,
-          stockSizes: [{ SizeId: null, quantity: 0 }],
-          images: [{ image: "" }],
-        },
-      ],
-    },
-    validationSchema: productFormValidationScheme,
-    onSubmit: async (values) => {
-      try {
-        const response = await postProduct(values);
-        console.log(response.data);
-        ToastifyToShow({ message: response.data });
-      } catch (error) {
-        console.log(error);
-        setErrorMessage("Error al agregar un producto");
-        ToastifyToShow({ message: error.response.data });
-        console.log(errorMessage);
-      }
-    },
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    formik.setFieldValue(name, value);
-  };
-
-  const handleDeleteSize = (index) => {
-    if (formik.values.stocks[index].stockSizes.length > 1) {
-      const newStockSizes = formik.values.stocks[index].stockSizes.slice(0, -1);
-      formik.setFieldValue(`stocks.${index}.stockSizes`, newStockSizes);
-    }
-  };
-
-  const handleDeleteImage = (index) => {
-    if (formik.values.stocks[index].images.length > 1) {
-      const imageToDelete = formik.values.stocks[index].images.slice(0, -1);
-      formik.setFieldValue(`stocks.${index}.images`, imageToDelete);
-    }
-  };
-
-  const handleChangeCategory = (e) => {
-    let value;
-    const { name, value: targetValue, type } = e.target;
-
-    if (name === "ColourId" || name === "SizeId" || name === "category") {
-      const id = parseInt(targetValue);
-      value = isNaN(id) ? [] : [id]; // Convertir el número entero en un array con un solo elemento
-    } else {
-      value = type === "number" ? parseFloat(targetValue) : targetValue; // Manejar correctamente valores numéricos
-    }
-
-    formik.setFieldValue(name, value);
-  };
+  const {
+    formik,
+    stock,
+    handleAddStock,
+    handleDeleteStock,
+    handleAddImage,
+    handleDeleteImage,
+    handleAddStockSizes,
+    handleDeleteStockSizes,
+    handleChange,
+    handleChangeCategory,
+    stockButtonVisibility,
+    addImageButtonVisibility,
+    addStockSizeButtonVisibility,
+  } = useProductsFormik();
 
   return (
     <Box>
-      <FormControl component="form" onSubmit={formik.handleSubmit}>
+      <FormControl fullWidth component="form" onSubmit={formik.handleSubmit}>
         <Typography variant="h6" gutterBottom align="center">
           Agregar Producto
         </Typography>
@@ -183,7 +86,7 @@ const PostProducts = () => {
                 id="price-input"
                 type="number"
                 name="price"
-                value={formik.values.price}
+                value={formik.values.price || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(formik.touched.price && formik.errors.price)}
@@ -255,7 +158,6 @@ const PostProducts = () => {
           >
             Añadir Stock
           </Button>
-          {/* */}
           <Button
             variant="contained"
             color="primary"
@@ -266,45 +168,57 @@ const PostProducts = () => {
           </Button>
           <Modal
             open={openModal2}
+            cancelButtonProps={{ style: { display: "none" } }} // Oculta el botón de cancelar
             onCancel={() => setOpenModal2(false)}
             onOk={() => setOpenModal2(false)}
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              top: "7%",
+              left: "-7%",
             }}
           >
+            {/* Adaptar este Box a Mobile */}
             <Box
               style={{
+                justifyContent: "center",
                 display: "flex",
-                justifyContent: "space-between",
                 top: "50%",
                 left: "50%",
-                maxWidth: 650,
-                maxHeight: 650,
+                width: "770px",
+                maxWidth: 770,
+                maxHeight: 700,
                 overflowY: "auto",
-                overflowX: "auto",
               }}
             >
-              <StockGrid />
+              <StockGrid
+                stocks={stock}
+                handleChange={handleChange}
+                formik={formik}
+                colours={colours}
+                sizes={sizes}
+                handleDeleteStock={handleDeleteStock}
+              />
             </Box>
           </Modal>
-          {/* */}
 
           <Modal
             open={openModal}
-            onCancel={() => setOpenModal(false)}
+            cancelButtonProps={{ style: { display: "none" } }}
             onOk={() => setOpenModal(false)}
+            onCancel={() => setOpenModal(false)}
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
             }}
           >
             <Box
               style={{
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "center",
+                width: "300px",
                 top: "50%",
                 left: "50%",
                 maxWidth: 650,
@@ -314,206 +228,221 @@ const PostProducts = () => {
               }}
             >
               {formik.values.stocks.map((stock, index) => (
-                <Box key={index} mb={2} mr={5}>
-                  <Typography variant="h6" gutterBottom align="center">
+                <Box key={index} mb={2}>
+                  <Typography variant="h6" align="center">
                     Color
                   </Typography>
-                  <FormControl fullWidth>
-                    <TextField
-                      id="colour-input"
-                      select
-                      label="Color"
-                      type="text"
-                      name={`stocks.${index}.ColourId`}
-                      value={formik.values.stocks[index]?.ColourId || ""}
-                      onChange={handleChange}
-                      onBlur={formik.handleBlur}
-                      error={Boolean(
-                        formik.touched.stocks &&
-                          formik.touched.stocks[index]?.ColourId !==
-                            undefined &&
-                          formik.errors.stocks &&
-                          formik.errors.stocks[index]?.ColourId !== undefined
-                      )}
-                      style={{
-                        marginBottom: "10px",
-                      }}
-                    >
-                      {colours.map((colour) => (
-                        <MenuItem key={colour.id} value={colour.id}>
-                          {colour.colourName}
-                        </MenuItem>
-                      ))}
-                    </TextField>
 
-                    <Typography variant="h6" align="center">
-                      Talles
-                    </Typography>
-                    {formik.values.stocks[index]?.stockSizes.map(
-                      (size, sizeIndex) => (
-                        <Box key={sizeIndex} mb={1}>
-                          <FormControl fullWidth>
-                            <TextField
-                              id={`stockSizes-input-${sizeIndex}`}
-                              select
-                              label="Talle"
-                              type="text"
-                              name={`stocks.${index}.stockSizes.${sizeIndex}.SizeId`}
-                              value={
-                                formik.values.stocks[index]?.stockSizes[
-                                  sizeIndex
-                                ]?.SizeId || ""
-                              }
-                              onChange={handleChange}
-                              onBlur={formik.handleBlur}
-                              style={{
-                                marginBottom: "10px",
-                              }}
-                            >
-                              {sizes.map((size) => (
-                                <MenuItem key={size.id} value={size.id}>
-                                  {size.sizeName}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                            <TextField
-                              id={`stockQuantity-input-${sizeIndex}`}
-                              placeholder="Cantidad"
-                              label="Cantidad"
-                              type="number"
-                              name={`stocks.${index}.stockSizes.${sizeIndex}.quantity`}
-                              value={
-                                formik.values.stocks[index]?.stockSizes[
-                                  sizeIndex
-                                ]?.quantity || ""
-                              }
-                              onChange={handleChange}
-                              onBlur={formik.handleBlur}
-                            />
-                          </FormControl>
-                        </Box>
-                      )
+                  <TextField
+                    id="colour-input"
+                    select
+                    label="Color"
+                    type="text"
+                    name={`stocks.${index}.ColourId`}
+                    value={formik.values.stocks[index]?.ColourId || ""}
+                    onChange={handleChange}
+                    onBlur={formik.handleBlur}
+                    error={Boolean(
+                      formik.touched.stocks &&
+                        formik.touched.stocks[index]?.ColourId !== undefined &&
+                        formik.errors.stocks &&
+                        formik.errors.stocks[index]?.ColourId !== undefined
                     )}
-                    <Box
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        style={{
-                          marginRight: "5px",
-                        }}
-                        onClick={() => {
-                          formik.setFieldValue(`stocks.${index}.stockSizes`, [
-                            ...formik.values.stocks[index].stockSizes,
-                            { SizeId: null, quantity: 0 },
-                          ]);
-                        }}
-                      >
-                        Agregar
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        style={{
-                          maxHeight: "37px",
-                        }}
-                        onClick={() => {
-                          handleDeleteSize(index);
-                        }}
-                      >
-                        X
-                      </Button>
-                    </Box>
-                    <Typography variant="h6" align="center">
-                      Imágenes
-                    </Typography>
-                    {formik.values.stocks[index]?.images.map(
-                      (image, imageIndex) => (
-                        <Box key={imageIndex}>
+                    style={{
+                      marginBottom: "10px",
+                      width: "100%",
+                    }}
+                  >
+                    {colours.map((colour) => (
+                      <MenuItem key={colour.id} value={colour.id}>
+                        {colour.colourName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Typography variant="h6" align="center">
+                    Talles
+                  </Typography>
+                  {formik.values.stocks[index]?.stockSizes.map(
+                    (size, sizeIndex) => (
+                      <Box key={sizeIndex} mb={1}>
+                        <FormControl fullWidth>
                           <TextField
-                            id="image-input"
-                            label="URL Imagen"
+                            id={`stockSizes-input-${sizeIndex}`}
+                            select
+                            label="Talle"
                             type="text"
-                            name={`stocks.${index}.images.${imageIndex}.image`}
+                            name={`stocks.${index}.stockSizes.${sizeIndex}.SizeId`}
                             value={
-                              formik.values.stocks[index]?.images[imageIndex]
-                                ?.image || ""
+                              formik.values.stocks[index]?.stockSizes[sizeIndex]
+                                ?.SizeId || ""
+                            }
+                            error={
+                              formik.touched.stocks &&
+                              formik.touched.stocks[index]?.stockSizes &&
+                              formik.touched.stocks[index]?.stockSizes[
+                                sizeIndex
+                              ]?.SizeId !== undefined &&
+                              formik.errors.stocks &&
+                              formik.errors.stocks[index]?.stockSizes &&
+                              formik.errors.stocks[index]?.stockSizes[sizeIndex]
+                                ?.SizeId !== undefined
                             }
                             onChange={handleChange}
                             onBlur={formik.handleBlur}
                             style={{
-                              display: "flex",
-                              justifyContent: "space-between",
                               marginBottom: "10px",
                             }}
+                          >
+                            {sizes.map((size) => (
+                              <MenuItem key={size.id} value={size.id}>
+                                {size.sizeName}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                          <TextField
+                            id={`stockQuantity-input-${sizeIndex}`}
+                            placeholder="Cantidad"
+                            label="Cantidad"
+                            type="number"
+                            name={`stocks.${index}.stockSizes.${sizeIndex}.quantity`}
+                            value={
+                              formik.values.stocks[index]?.stockSizes[sizeIndex]
+                                ?.quantity || ""
+                            }
+                            error={
+                              formik.touched.stocks &&
+                              formik.touched.stocks[index]?.stockSizes &&
+                              formik.touched.stocks[index]?.stockSizes[
+                                sizeIndex
+                              ]?.quantity !== undefined &&
+                              formik.errors.stocks &&
+                              formik.errors.stocks[index]?.stockSizes &&
+                              formik.errors.stocks[index]?.stockSizes[sizeIndex]
+                                ?.quantity !== undefined
+                            }
+                            onChange={handleChange}
+                            onBlur={formik.handleBlur}
                           />
-                        </Box>
-                      )
-                    )}
-                    <Box
+                        </FormControl>
+                      </Box>
+                    )
+                  )}
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      disabled={addStockSizeButtonVisibility}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "10px",
+                        marginRight: "5px",
+                      }}
+                      onClick={() => {
+                        handleAddStockSizes(index);
                       }}
                     >
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          formik.setFieldValue(`stocks.${index}.images`, [
-                            ...formik.values.stocks[index].images,
-                            { image: "" },
-                          ]);
-                        }}
-                      >
-                        Agregar
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          handleDeleteImage(index);
-                        }}
-                        style={{
-                          maxHeight: "37px",
-                        }}
-                      >
-                        X
-                      </Button>
-                    </Box>
-                  </FormControl>
+                      Agregar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      style={{
+                        maxHeight: "37px",
+                      }}
+                      onClick={() => {
+                        handleDeleteStockSizes(index);
+                      }}
+                    >
+                      X
+                    </Button>
+                  </Box>
+                  <Typography variant="h6" align="center">
+                    Imágenes
+                  </Typography>
+                  {formik.values.stocks[index]?.images.map(
+                    (image, imageIndex) => (
+                      <Box key={imageIndex}>
+                        <TextField
+                          id="image-input"
+                          label="URL Imagen"
+                          type="text"
+                          name={`stocks.${index}.images.${imageIndex}.image`}
+                          value={
+                            formik.values.stocks[index]?.images[imageIndex]
+                              ?.image || ""
+                          }
+                          error={
+                            formik.touched.stocks &&
+                            formik.touched.stocks[index]?.images &&
+                            formik.touched.stocks[index]?.images[imageIndex]
+                              ?.image &&
+                            Boolean(
+                              formik.errors.stocks &&
+                                formik.errors.stocks[index]?.images &&
+                                formik.errors.stocks[index]?.images[imageIndex]
+                                  ?.image
+                            )
+                          }
+                          onChange={handleChange}
+                          onBlur={formik.handleBlur}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginBottom: "10px",
+                          }}
+                        />
+                      </Box>
+                    )
+                  )}
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: "30px",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      disabled={addImageButtonVisibility}
+                      onClick={() => {
+                        handleAddImage(index);
+                      }}
+                    >
+                      Agregar
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => {
+                        handleDeleteImage(index);
+                      }}
+                    >
+                      X
+                    </Button>
+                  </Box>
+
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      disabled={stockButtonVisibility}
+                      variant="contained"
+                      type="submit"
+                      onClick={handleAddStock}
+                      style={{ marginBottom: "10px" }}
+                    >
+                      Agregar Stock
+                    </Button>
+                  </Box>
                 </Box>
               ))}
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    formik.setFieldValue("stocks", [
-                      ...formik.values.stocks,
-                      {
-                        ColourId: null,
-                        stockSizes: [{ SizeId: null, quantity: 0 }],
-                        images: [{ image: "" }],
-                      },
-                    ]);
-                  }}
-                  style={{
-                    marginTop: "10px",
-                  }}
-                >
-                  Agregar Color
-                </Button>
-              </Box>
             </Box>
           </Modal>
         </FormGroup>

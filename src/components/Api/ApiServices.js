@@ -63,6 +63,10 @@ export const postUser = (values) => {
   return api.post("/api/register", values);
 };
 
+export const postPayment = (values) => {
+  return api.post("/api/PaymentControllerMP/create-preference", values);
+};
+
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post("/api/authenticate", credentials);

@@ -4,8 +4,11 @@ import LoginForm from "./LoginMenu/LoginForm";
 import SignupForm from "./LoginMenu/SignupForm";
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
+import UserProfile from "./UserProfile";
 const UserIcon = ({ token, handleLogout }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
+
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [userData, setUserData] = useState(null);
 
@@ -30,34 +33,46 @@ const UserIcon = ({ token, handleLogout }) => {
     setShowLoginForm(!showLoginForm);
   };
 
+  const handleOpenUserProfile = () => {
+      setShowUserProfile(true)
+  }
+  const handleCloseUserProfile = () => {
+    setShowUserProfile(false);
+  };
+
   const userMenu = (
     <Menu>
-      <Menu.Item key="1">
+      <Menu.Item key="1" onClick={handleOpenUserProfile}>
         <div>
           {userData && (
-            <>
-              {userData.name} {userData.surname}
-              <br />
-              {userData.email}
-            </>
+            <a style={{color:"black"}} >
+              Mi perfil
+            </a>
           )}
         </div>
       </Menu.Item>
       {userData && userData.role === "Admin" && (
         <Menu.Item key="2">
-          <Button href="/admin" type="link">
-            Panel de Administrador
-          </Button>
+          <a href="/admin" type="link">
+          Panel de Administrador
+          </a>
         </Menu.Item>
       )}
       <Menu.Item key="3" onClick={handleLogout}>
-        Cerrar Sesión
+       <a>Cerrar Sesión</a> 
       </Menu.Item>
     </Menu>
   );
 
   return (
     <>
+    {
+      showUserProfile && <UserProfile
+          showUserProfile={showUserProfile}
+          handleClose={handleCloseUserProfile}
+          userData={userData}
+        />
+    }
       {token ? (
         <Dropdown overlay={userMenu} trigger={["click"]}>
           <UserOutlined

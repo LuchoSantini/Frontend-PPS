@@ -71,7 +71,7 @@ function App() {
           }
         />
         <Route path="*" element={<Home products={products} />} />
-        <Route path="/product/:id" element={<ProductDetail products={products} />} />
+        <Route path="/product/:id" element={<ProductDetail products={products} loading={loading} />} />
       </Routes>
     </BrowserRouter>
   );

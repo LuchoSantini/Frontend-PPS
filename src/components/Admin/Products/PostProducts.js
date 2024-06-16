@@ -146,7 +146,7 @@ const PostProducts = () => {
               >
                 <MenuItem value={"Hombre"}>Hombre</MenuItem>
                 <MenuItem value={"Mujer"}>Mujer</MenuItem>
-                <MenuItem value={"Ambos"}>Ambos</MenuItem>
+                <MenuItem value={"Unisex"}>Unisex</MenuItem>
               </TextField>
             </FormControl>
           </Box>

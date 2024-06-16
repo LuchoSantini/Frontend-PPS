@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { getProductById } from "../../../../Api/ApiServices";
 import Navbar from "../../../../Navbar/Navbar";
+import { Spin } from "antd";
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
@@ -58,7 +59,19 @@ const ProductDetail = ({ products }) => {
     }
   }, [selectedColor, product]);
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    );
 
   if (!product) return <Typography>Product not found</Typography>;
 

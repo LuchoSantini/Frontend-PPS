@@ -125,7 +125,7 @@ function Filters ({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
       <Collapse
         bordered={true}
         defaultActiveKey={["0"]}
-        style={{ width: 320, background: "rgb(137 174 188 / 72%)", color: "#fff" }}
+        style={{ width: 320, background: "#a7bee42e", color: "#fff" }}
         expandIcon={({ isActive }) => (
           <CaretRightOutlined rotate={isActive ? 90 : 0} />
         )}

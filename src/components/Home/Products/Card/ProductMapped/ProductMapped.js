@@ -140,6 +140,7 @@ function ProductMapped({ isMobile }) {
                 price={product.price}
                 colors={product.colours}
                 image={product.image}
+                genre={product.genre}
               />
             ))}
           </div>

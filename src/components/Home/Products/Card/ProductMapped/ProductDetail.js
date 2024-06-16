@@ -15,7 +15,7 @@ import {
 import { getProductById } from "../../../../Api/ApiServices";
 import Navbar from "../../../../Navbar/Navbar";
 
-const ProductDetail = ({products}) => {
+const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,15 +26,20 @@ const ProductDetail = ({products}) => {
     const fetchProduct = async () => {
       try {
         const response = await getProductById(id);
+        console.log(response.data.stocks[0].images[0].imageURL);
+
         setProduct(response.data);
         setLoading(false);
+        setMainImage(response.data.stocks[0]?.images[0]?.imageURL);
+        setSelectedColor(response.data.stocks[0]?.colourId);
+
         // Establece la imagen principal inicial
-        const initialStock = response.data.stocks.find(
-          (stock) => stock.colourId === 1
-        );
-        if (initialStock) {
-          setMainImage(initialStock.images[0]?.imageURL || "");
-        }
+        // const initialStock = response.data.stocks.find(
+        //   (stock) => stock.colourId === 1
+        // );
+        // if (initialStock) {
+        //   setMainImage(initialStock.images[0]?.imageURL || "");
+        // }
       } catch (error) {
         console.error(error);
         setLoading(false);

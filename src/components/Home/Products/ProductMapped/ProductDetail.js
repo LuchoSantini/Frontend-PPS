@@ -1,5 +1,3 @@
-// src/components/ProductDetail.js
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -14,20 +12,20 @@ import {
   FormLabel,
   Chip,
 } from "@mui/material";
-import { getProductById } from "../../../../Api/ApiServices";
-import Navbar from "../../../../Navbar/Navbar";
+import { getProductById } from "../../../Api/ApiServices";
+import Navbar from "../../../Navbar/Navbar";
 import { Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../../../../redux/cartActions";
+import { addToCart } from "../../../../redux/cartActions";
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState(1);
-  const [selectedSize, setSelectedSize] = useState(""); // Estado para almacenar el tamaño seleccionado
+  const [selectedSize, setSelectedSize] = useState("");
   const [mainImage, setMainImage] = useState("");
-  const [quantity, setQuantity] = useState(1); // Estado para la cantidad seleccionada
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -83,7 +81,6 @@ const ProductDetail = ({ products }) => {
       return;
     }
 
-    // Verificar si el producto ya está en el carrito
     const existingItem = cartItems.find(
       (item) =>
         item.id === product.id &&
@@ -92,7 +89,6 @@ const ProductDetail = ({ products }) => {
     );
 
     if (existingItem) {
-      // Si el producto ya está en el carrito, incrementamos la cantidad en 1
       const updatedQuantity = existingItem.quantity + 1;
 
       const cartProduct = {
@@ -103,7 +99,6 @@ const ProductDetail = ({ products }) => {
       dispatch(addToCart(cartProduct));
       console.log(cartProduct);
     } else {
-      // Si el producto no está en el carrito, lo agregamos con cantidad inicial 1
       const cartProduct = {
         id: product.id,
         name: product.description,
@@ -119,6 +114,7 @@ const ProductDetail = ({ products }) => {
       console.log(cartProduct);
     }
   };
+
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
       <Navbar products={products} />

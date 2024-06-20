@@ -26,7 +26,7 @@ function CustomFilters({ filters, filterType, onFilterSelected }) {
                 alignItems: "center",
                 width: 100,
                 justifyContent: "center",
-                transition:"all 0.3s ease"
+                transition: "all 0.3s ease",
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.color = "#8ba0a5";

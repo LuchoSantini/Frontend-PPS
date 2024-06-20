@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../ProductCard"
+import ProductCard from "../ProductCard";
 import { Select, Spin } from "antd";
-
-import { getProductsByFilter } from "../../../../Api/ApiServices"
+import { getProductsByFilter } from "../../../Api/ApiServices";
 import Filters from "./Filters";
+
 function ProductMapped({ isMobile }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -141,6 +141,8 @@ function ProductMapped({ isMobile }) {
                 colors={product.colours}
                 image={product.image}
                 genre={product.genre}
+                newProductDays={14}
+                //Aca directamente le pasamos los dias, hay que confirmar
               />
             ))}
           </div>

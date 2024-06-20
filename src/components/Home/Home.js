@@ -2,7 +2,7 @@ import React from "react";
 
 import Navbar from "../Navbar/Navbar";
 
-import ProductMapped from "./Products/Card/ProductMapped/ProductMapped.js";
+import ProductMapped from "./Products/ProductMapped/ProductMapped";
 
 import { useMediaQuery } from "@mui/material";
 

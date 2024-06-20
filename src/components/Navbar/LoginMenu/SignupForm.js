@@ -7,6 +7,7 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  Box,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
@@ -21,28 +22,44 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Correo electrónico no válido")
     .required("Campo obligatorio"),
-  password: Yup.string().required("Campo obligatorio"),
+  password: Yup.string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .max(50, "La contraseña debe tener como máximo 50 caracteres")
+    .matches(
+      /(?=.*[A-Z])/,
+      "La contraseña debe tener por lo menos una mayúscula"
+    )
+    .required("Por favor ingrese una contraseña"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Las contraseñas deben coincidir")
+    .required("Por favor, confirma tu contraseña"),
 });
 
 const SignupForm = ({ toggleForm }) => {
   const dispatch = useDispatch();
-
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const handleSubmit = async (values) => {
     try {
-      setIsSubmitting(true); // Marcamos como enviando
-      await dispatch(signup(values)); // Enviar los valores del formulario al método de inicio de sesión de Redux
-      setIsSubmitting(false); // Marcamos como no enviando después del éxito
+      setIsSubmitting(true);
+      await dispatch(signup(values));
+      //Aca hay que agregar el toasty de exito con el mensaje de mail enviado
+      setIsSubmitting(false);
     } catch (error) {
-      setIsSubmitting(false); // Aseguramos que siempre se resetee el estado en caso de error
+      setIsSubmitting(false);
       console.error("Error al registrarse:", error);
-      // Aquí podrías manejar errores de inicio de sesión si es necesario
+      // Aca hay que agregar el toasty error
     }
   };
 
@@ -59,6 +76,10 @@ const SignupForm = ({ toggleForm }) => {
             flexDirection: "column",
             alignItems: "center",
             padding: "20px",
+            position: "relative",
+            width: "100%",
+            maxWidth: "400px",
+            margin: "0 auto",
           }}
         >
           <Typography variant="h5" gutterBottom>
@@ -100,11 +121,55 @@ const SignupForm = ({ toggleForm }) => {
             component="div"
             style={{ marginBottom: "10px", color: "red" }}
           />
-          <Field
+          <Box sx={{ position: "relative", width: "100%" }}>
+            <Field
+              name="password"
+              type={showPassword ? "text" : "password"}
+              as={TextField}
+              label="Contraseña"
+              variant="outlined"
+              style={{ marginBottom: "20px", width: "100%" }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+            />
+            {passwordFocused && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  left: "0",
+                  width: "100%",
+                  marginTop: "8px",
+                  zIndex: 1000,
+                }}
+              >
+                <PasswordStrengthMeter password={values.password} />
+              </Box>
+            )}
+          </Box>
+          <ErrorMessage
             name="password"
-            type={showPassword ? "text" : "password"}
+            component="div"
+            style={{ marginBottom: "10px", color: "red" }}
+          />
+          <Field
+            name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
             as={TextField}
-            label="Contraseña"
+            label="Confirmar Contraseña"
             variant="outlined"
             style={{ marginBottom: "20px", width: "100%" }}
             InputProps={{
@@ -112,18 +177,17 @@ const SignupForm = ({ toggleForm }) => {
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
+                    onClick={handleClickShowConfirmPassword}
                     edge="end"
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
           />
-          <PasswordStrengthMeter password={values.password} />
           <ErrorMessage
-            name="password"
+            name="confirmPassword"
             component="div"
             style={{ marginBottom: "10px", color: "red" }}
           />

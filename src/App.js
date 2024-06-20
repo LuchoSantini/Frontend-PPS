@@ -7,7 +7,7 @@ import ProductsManagement from "./components/Admin/Products/ProductsManagement";
 import UsersManagement from "./components/Admin/Users/UsersManagement";
 import CheckAdmin from "./context/CheckAdmin";
 import OrdersManagement from "./components/Admin/Orders/OrdersManagement";
-import ProductDetail from "./components/Home/Products/Card/ProductMapped/ProductDetail";
+import ProductDetail from "./components/Home/Products/ProductMapped/ProductDetail";
 
 function App() {
   const [loading, setLoading] = useState(true);

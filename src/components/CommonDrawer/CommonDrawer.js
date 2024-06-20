@@ -1,16 +1,9 @@
+// src/components/CommonDrawer/CommonDrawer.js
 import { CloseOutlined } from "@ant-design/icons";
-import { Drawer, Space } from "antd";
+import { Drawer } from "antd";
 import ProductSearch from "../Home/Products/ProductSearch";
 
-const CommonDrawer = ({
-  title,
-  placement,
-  open,
-  openCart,
-  setOpen,
-  setOpenCart,
-  products,
-}) => {
+const CommonDrawer = ({ title, placement, open, setOpen, products }) => {
   return (
     <Drawer
       title={
@@ -25,23 +18,19 @@ const CommonDrawer = ({
           >
             <ProductSearch products={products} setOpen={setOpen} />
             <CloseOutlined
-              onClick={() => {
-                setOpen(false);
-                setOpenCart(false);
-              }}
-              style={{ fontSize: "16px", cursor: "pointer", marginLeft:5 }}
+              onClick={() => setOpen(false)}
+              style={{ fontSize: "16px", cursor: "pointer", marginLeft: 5 }}
             />
           </div>
-        ) : (<div>CARRITO</div>)
+        ) : (
+          <div>{title}</div>
+        )
       }
       closeIcon={false}
       placement={placement}
-      onClose={() => {
-        setOpen(false);
-        setOpenCart(false);
-      }}
+      onClose={() => setOpen(false)}
       style={{ zIndex: 1001 }}
-      open={placement === "left" ? open : openCart}
+      open={open}
     ></Drawer>
   );
 };

@@ -1,16 +1,17 @@
+// src/components/Navbar/Navbar.js
 import React, { useState } from "react";
-import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { useMediaQuery, Box } from "@mui/material";
 import CommonDrawer from "../CommonDrawer/CommonDrawer";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/store/authSlice";
-import UserIcon from "./UserIcon"; // Importar el nuevo componente
+import UserIcon from "./UserIcon";
 import ProductDrawer from "../Admin/Products/ProductDrawer";
+import CartIcon from "../Cart/CartIcon";
 
-const Navbar = ({products}) => {
+const Navbar = ({ products }) => {
   const [open, setOpen] = useState(false);
-  const [openCart, setOpenCart] = useState(false);
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 632px)");
@@ -21,12 +22,6 @@ const Navbar = ({products}) => {
     setOpen(true);
     setTitle("Buscar productos");
     setPlacement("left");
-  };
-
-  const showDrawerCart = () => {
-    setOpenCart(true);
-    setTitle("Carrito de compra");
-    setPlacement("right");
   };
 
   const handleLogout = () => {
@@ -99,12 +94,8 @@ const Navbar = ({products}) => {
                 </Link>
               </div>
               <div style={{ display: "flex" }}>
-                <UserIcon token={token} handleLogout={handleLogout} />{" "}
-                {/* Mostrar el UserIcon directamente */}
-                <ShoppingCartOutlined
-                  style={{ fontSize: 30 }}
-                  onClick={showDrawerCart}
-                />
+                <UserIcon token={token} handleLogout={handleLogout} />
+                <CartIcon /> {/* Utilizar el CartIcon */}
               </div>
             </div>
           </div>
@@ -135,7 +126,6 @@ const Navbar = ({products}) => {
                   e.currentTarget.style.color = "black";
                 }}
                 onClick={showDrawerSearch}
-                
               />
             </Box>
             <div>
@@ -147,21 +137,8 @@ const Navbar = ({products}) => {
               </Link>
             </div>
             <div style={{ display: "flex" }}>
-              <UserIcon token={token} handleLogout={handleLogout} />{" "}
-              {/* Mostrar el UserIcon directamente */}
-              <div>
-                <ShoppingCartOutlined
-                  style={{ fontSize: 30, transition: "all 0.3s ease" }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.color = "#abbec4";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.color = "black";
-                  }}
-                  onClick={showDrawerCart}
-                  className="buttons-navbar"
-                />
-              </div>
+              <UserIcon token={token} handleLogout={handleLogout} />
+              <CartIcon /> {/* Utilizar el CartIcon */}
             </div>
           </Box>
         )}
@@ -169,14 +146,11 @@ const Navbar = ({products}) => {
           title={title}
           placement={placement}
           open={open}
+          products={products}
           onClose={() => {
             setOpen(false);
-            setOpenCart(false);
           }}
-          openCart={openCart}
-          setOpenCart={setOpenCart}
           setOpen={setOpen}
-          products={products}
         />
       </div>
     </>

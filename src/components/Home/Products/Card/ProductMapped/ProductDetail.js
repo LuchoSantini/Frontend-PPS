@@ -1,3 +1,5 @@
+// src/components/ProductDetail.js
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -15,32 +17,28 @@ import {
 import { getProductById } from "../../../../Api/ApiServices";
 import Navbar from "../../../../Navbar/Navbar";
 import { Spin } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../../../../redux/cartActions";
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedColor, setSelectedColor] = useState(1); // Estado para el color seleccionado, por defecto color 1
-  const [mainImage, setMainImage] = useState(""); // Estado para la imagen principal
+  const [selectedColor, setSelectedColor] = useState(1);
+  const [selectedSize, setSelectedSize] = useState(""); // Estado para almacenar el tamaño seleccionado
+  const [mainImage, setMainImage] = useState("");
+  const [quantity, setQuantity] = useState(1); // Estado para la cantidad seleccionada
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductById(id);
-        console.log(response.data.stocks[0].images[0].imageURL);
-
         setProduct(response.data);
         setLoading(false);
         setMainImage(response.data.stocks[0]?.images[0]?.imageURL);
         setSelectedColor(response.data.stocks[0]?.colourId);
-
-        // Establece la imagen principal inicial
-        // const initialStock = response.data.stocks.find(
-        //   (stock) => stock.colourId === 1
-        // );
-        // if (initialStock) {
-        //   setMainImage(initialStock.images[0]?.imageURL || "");
-        // }
       } catch (error) {
         console.error(error);
         setLoading(false);
@@ -50,7 +48,6 @@ const ProductDetail = ({ products }) => {
   }, [id]);
 
   useEffect(() => {
-    // Cambia la imagen principal cuando se cambia el color seleccionado
     const selectedStock = product?.stocks.find(
       (stock) => stock.colourId === selectedColor
     );
@@ -76,12 +73,52 @@ const ProductDetail = ({ products }) => {
   if (!product) return <Typography>Product not found</Typography>;
 
   const { description, stocks, categories } = product;
-
-  // Filtrar el stock según el color seleccionado
   const selectedStock = stocks.find(
     (stock) => stock.colourId === selectedColor
   );
 
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+
+    // Verificar si el producto ya está en el carrito
+    const existingItem = cartItems.find(
+      (item) =>
+        item.id === product.id &&
+        item.colorId === selectedColor &&
+        item.sizeId === selectedSize
+    );
+
+    if (existingItem) {
+      // Si el producto ya está en el carrito, incrementamos la cantidad en 1
+      const updatedQuantity = existingItem.quantity + 1;
+
+      const cartProduct = {
+        ...existingItem,
+        quantity: updatedQuantity,
+      };
+
+      dispatch(addToCart(cartProduct));
+      console.log(cartProduct);
+    } else {
+      // Si el producto no está en el carrito, lo agregamos con cantidad inicial 1
+      const cartProduct = {
+        id: product.id,
+        name: product.description,
+        price: product.price,
+        color: selectedStock.colour?.colourName,
+        colorId: selectedColor,
+        sizeId: selectedSize,
+        image: mainImage,
+        quantity: quantity,
+      };
+
+      dispatch(addToCart(cartProduct));
+      console.log(cartProduct);
+    }
+  };
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
       <Navbar products={products} />
@@ -93,7 +130,7 @@ const ProductDetail = ({ products }) => {
                 <Button
                   variant="outlined"
                   fullWidth
-                  onClick={() => setMainImage(img.imageURL)} // Cambiar imagen principal al hacer clic
+                  onClick={() => setMainImage(img.imageURL)}
                   sx={{
                     margin: "8px",
                     width: "90%",
@@ -174,16 +211,21 @@ const ProductDetail = ({ products }) => {
           <Box mt={4}>
             <FormControl component="fieldset">
               <FormLabel component="legend">Size</FormLabel>
-              <RadioGroup row name="size" defaultValue="m">
+              <RadioGroup
+                row
+                name="size"
+                value={selectedSize}
+                onChange={(e) => setSelectedSize(e.target.value)}
+              >
                 {selectedStock?.stockSizes.map((stockSize) => (
                   <FormControlLabel
                     key={stockSize.sizeId}
-                    value={stockSize.size.sizeName.toLowerCase()}
+                    value={stockSize.sizeId.toString()} // Asignamos el sizeId como valor
                     control={
                       <Radio
                         sx={{
                           color: (theme) =>
-                            selectedStock === stockSize.size.sizeId
+                            selectedSize === stockSize.sizeId
                               ? "rgb(118, 148, 159)"
                               : theme.palette.grey[400],
                           "&.Mui-checked": {
@@ -219,10 +261,11 @@ const ProductDetail = ({ products }) => {
               mt: 4,
               backgroundColor: "rgb(118, 148, 159)",
               "&:hover": {
-                backgroundColor: "rgb(118, 148, 159)", //Cambiar brillo o transparencia
+                backgroundColor: "rgb(118, 148, 159)",
                 borderColor: "transparent",
               },
             }}
+            onClick={handleAddToCart}
           >
             Add to cart
           </Button>

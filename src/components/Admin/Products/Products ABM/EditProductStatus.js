@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import api from "../../Api/Api";
-import ToastifyToShow from "../../hooks/Toastify/ToastifyToShow";
+import api from "../../../Api/Api";
+import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
 
 import {
   FormControl,
@@ -15,7 +15,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { allProducts } from "../../Api/ApiServices";
+import { allProducts } from "../../../Api/ApiServices";
 
 const EditProductStatus = () => {
   const [products, setProducts] = useState([]);
@@ -97,7 +97,7 @@ const EditProductStatus = () => {
     <Box mb={2}>
       <FormControl component="form" onSubmit={formik.handleSubmit}>
         <Typography variant="h6" gutterBottom align="center">
-          Editar Estado del Producto
+          Cambiar Estado del Producto
         </Typography>
         <FormGroup>
           <Box mb={2}>

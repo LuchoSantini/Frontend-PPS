@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { signup } from "../../../redux/store/authSlice";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
-import Spinner from "../../effects/Spinner";
+import Spinner from "../../hooks/Effects/Spinner";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Campo obligatorio"),

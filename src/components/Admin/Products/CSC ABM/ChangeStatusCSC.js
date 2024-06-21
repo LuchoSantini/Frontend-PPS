@@ -8,8 +8,8 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import useFetchDataCSC from "../../hooks/Products/useFetchDataCSC";
-import useHandleStatusCSC from "../../hooks/Products/useHandleStatusCSC";
+import useFetchDataCSC from "../../../hooks/Products/useFetchDataCSC";
+import useHandleStatusCSC from "../../../hooks/Products/useHandleStatusCSC";
 
 const ChangeStatusCSC = () => {
   const {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { postProduct } from "../../Api/ApiServices";
-import ToastifyToShow from "../Toastify/ToastifyToShow";
+import ToastifyToShow from "../Effects/ToastifyToShow";
 import { useFormik } from "formik";
 import * as yup from "yup";
 

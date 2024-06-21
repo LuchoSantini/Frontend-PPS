@@ -12,7 +12,7 @@ import * as Yup from "yup";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/store/authSlice";
-import Spinner from "../../effects/Spinner";
+import Spinner from "../../hooks/Effects/Spinner";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()

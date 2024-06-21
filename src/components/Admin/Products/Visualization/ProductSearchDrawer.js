@@ -1,9 +1,9 @@
 // src/components/CommonDrawer/CommonDrawer.js
 import { CloseOutlined } from "@ant-design/icons";
 import { Drawer } from "antd";
-import ProductSearch from "../Home/Products/ProductSearch";
+import ProductSearch from "../../../Home/Products/ProductSearch";
 
-const CommonDrawer = ({ title, placement, open, setOpen, products }) => {
+const ProductSearchDrawer = ({ title, placement, open, setOpen, products }) => {
   return (
     <Drawer
       title={
@@ -35,4 +35,4 @@ const CommonDrawer = ({ title, placement, open, setOpen, products }) => {
   );
 };
 
-export default CommonDrawer;
+export default ProductSearchDrawer;

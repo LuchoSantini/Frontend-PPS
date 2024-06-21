@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
+
 import {
   FormControl,
   FormGroup,
@@ -10,39 +14,27 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { getCategories, getColours, getSizes } from "../../Api/ApiServices";
+import {
+  getCategories,
+  getColours,
+  getProducts,
+  getSizes,
+} from "../../../Api/ApiServices";
+import api from "../../../Api/Api";
+import useProductsFormik from "../../../hooks/Products/useProductsFormik";
 import { Modal } from "antd";
-import StockGrid from "./StockGrid";
-import useProductsFormik from "../../hooks/Products/useProductsFormik";
 
-const PostProducts = () => {
+const EditProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [openModal2, setOpenModal2] = useState(false);
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [openModal2, setOpenModal2] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      const coloursResponse = await getColours();
-      const sizesResponse = await getSizes();
-      const categoriesResponse = await getCategories();
-
-      setColours(coloursResponse.data);
-      setSizes(sizesResponse.data);
-      setCategories(categoriesResponse.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [selectedProductId, setSelectedProductId] = useState("");
 
   const {
-    formik,
-    stock,
     handleAddStock,
     handleDeleteStock,
     handleAddImage,
@@ -56,14 +48,177 @@ const PostProducts = () => {
     addStockSizeButtonVisibility,
   } = useProductsFormik();
 
+  const fetchData = async () => {
+    try {
+      const productsResponse = await getProducts();
+      const coloursResponse = await getColours();
+      const sizesResponse = await getSizes();
+      const categoriesResponse = await getCategories();
+
+      setProducts(productsResponse.data);
+      setColours(coloursResponse.data);
+      setSizes(sizesResponse.data);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Error al cargar los datos");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const productsFormValidationScheme = yup.object().shape({
+    description: yup.string().required("Ingrese una descripción"),
+    price: yup
+      .number()
+      .min(0.01, "Ingresa un precio válido.")
+      .required("Ingrese un precio"),
+    image: yup.string().required("Ingrese una URL"),
+    genre: yup.string().required("Selecciona un género"),
+    category: yup.string().required("Selecciona una categoría"),
+    stocks: yup.array().of(
+      yup.object().shape({
+        ColourId: yup
+          .number()
+          .min(1, "Selecciona un color")
+          .required("Selecciona un color"),
+        stockSizes: yup.array().of(
+          yup.object().shape({
+            SizeId: yup
+              .number()
+              .min(1, "Selecciona un tamaño")
+              .required("Selecciona un tamaño"),
+            quantity: yup
+              .number()
+              .min(1, "Ingresa una cantidad válida.")
+              .required("Ingresa una cantidad"),
+          })
+        ),
+        images: yup.array().of(
+          yup.object().shape({
+            image: yup.string().required("Ingrese una URL válida"),
+          })
+        ),
+      })
+    ),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      description: "",
+      price: "",
+      image: "",
+      genre: "",
+      category: null,
+      stocks: [
+        {
+          ColourId: "",
+          stockSizes: [{ SizeId: "", quantity: "" }],
+          images: [{ image: "" }],
+        },
+      ],
+    },
+    validationSchema: productsFormValidationScheme,
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          ...values,
+          category: Array.isArray(values.category)
+            ? values.category
+            : [values.category],
+        };
+
+        const response = await api.put(
+          `/api/products/edit/${selectedProductId}`,
+          formData
+        );
+
+        const updatedProductIndex = products.findIndex(
+          (product) => product.id === selectedProductId
+        );
+
+        const updatedProducts = [...products];
+        updatedProducts[updatedProductIndex] = response.data;
+
+        setProducts(updatedProducts);
+
+        fetchData();
+        formik.resetForm();
+        setSelectedProductId(1);
+
+        setErrorMessage("");
+        ToastifyToShow({ message: "Producto editado correctamente" });
+      } catch (error) {
+        ToastifyToShow({ message: error.response.data });
+        console.log(error);
+      }
+    },
+  });
+
+  const handleProductChange = (e) => {
+    const productId = e.target.value;
+    setSelectedProductId(productId);
+
+    const selectedProduct = products.find(
+      (product) => product.id === productId
+    );
+
+    const selectedCategoryId =
+      selectedProduct.categories[0].id > 0
+        ? selectedProduct.categories[0].id
+        : null;
+    console.log(selectedProduct);
+
+    const initialValues = {
+      id: selectedProduct.id,
+      description: selectedProduct.description,
+      price: selectedProduct.price,
+      image: selectedProduct.image,
+      genre: selectedProduct.genre,
+      category: selectedCategoryId,
+      stocks: selectedProduct.stocks.map((stock) => ({
+        ColourId: stock.colour.id,
+        stockSizes: stock.stockSizes.map((stockSize) => ({
+          SizeId: stockSize.size.id,
+          quantity: stockSize.quantity,
+        })),
+        images: stock.images.map((image) => ({
+          image: image.imageURL,
+        })),
+      })),
+    };
+    console.log(products);
+    formik.setValues(initialValues);
+  };
+
   return (
     <Box>
-      <FormControl fullWidth component="form" onSubmit={formik.handleSubmit}>
+      <FormControl component="form" onSubmit={formik.handleSubmit}>
         <Typography variant="h6" gutterBottom align="center">
-          Agregar Producto
+          Editar Producto
         </Typography>
         <FormGroup>
-          <Box mb={2} mt={1}>
+          <Box mb={2}>
+            <FormControl fullWidth>
+              <TextField
+                select
+                label="Seleccione un Producto"
+                name="id"
+                value={formik.values.id || ""}
+                onChange={handleProductChange}
+              >
+                {products.map((product) => (
+                  <MenuItem key={product.id + 1} value={product.id}>
+                    {product.description}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Box>
+
+          <Box mb={2}>
             <FormControl fullWidth>
               <InputLabel htmlFor="description">Descripción:</InputLabel>
               <Input
@@ -86,7 +241,7 @@ const PostProducts = () => {
                 id="price-input"
                 type="number"
                 name="price"
-                value={formik.values.price || ""}
+                value={formik.values.price}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(formik.touched.price && formik.errors.price)}
@@ -117,7 +272,7 @@ const PostProducts = () => {
                 type="text"
                 name="category"
                 value={formik.values.category || ""}
-                onChange={handleChangeCategory}
+                onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.category && formik.errors.category
@@ -137,9 +292,8 @@ const PostProducts = () => {
                 id="genre-input"
                 select
                 label="Género"
-                type="text"
                 name="genre"
-                value={formik.values.genre}
+                value={formik.values.genre || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(formik.touched.genre && formik.errors.genre)}
@@ -156,53 +310,8 @@ const PostProducts = () => {
             onClick={() => setOpenModal(true)}
             sx={{ mb: 2 }}
           >
-            Añadir Stock
+            Stock
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setOpenModal2(true)}
-            sx={{ mb: 2 }}
-          >
-            Ver Stock
-          </Button>
-          <Modal
-            open={openModal2}
-            cancelButtonProps={{ style: { display: "none" } }} // Oculta el botón de cancelar
-            onCancel={() => setOpenModal2(false)}
-            onOk={() => setOpenModal2(false)}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              top: "7%",
-              left: "-7%",
-            }}
-          >
-            {/* Adaptar este Box a Mobile */}
-            <Box
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                top: "50%",
-                left: "50%",
-                width: "770px",
-                maxWidth: 770,
-                maxHeight: 700,
-                overflowY: "auto",
-              }}
-            >
-              <StockGrid
-                stocks={stock}
-                handleChange={handleChange}
-                formik={formik}
-                colours={colours}
-                sizes={sizes}
-                handleDeleteStock={handleDeleteStock}
-              />
-            </Box>
-          </Modal>
-
           <Modal
             open={openModal}
             cancelButtonProps={{ style: { display: "none" } }}
@@ -218,7 +327,7 @@ const PostProducts = () => {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                width: "300px",
+                width: "500px",
                 top: "50%",
                 left: "50%",
                 maxWidth: 650,
@@ -228,7 +337,7 @@ const PostProducts = () => {
               }}
             >
               {formik.values.stocks.map((stock, index) => (
-                <Box key={index} mb={2}>
+                <Box key={index} mb={2} mr={3}>
                   <Typography variant="h6" align="center">
                     Color
                   </Typography>
@@ -240,7 +349,7 @@ const PostProducts = () => {
                     type="text"
                     name={`stocks.${index}.ColourId`}
                     value={formik.values.stocks[index]?.ColourId || ""}
-                    onChange={handleChange}
+                    onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={Boolean(
                       formik.touched.stocks &&
@@ -262,7 +371,7 @@ const PostProducts = () => {
                   <Typography variant="h6" align="center">
                     Talles
                   </Typography>
-                  {formik.values.stocks[index]?.stockSizes.map(
+                  {formik.values.stocks[index]?.stockSizes?.map(
                     (size, sizeIndex) => (
                       <Box key={sizeIndex} mb={1}>
                         <FormControl fullWidth>
@@ -287,7 +396,7 @@ const PostProducts = () => {
                               formik.errors.stocks[index]?.stockSizes[sizeIndex]
                                 ?.SizeId !== undefined
                             }
-                            onChange={handleChange}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             style={{
                               marginBottom: "10px",
@@ -320,7 +429,7 @@ const PostProducts = () => {
                               formik.errors.stocks[index]?.stockSizes[sizeIndex]
                                 ?.quantity !== undefined
                             }
-                            onChange={handleChange}
+                            onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                           />
                         </FormControl>
@@ -341,7 +450,7 @@ const PostProducts = () => {
                         marginRight: "5px",
                       }}
                       onClick={() => {
-                        handleAddStockSizes(index);
+                        handleAddStockSizes(stock);
                       }}
                     >
                       Agregar
@@ -353,7 +462,7 @@ const PostProducts = () => {
                         maxHeight: "37px",
                       }}
                       onClick={() => {
-                        handleDeleteStockSizes(index);
+                        handleDeleteStockSizes(stock);
                       }}
                     >
                       X
@@ -386,7 +495,7 @@ const PostProducts = () => {
                                   ?.image
                             )
                           }
-                          onChange={handleChange}
+                          onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           style={{
                             display: "flex",
@@ -446,12 +555,14 @@ const PostProducts = () => {
             </Box>
           </Modal>
         </FormGroup>
-        <Button variant="contained" type="submit">
-          Agregar Producto
-        </Button>
+        <Box sx={{ mt: 3 }}>
+          <Button type="submit" variant="contained" color="primary">
+            Actualizar Producto
+          </Button>
+        </Box>
       </FormControl>
     </Box>
   );
 };
 
-export default PostProducts;
+export default EditProducts;

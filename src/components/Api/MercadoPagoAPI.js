@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-import { postPayment } from "../Api/ApiServices";
+import { postPayment } from "./ApiServices";
 
 // ta re crudely eto e no hagan caso xd
 

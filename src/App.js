@@ -3,7 +3,7 @@ import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
 import { useEffect, useState } from "react";
 import { getProducts, getUsers } from "./components/Api/ApiServices";
-import ProductsManagement from "./components/Admin/Products/ProductsManagement";
+import ProductsManagement from "./components/Admin/Products/Visualization/ProductsManagement";
 import UsersManagement from "./components/Admin/Users/UsersManagement";
 import CheckAdmin from "./context/CheckAdmin";
 import OrdersManagement from "./components/Admin/Orders/OrdersManagement";

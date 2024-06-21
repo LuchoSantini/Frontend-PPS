@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 
 import { useFormik } from "formik";
-import { postCategories, postColours, postSizes } from "../../Api/ApiServices";
+import {
+  postCategories,
+  postColours,
+  postSizes,
+} from "../../../Api/ApiServices";
 
 const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");

@@ -18,10 +18,10 @@ const ToastifyToShow = ({ message }) => {
       letterSpacing: "0.02857em",
       textTransform: "uppercase",
     },
-    onClick: function () {}, // Callback after click
+    onClick: function () {},
   }).showToast();
 
-  return null; // No necesitamos renderizar nada en este componente
+  return null;
 };
 
 export default ToastifyToShow;

@@ -1,4 +1,4 @@
-import Navbar from "../../Navbar/Navbar";
+import Navbar from "../../../Navbar/Navbar";
 import { Box, Typography, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";

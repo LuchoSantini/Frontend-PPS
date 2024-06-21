@@ -2,12 +2,11 @@
 import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { useMediaQuery, Box } from "@mui/material";
-import CommonDrawer from "../CommonDrawer/CommonDrawer";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/store/authSlice";
+import ProductSearchDrawer from "../Admin/Products/Visualization/ProductSearchDrawer";
 import UserIcon from "./UserIcon";
-import ProductDrawer from "../Admin/Products/ProductDrawer";
 import CartIcon from "../Cart/CartIcon";
 
 const Navbar = ({ products }) => {
@@ -116,7 +115,6 @@ const Navbar = ({ products }) => {
                 flexDirection: "row",
               }}
             >
-              <ProductDrawer />
               <SearchOutlined
                 style={{ fontSize: 30, transition: "all 0.3s ease" }}
                 onMouseOver={(e) => {
@@ -142,7 +140,7 @@ const Navbar = ({ products }) => {
             </div>
           </Box>
         )}
-        <CommonDrawer
+        <ProductSearchDrawer
           title={title}
           placement={placement}
           open={open}

@@ -3,11 +3,11 @@ import { Tab, Button, Box } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Modal } from "antd";
 
-import PostProducts from "../Products/PostProducts";
-import EditProducts from "../Products/EditProducts";
-import EditProductStatus from "../Products/EditProductStatus";
-import PostColoursSizesCategories from "../Products/PostColoursSizesCategories";
-import ChangeStatusCSC from "./ChangeStatusCSC";
+import PostProducts from "../Products ABM/PostProducts";
+import EditProducts from "../Products ABM/EditProducts";
+import EditProductStatus from "../Products ABM/EditProductStatus";
+import PostColoursSizesCategories from "../CSC ABM/PostColoursSizesCategories";
+import ChangeStatusCSC from "../CSC ABM/ChangeStatusCSC";
 
 const ProductsTabs = () => {
   const [value, setValue] = React.useState("1");

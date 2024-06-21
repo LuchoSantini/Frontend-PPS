@@ -34,10 +34,11 @@ const ProductSearch = ({ products,setOpen }) => {
     );
 
     if (selectedProduct) {
-      navigate(`/product/${selectedProduct.id}`, {
+      navigate(`/product/${selectedProduct.description}`, {
         state: {
           product: selectedProduct,
           id: selectedProduct.id,
+          description:selectedProduct.description
         },
       });
     }

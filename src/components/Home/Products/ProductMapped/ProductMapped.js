@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
-import { Select, Spin } from "antd";
+import { Select, Spin, Tag } from "antd";
 import { getProductsByFilter } from "../../../Api/ApiServices";
 import Filters from "./Filters";
 
@@ -132,11 +132,12 @@ function ProductMapped({ isMobile }) {
               width: "auto",
             }}
           >
+            
             {products.map((product) => (
               <ProductCard
                 key={product.id}
                 id={product.id}
-                title={product.description}
+                description={product.description}
                 price={product.price}
                 colors={product.colours}
                 image={product.image}

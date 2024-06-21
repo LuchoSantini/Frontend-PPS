@@ -12,7 +12,7 @@ import {
   FormLabel,
   Chip,
 } from "@mui/material";
-import { getProductById } from "../../../Api/ApiServices";
+import { getProductByDescription, getProductById } from "../../../Api/ApiServices";
 import Navbar from "../../../Navbar/Navbar";
 import { Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,7 @@ const ProductDetail = ({ products }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await getProductById(id);
+        const response = await getProductByDescription(id);
         setProduct(response.data);
         setLoading(false);
         setMainImage(response.data.stocks[0]?.images[0]?.imageURL);

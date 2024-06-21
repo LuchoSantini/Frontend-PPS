@@ -3,9 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
-  id,
   image,
-  title,
+  description,
   price,
   genre,
   createdDate,
@@ -14,8 +13,9 @@ const ProductCard = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/product/${id}`);
+    navigate(`/product/${description}`);
   };
+
 
   const isNewProduct = (createdDate, newProductDays) => {
     const currentDate = new Date();
@@ -35,7 +35,7 @@ const ProductCard = ({
         maxWidth: "250px",
         borderRadius: 0,
       }}
-      cover={<img src={image} alt={title} style={{ maxWidth: "100%" }} />}
+      cover={<img src={image} alt={description} style={{ maxWidth: "100%" }} />}
       extra={
         isNewProduct(createdDate, newProductDays) && (
           <p style={{ backgroundColor: "#76949F", padding: 5, color: "white" }}>
@@ -61,7 +61,7 @@ const ProductCard = ({
             marginTop: 5,
           }}
         >
-          <h4 style={{ margin: 0, maxWidth: "34.1rem", zIndex: 2 }}>{title}</h4>
+          <h4 style={{ margin: 0, maxWidth: "34.1rem", zIndex: 2 }}>{description}</h4>
           <span style={{ color: "ffff", margin: "0px 0" }}>
             ${price.toLocaleString()}
           </span>

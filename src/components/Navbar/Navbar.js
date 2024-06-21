@@ -16,7 +16,7 @@ const Navbar = ({ products }) => {
   const isMobile = useMediaQuery("(max-width: 632px)");
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-
+  console.log(token)
   const showDrawerSearch = () => {
     setOpen(true);
     setTitle("Buscar productos");

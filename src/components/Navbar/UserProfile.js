@@ -1,15 +1,52 @@
-import { Modal, Button, Divider, Tabs } from "antd";
-import React from "react";
+import { Modal, Button, Tabs, Tag, Avatar, Popconfirm } from "antd";
+import React, { useEffect, useState } from "react";
+import { Subscribe, UnSubscribe, getUserByEmail } from "../Api/ApiServices";
+import { UserOutlined } from "@ant-design/icons";
 
 const { TabPane } = Tabs;
 
 function UserProfile({ showUserProfile, handleClose, userData }) {
-  console.log(userData);
+  const email = userData.email;
+  const [isSubscribe, setIsSubscribe] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getUserByEmail(email);
+        console.log(res);
+        setIsSubscribe(res.data.notification);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    };
+
+    fetchUser();
+  }, [email]);
+
+  const handleSubscribe = async () => {
+    try {
+      const response = await Subscribe(email);
+      console.log("Subscribed successfully", response);
+      setIsSubscribe(true);
+    } catch (error) {
+      console.error("Error subscribing", error);
+    }
+  };
+
+  const handleUnSubscribe = async () => {
+    try {
+      const response = await UnSubscribe(email);
+      console.log("Unsubscribed successfully", response);
+      setIsSubscribe(false);
+    } catch (error) {
+      console.error("Error unsubscribing", error);
+    }
+  };
+
   return (
     <>
       {showUserProfile && (
         <Modal
-          title="Perfil de Usuario"
           visible={showUserProfile}
           onCancel={handleClose}
           footer={[
@@ -20,13 +57,68 @@ function UserProfile({ showUserProfile, handleClose, userData }) {
         >
           <Tabs defaultActiveKey="1">
             <TabPane tab="Perfil" key="1">
-              <div style={{ display: "flex", gap: 50, justifyContent: "center" }}>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span>Nombre: {userData.name}</span>
-                  <span>Apellido: {userData.surname}</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar
+                    style={{
+                      backgroundColor: "#87d068",
+                      marginBottom: "10px",
+                    }}
+                    icon={<UserOutlined />}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div style={{ textAlign: "left", marginRight: "20px" }}>
+                      <p>
+                        <strong>Nombre:</strong>
+                      </p>
+                      <p>
+                        <strong>Apellido:</strong>
+                      </p>
+                      <p>
+                        <strong>Email:</strong>
+                      </p>
+                    </div>
+                    <div style={{ textAlign: "left" }}>
+                      <p>{userData.name}</p>
+                      <p>{userData.surname}</p>
+                      <p>{userData.email}</p>
+                    </div>
+                  </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span>Email: {userData.email}</span>
+
+                <div style={{ textAlign: "left" }}>
+                  {isSubscribe ? (
+                    <Popconfirm
+                      placement="topLeft"
+                      description="¿Quieres desubscribirte a notificaciones?"
+                      okText="Si"
+                      cancelText="No"
+                      onConfirm={handleUnSubscribe}
+                    >
+                      <Tag style={{ cursor: "pointer" }}>
+                        Desubscribirse a notificaciones
+                      </Tag>
+                    </Popconfirm>
+                  ) : null}
                 </div>
               </div>
             </TabPane>

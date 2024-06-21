@@ -1,5 +1,13 @@
 import api from "./Api";
 
+export const Subscribe = (email) => {
+  return api.put("/api/email/subscribe", email);
+};
+
+export const UnSubscribe = (email) => {
+  return api.put("/api/email/unsubscribe", email);  
+};
+
 // GET
 export const allProducts = () => {
   return api.get("api/allproducts");
@@ -8,8 +16,8 @@ export const getProducts = () => {
   return api.get("api/products");
 };
 
-export const getProductById = (id) => {
-  return api.get(`api/products/${id}`);
+export const getProductByDescription = (description) => {
+  return api.get(`api/products/${description}`);
 };
 
 export const getUsers = () => {
@@ -57,6 +65,10 @@ export const postSizes = (values) => {
 };
 export const postCategories = (values) => {
   return api.post("/api/categories", values);
+};
+
+export const getUserByEmail = (email) => {
+  return api.get('/api/user', { params: { email } });
 };
 
 export const postUser = (values) => {

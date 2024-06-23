@@ -12,12 +12,14 @@ import {
   FormLabel,
   Chip,
 } from "@mui/material";
-import { getProductByDescription, getProductById } from "../../../Api/ApiServices";
 import Navbar from "../../../Navbar/Navbar";
 import { Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../../redux/cartActions";
-
+import {
+  getProductByDescription,
+  getProductById,
+} from "../../../Api/ApiServices";
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -35,8 +37,13 @@ const ProductDetail = ({ products }) => {
         const response = await getProductByDescription(id);
         setProduct(response.data);
         setLoading(false);
-        setMainImage(response.data.stocks[0]?.images[0]?.imageURL);
-        setSelectedColor(response.data.stocks[0]?.colourId);
+        const initialStock = response.data.stocks.find(
+          (stock) => stock.status !== false
+        );
+        if (initialStock) {
+          setMainImage(initialStock.images[0]?.imageURL);
+          setSelectedColor(initialStock.colourId);
+        }
       } catch (error) {
         console.error(error);
         setLoading(false);
@@ -46,7 +53,10 @@ const ProductDetail = ({ products }) => {
   }, [id]);
 
   useEffect(() => {
-    const selectedStock = product?.stocks.find(
+    const validStocks = product?.stocks.filter(
+      (stock) => stock.status !== false
+    );
+    const selectedStock = validStocks?.find(
       (stock) => stock.colourId === selectedColor
     );
     if (selectedStock) {
@@ -71,7 +81,8 @@ const ProductDetail = ({ products }) => {
   if (!product) return <Typography>Product not found</Typography>;
 
   const { description, stocks, categories } = product;
-  const selectedStock = stocks.find(
+  const validStocks = stocks.filter((stock) => stock.status !== false);
+  const selectedStock = validStocks.find(
     (stock) => stock.colourId === selectedColor
   );
 
@@ -179,9 +190,9 @@ const ProductDetail = ({ products }) => {
                 row
                 name="color"
                 value={selectedColor}
-                onChange={(e) => setSelectedColor(parseInt(e.target.value))}
+                onChange={(e) => setSelectedColor(Number(e.target.value))}
               >
-                {stocks.map((stock) => (
+                {validStocks.map((stock) => (
                   <FormControlLabel
                     key={stock.colourId}
                     value={stock.colourId.toString()}

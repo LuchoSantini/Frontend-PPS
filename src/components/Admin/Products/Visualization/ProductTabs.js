@@ -86,6 +86,7 @@ const ProductsTabs = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              maxWidth: "200px",
             }}
           >
             <EditProducts />
@@ -107,6 +108,7 @@ const ProductsTabs = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              top: "25%",
             }}
           >
             <EditProductStatus />

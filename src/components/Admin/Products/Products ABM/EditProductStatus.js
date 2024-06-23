@@ -26,6 +26,7 @@ const EditProductStatus = () => {
     try {
       const productsResponse = await allProducts();
       setProducts(productsResponse.data);
+      console.log(productsResponse.data);
       if (productsResponse.data.length > 0) {
         setSelectedProductId(productsResponse.data[0].id);
       }
@@ -50,12 +51,9 @@ const EditProductStatus = () => {
     validationSchema: statusFormValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.put(
-          `/api/products/status/${selectedProductId}`,
-          {
-            status: values.status,
-          }
-        );
+        const response = await api.put(`/api/products/${selectedProductId}`, {
+          status: values.status,
+        });
 
         // Actualizar estado local
         const updatedProducts = products.map((product) =>
@@ -67,7 +65,6 @@ const EditProductStatus = () => {
 
         // Aquí actualizamos selectedProductId con el id del producto editado
         setSelectedProductId(response.data.id);
-
         formik.resetForm();
         setErrorMessage("");
         ToastifyToShow({
@@ -91,17 +88,39 @@ const EditProductStatus = () => {
         status: selectedProduct.status,
       });
     }
+    console.log(selectedProductId);
   }, [selectedProductId, products]);
 
   return (
     <Box mb={2}>
-      <FormControl component="form" onSubmit={formik.handleSubmit}>
+      <FormControl
+        style={{
+          display: "flex",
+          minWidth: "270px",
+          maxWidth: "270px",
+        }}
+        component="form"
+        onSubmit={formik.handleSubmit}
+      >
         <Typography variant="h6" gutterBottom align="center">
           Cambiar Estado del Producto
         </Typography>
-        <FormGroup>
+        <FormGroup
+          style={{
+            display: "flex",
+            minWidth: "270px",
+            maxWidth: "270px",
+          }}
+        >
           <Box mb={2}>
-            <FormControl fullWidth>
+            <FormControl
+              fullWidth
+              style={{
+                display: "flex",
+                minWidth: "270px",
+                maxWidth: "270px",
+              }}
+            >
               <TextField
                 id="products"
                 select
@@ -119,7 +138,14 @@ const EditProductStatus = () => {
             </FormControl>
           </Box>
           <Box mb={2}>
-            <FormControl fullWidth>
+            <FormControl
+              fullWidth
+              style={{
+                display: "flex",
+                minWidth: "270px",
+                maxWidth: "270px",
+              }}
+            >
               <TextField
                 id="status-input"
                 select

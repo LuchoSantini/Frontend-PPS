@@ -64,15 +64,19 @@ const useProductsFormik = () => {
           ColourId: null,
           stockSizes: [{ SizeId: null, quantity: null }],
           images: [{ image: "" }],
+          status: true,
         },
       ],
     },
     validationSchema: productFormValidationScheme,
     onSubmit: async (values) => {
       try {
+        values.stocks = stock;
+
         const response = await postProduct(values);
         console.log(response.data);
         ToastifyToShow({ message: response.data });
+        formik.resetForm();
       } catch (error) {
         console.log(error);
         setErrorMessage("Error al agregar un producto");
@@ -106,6 +110,7 @@ const useProductsFormik = () => {
         images: lastStock.images.map((image) => ({
           image: image.image,
         })),
+        status: true,
       };
 
       if (stock.length + 1 === 10) {

@@ -1,3 +1,4 @@
+import CartMenu from "../Cart/CartMenu";
 import api from "./Api";
 
 export const Subscribe = (email) => {
@@ -5,7 +6,7 @@ export const Subscribe = (email) => {
 };
 
 export const UnSubscribe = (email) => {
-  return api.put("/api/email/unsubscribe", email);  
+  return api.put("/api/email/unsubscribe", email);
 };
 
 // GET
@@ -68,15 +69,15 @@ export const postCategories = (values) => {
 };
 
 export const getUserByEmail = (email) => {
-  return api.get('/api/user', { params: { email } });
+  return api.get("/api/user", { params: { email } });
 };
 
 export const postUser = (values) => {
   return api.post("/api/register", values);
 };
 
-export const postPayment = (values) => {
-  return api.post("/api/PaymentControllerMP/create-preference", values);
+export const postPayment = (cartItems) => {
+  return api.post("/api/MercadoPago/payment", cartItems);
 };
 
 export const loginUser = async (credentials) => {

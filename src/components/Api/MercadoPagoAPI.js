@@ -2,37 +2,48 @@ import React, { useEffect, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import { postPayment } from "./ApiServices";
 
-// ta re crudely eto e no hagan caso xd
-
-// Inicializa MercadoPago con tu clave pública
-initMercadoPago("YOUR_PUBLIC_KEY");
-
-const MercadoPagoAPI = () => {
+const MercadoPagoAPI = ({ cartItems }) => {
   const [preferenceId, setPreferenceId] = useState(null);
+  const [isMercadoPagoInitialized, setIsMercadoPagoInitialized] =
+    useState(false);
 
   useEffect(() => {
+    // Inicializa MercadoPago solo una vez
+    if (!isMercadoPagoInitialized) {
+      initMercadoPago("APP_USR-24ea6241-dd0d-4186-9121-9ef6fa946bba", {
+        locale: "es-AR",
+      });
+      setIsMercadoPagoInitialized(true);
+    }
+  }, [isMercadoPagoInitialized]);
+
+  useEffect(() => {
+    // Obtiene la preferencia solo cuando hay items en el carrito
     const fetchData = async () => {
       try {
-        const paymentResponse = await postPayment();
-        setPreferenceId(paymentResponse.data);
-        console.log("xdd");
-        console.log(paymentResponse.data);
+        const paymentResponse = await postPayment(cartItems);
+        setPreferenceId(paymentResponse.data.preferenceId);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching payment preference:", error);
       }
     };
 
-    fetchData();
-  }, []);
+    if (cartItems && cartItems.length > 0) {
+      fetchData();
+    }
+  }, [cartItems]);
 
-  // Renderiza el componente Wallet solo si preferenceId está definido
-  return preferenceId ? (
-    <Wallet
-      initialization={{ preferenceId }}
-      customization={{ texts: { valueProp: "smart_option" } }}
-    />
-  ) : (
-    <div>...</div>
+  return (
+    <div>
+      {preferenceId && isMercadoPagoInitialized ? (
+        <Wallet
+          initialization={{ preferenceId, redirectMode: "modal" }}
+          customization={{ texts: { valueProp: "smart_option" } }}
+        />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
   );
 };
 

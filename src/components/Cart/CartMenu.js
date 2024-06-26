@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Drawer, Button, List, Space } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { removeItem, clearCart } from "../../redux/cartActions";
+import MercadoPagoAPI from "../Api/MercadoPagoAPI";
 
 const CartMenu = ({ open, onClose }) => {
   const items = useSelector((state) => state.cart.items);
@@ -25,8 +26,8 @@ const CartMenu = ({ open, onClose }) => {
 
     return Object.values(groupedItems);
   };
-
   const groupedItems = groupItemsByColorAndSize();
+  console.log(groupedItems);
 
   const handleRemoveItem = (item) => {
     dispatch(removeItem(item)); // Envía el objeto completo del item a eliminar
@@ -68,6 +69,8 @@ const CartMenu = ({ open, onClose }) => {
         <Button type="primary" onClick={handleClearCart}>
           Limpiar Carrito
         </Button>
+
+        <MercadoPagoAPI cartItems={items} />
       </Space>
     </Drawer>
   );

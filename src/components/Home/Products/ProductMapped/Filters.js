@@ -155,12 +155,6 @@ function Filters({ onFilterSelected, onSetSortMethod, setSelectedFilters }) {
             justifyContent: "center",
             transition: "all 0.3s ease",
           }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.color = "#abbec4";
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.color = "black";
-          }}
         >
           <p>FILTRAR</p>
           <SlidersOutlined style={{ fontSize: 20 }} />

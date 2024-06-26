@@ -1,5 +1,5 @@
 // src/components/Navbar/Navbar.js
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { useMediaQuery, Box } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -8,15 +8,21 @@ import { logout } from "../../redux/store/authSlice";
 import ProductSearchDrawer from "../Admin/Products/Visualization/ProductSearchDrawer";
 import UserIcon from "./UserIcon";
 import CartIcon from "../Cart/CartIcon";
+import { ThemeContext } from "../../context/theme/theme.context";
 
 const Navbar = ({ products }) => {
+  const { theme } = useContext(ThemeContext);
+  const backgroundColor =
+    theme === "dark"
+      ? "#0E1113" // Fondo oscuro semitransparente para el modo oscuro
+      : "#ffff";
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 632px)");
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  console.log(token)
+  console.log(token);
   const showDrawerSearch = () => {
     setOpen(true);
     setTitle("Buscar productos");
@@ -65,7 +71,7 @@ const Navbar = ({ products }) => {
           width: "100%",
           zIndex: 1000,
           marginTop: 27,
-          background: "#fff",
+          backgroundColor: backgroundColor,
         }}
       >
         {isMobile ? (
@@ -117,15 +123,10 @@ const Navbar = ({ products }) => {
             >
               <SearchOutlined
                 style={{ fontSize: 30, transition: "all 0.3s ease" }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.color = "#abbec4";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.color = "black";
-                }}
                 onClick={showDrawerSearch}
               />
             </Box>
+
             <div>
               <Link to="/">
                 <img

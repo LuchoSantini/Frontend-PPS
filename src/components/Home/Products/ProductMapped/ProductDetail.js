@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -20,6 +20,8 @@ import {
   getProductByDescription,
   getProductById,
 } from "../../../Api/ApiServices";
+import { ThemeContext } from "../../../../context/theme/theme.context";
+
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -30,6 +32,7 @@ const ProductDetail = ({ products }) => {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -126,6 +129,10 @@ const ProductDetail = ({ products }) => {
     }
   };
 
+  const textColor = theme === "dark" ? "white" : "black";
+  const backgroundColor = theme === "dark" ? "rgb(48, 48, 48)" : "white";
+  const buttonBackgroundColor = theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
+
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
       <Navbar products={products} />
@@ -174,18 +181,18 @@ const ProductDetail = ({ products }) => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h3" component="h1" fontWeight="bold">
+          <Typography variant="h3" component="h1" fontWeight="bold" color={textColor}>
             {description}
           </Typography>
-          <Typography variant="body1" mt={2}>
+          <Typography variant="body1" mt={2} color={textColor}>
             {product.genre} - ${product.price}
           </Typography>
           <Box mt={2}>
-            <Chip label="In Stock" variant="outlined" />
+            <Chip label="In Stock" variant="outlined" sx={{ color: textColor, borderColor: textColor }} />
           </Box>
           <Box mt={4}>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Color</FormLabel>
+              <FormLabel component="legend" sx={{ color: textColor }}>Color</FormLabel>
               <RadioGroup
                 row
                 name="color"
@@ -199,10 +206,7 @@ const ProductDetail = ({ products }) => {
                     control={
                       <Radio
                         sx={{
-                          color: (theme) =>
-                            selectedColor === stock.colourId
-                              ? "rgb(118, 148, 159)"
-                              : theme.palette.grey[400],
+                          color: selectedColor === stock.colourId ? "rgb(118, 148, 159)" : textColor,
                           "&.Mui-checked": {
                             color: "rgb(118, 148, 159)",
                           },
@@ -210,6 +214,7 @@ const ProductDetail = ({ products }) => {
                       />
                     }
                     label={stock.colour?.colourName || "Color"}
+                    sx={{ color: textColor }}
                   />
                 ))}
               </RadioGroup>
@@ -217,7 +222,7 @@ const ProductDetail = ({ products }) => {
           </Box>
           <Box mt={4}>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Size</FormLabel>
+              <FormLabel component="legend" sx={{ color: textColor }}>Size</FormLabel>
               <RadioGroup
                 row
                 name="size"
@@ -227,14 +232,11 @@ const ProductDetail = ({ products }) => {
                 {selectedStock?.stockSizes.map((stockSize) => (
                   <FormControlLabel
                     key={stockSize.sizeId}
-                    value={stockSize.sizeId.toString()} // Asignamos el sizeId como valor
+                    value={stockSize.sizeId.toString()}
                     control={
                       <Radio
                         sx={{
-                          color: (theme) =>
-                            selectedSize === stockSize.sizeId
-                              ? "rgb(118, 148, 159)"
-                              : theme.palette.grey[400],
+                          color: selectedSize === stockSize.sizeId ? "rgb(118, 148, 159)" : textColor,
                           "&.Mui-checked": {
                             color: "rgb(118, 148, 159)",
                           },
@@ -242,21 +244,21 @@ const ProductDetail = ({ products }) => {
                       />
                     }
                     label={stockSize.size.sizeName}
+                    sx={{ color: textColor }}
                   />
                 ))}
               </RadioGroup>
             </FormControl>
           </Box>
-
           <Box mt={4}>
-            <Typography variant="body2">Categories</Typography>
+            <Typography variant="body2" color={textColor}>Categories</Typography>
             <Box mt={1}>
               {categories.map((category) => (
                 <Chip
                   key={category.id}
                   label={category.categoryName}
                   variant="outlined"
-                  sx={{ mr: 1, mb: 1 }}
+                  sx={{ mr: 1, mb: 1, color: textColor, borderColor: textColor }}
                 />
               ))}
             </Box>
@@ -266,9 +268,9 @@ const ProductDetail = ({ products }) => {
             size="large"
             sx={{
               mt: 4,
-              backgroundColor: "rgb(118, 148, 159)",
+              backgroundColor: buttonBackgroundColor,
               "&:hover": {
-                backgroundColor: "rgb(118, 148, 159)",
+                backgroundColor: buttonBackgroundColor,
                 borderColor: "transparent",
               },
             }}

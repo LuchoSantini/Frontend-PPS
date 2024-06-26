@@ -5,6 +5,7 @@ import SignupForm from "./LoginMenu/SignupForm";
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
+import ToggleTheme from "../../context/theme/ToggleTheme";
 const UserIcon = ({ token, handleLogout }) => {
   const [showModal, setShowModal] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
@@ -34,57 +35,43 @@ const UserIcon = ({ token, handleLogout }) => {
   };
 
   const handleOpenUserProfile = () => {
-      setShowUserProfile(true)
-  }
+    setShowUserProfile(true);
+  };
   const handleCloseUserProfile = () => {
     setShowUserProfile(false);
   };
 
   const userMenu = (
-    <Menu>
+    <Menu style={{ alignItems: "center" }}>
+      <ToggleTheme />
       <Menu.Item key="1" onClick={handleOpenUserProfile}>
-        <div>
-          {userData && (
-            <a style={{color:"black"}} >
-              Mi perfil
-            </a>
-          )}
-        </div>
+        <div>{userData && <a style={{ color: "black" }}>Mi perfil</a>}</div>
       </Menu.Item>
       {userData && userData.role === "Admin" && (
         <Menu.Item key="2">
           <a href="/admin" type="link">
-          Panel de Administrador
+            Panel de Administrador
           </a>
         </Menu.Item>
       )}
       <Menu.Item key="3" onClick={handleLogout}>
-       <a>Cerrar Sesión</a> 
+        <a>Cerrar Sesión</a>
       </Menu.Item>
     </Menu>
   );
 
   return (
     <>
-    {
-      showUserProfile && <UserProfile
+      {showUserProfile && (
+        <UserProfile
           showUserProfile={showUserProfile}
           handleClose={handleCloseUserProfile}
           userData={userData}
         />
-    }
+      )}
       {token ? (
         <Dropdown overlay={userMenu} trigger={["click"]}>
-          <UserOutlined
-            style={{ fontSize: 30 }}
-            className="buttons-navbar"
-            onMouseOver={(e) => {
-              e.currentTarget.style.color = "#abbec4";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.color = "black";
-            }}
-          />
+          <UserOutlined style={{ fontSize: 30 }} className="buttons-navbar" />
         </Dropdown>
       ) : (
         <UserOutlined

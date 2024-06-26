@@ -19,7 +19,7 @@ const Navbar = ({ products }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
 
-  console.log(token);
+  //console.log(token);
   const showDrawerSearch = () => {
     setOpen(true);
     setTitle("Buscar productos");

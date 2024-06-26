@@ -1,4 +1,3 @@
-import CartMenu from "../Cart/CartMenu";
 import api from "./Api";
 
 export const Subscribe = (email) => {

@@ -11,6 +11,8 @@ import {
   FormControl,
   FormLabel,
   Chip,
+  IconButton,
+  Hidden,
 } from "@mui/material";
 import Navbar from "../../../Navbar/Navbar";
 import { Spin } from "antd";
@@ -21,6 +23,9 @@ import {
   getProductById,
 } from "../../../Api/ApiServices";
 import { ThemeContext } from "../../../../context/theme/theme.context";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useMediaQuery } from "@mui/material";
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
@@ -32,7 +37,8 @@ const ProductDetail = ({ products }) => {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  const { theme } = useContext(ThemeContext);
+  const { theme, isDarkMode } = useContext(ThemeContext);
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -129,70 +135,126 @@ const ProductDetail = ({ products }) => {
     }
   };
 
+  const handleThumbnailClick = (imageUrl) => {
+    setMainImage(imageUrl);
+  };
+
+  const handleNextImage = () => {
+    const currentIndex = selectedStock.images.findIndex(
+      (img) => img.imageURL === mainImage
+    );
+    const nextIndex =
+      currentIndex === selectedStock.images.length - 1 ? 0 : currentIndex + 1;
+    setMainImage(selectedStock.images[nextIndex].imageURL);
+  };
+
+  const handlePrevImage = () => {
+    const currentIndex = selectedStock.images.findIndex(
+      (img) => img.imageURL === mainImage
+    );
+    const prevIndex =
+      currentIndex === 0 ? selectedStock.images.length - 1 : currentIndex - 1;
+    setMainImage(selectedStock.images[prevIndex].imageURL);
+  };
+
   const textColor = theme === "dark" ? "white" : "black";
   const backgroundColor = theme === "dark" ? "rgb(48, 48, 48)" : "white";
-  const buttonBackgroundColor = theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
+  const buttonBackgroundColor =
+    theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
 
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
       <Navbar products={products} />
       <Grid container spacing={6} marginTop={"20px"}>
-        <Grid item xs={12} md={6} container>
-          <Grid item xs={3} container direction="column" spacing={2}>
-            {selectedStock?.images.map((img, idx) => (
-              <Grid item key={idx}>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => setMainImage(img.imageURL)}
-                  sx={{
-                    margin: "8px",
-                    width: "90%",
-                    height: "20dvh",
-                    borderColor: "transparent",
-                    borderBottom: "4px solid",
-                    borderBottomColor: "rgb(118, 148, 159)",
-                    color: "white",
-                    padding: "5px 12px",
-                    "&:hover": {
-                      backgroundColor: "rgb(118, 148, 159)",
-                      borderColor: "transparent",
-                    },
-                  }}
-                >
-                  <img
-                    src={img.imageURL}
-                    alt={`Preview ${idx + 1}`}
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                    }}
-                  />
-                </Button>
+        <Grid item xs={12} md={6}>
+          <Box display="flex" flexDirection={isMobile ? "column" : "row"}>
+            <Hidden smDown>
+              <Grid item xs={3} container direction="column" spacing={2}>
+                {selectedStock?.images.map((img, idx) => (
+                  <Grid item key={idx}>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      onClick={() => handleThumbnailClick(img.imageURL)}
+                      sx={{
+                        margin: "8px",
+                        width: "90%",
+                        height: "20dvh",
+                        borderColor: "transparent",
+                        borderBottom: "4px solid",
+                        borderBottomColor: "rgb(118, 148, 159)",
+                        color: "white",
+                        padding: "5px 12px",
+                        "&:hover": {
+                          backgroundColor: "rgb(118, 148, 159)",
+                          borderColor: "transparent",
+                        },
+                      }}
+                    >
+                      <img
+                        src={img.imageURL}
+                        alt={`Preview ${idx + 1}`}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                        }}
+                      />
+                    </Button>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-          <Grid item xs={9}>
-            <img
-              src={mainImage}
-              alt="Product Image"
-              style={{ width: "100%" }}
-            />
-          </Grid>
+            </Hidden>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="center">
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{ display: isMobile ? "flex" : "none" }}
+                >
+                  <ArrowBackIcon
+                    sx={{ color: isDarkMode ? "white" : "black" }}
+                  />
+                </IconButton>
+                <img
+                  src={mainImage}
+                  alt="Product Image"
+                  style={{ width: "100%", maxWidth: "300px" }}
+                />
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{ display: isMobile ? "flex" : "none" }}
+                >
+                  <ArrowForwardIcon
+                    sx={{ color: isDarkMode ? "white" : "black" }}
+                  />
+                </IconButton>
+              </Box>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h3" component="h1" fontWeight="bold" color={textColor}>
+          <Typography
+            variant="h3"
+            component="h1"
+            fontWeight="bold"
+            color={textColor}
+          >
             {description}
           </Typography>
           <Typography variant="body1" mt={2} color={textColor}>
             {product.genre} - ${product.price}
           </Typography>
           <Box mt={2}>
-            <Chip label="In Stock" variant="outlined" sx={{ color: textColor, borderColor: textColor }} />
+            <Chip
+              label="In Stock"
+              variant="outlined"
+              sx={{ color: textColor, borderColor: textColor }}
+            />
           </Box>
-          <Box mt={4}>
+          <Box mt={2}>
             <FormControl component="fieldset">
-              <FormLabel component="legend" sx={{ color: textColor }}>Color</FormLabel>
+              <FormLabel component="legend" sx={{ color: textColor }}>
+                Color
+              </FormLabel>
               <RadioGroup
                 row
                 name="color"
@@ -206,7 +268,10 @@ const ProductDetail = ({ products }) => {
                     control={
                       <Radio
                         sx={{
-                          color: selectedColor === stock.colourId ? "rgb(118, 148, 159)" : textColor,
+                          color:
+                            selectedColor === stock.colourId
+                              ? "rgb(118, 148, 159)"
+                              : textColor,
                           "&.Mui-checked": {
                             color: "rgb(118, 148, 159)",
                           },
@@ -222,7 +287,9 @@ const ProductDetail = ({ products }) => {
           </Box>
           <Box mt={4}>
             <FormControl component="fieldset">
-              <FormLabel component="legend" sx={{ color: textColor }}>Size</FormLabel>
+              <FormLabel component="legend" sx={{ color: textColor }}>
+                Size
+              </FormLabel>
               <RadioGroup
                 row
                 name="size"
@@ -236,48 +303,54 @@ const ProductDetail = ({ products }) => {
                     control={
                       <Radio
                         sx={{
-                          color: selectedSize === stockSize.sizeId ? "rgb(118, 148, 159)" : textColor,
+                          color: textColor,
                           "&.Mui-checked": {
                             color: "rgb(118, 148, 159)",
                           },
                         }}
                       />
                     }
-                    label={stockSize.size.sizeName}
+                    label={stockSize.size?.sizeName || "Size"}
                     sx={{ color: textColor }}
                   />
                 ))}
               </RadioGroup>
             </FormControl>
           </Box>
-          <Box mt={4}>
-            <Typography variant="body2" color={textColor}>Categories</Typography>
-            <Box mt={1}>
+          <Box mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddToCart}
+              disabled={!selectedSize}
+              sx={{
+                backgroundColor: buttonBackgroundColor,
+                ":hover": {
+                  backgroundColor: "rgb(118, 148, 159)",
+                },
+              }}
+            >
+              Add to Cart
+            </Button>
+          </Box>
+          <Box mt={3}>
+            <Typography variant="body2" sx={{ color: textColor }}>
+              Categories
+            </Typography>
+            <Box mt={2} display="flex">
               {categories.map((category) => (
                 <Chip
                   key={category.id}
                   label={category.categoryName}
                   variant="outlined"
-                  sx={{ mr: 1, mb: 1, color: textColor, borderColor: textColor }}
+                  sx={{
+                    color: textColor,
+                    borderColor: textColor,
+                  }}
                 />
               ))}
             </Box>
           </Box>
-          <Button
-            variant="contained"
-            size="large"
-            sx={{
-              mt: 4,
-              backgroundColor: buttonBackgroundColor,
-              "&:hover": {
-                backgroundColor: buttonBackgroundColor,
-                borderColor: "transparent",
-              },
-            }}
-            onClick={handleAddToCart}
-          >
-            Add to cart
-          </Button>
         </Grid>
       </Grid>
     </Box>

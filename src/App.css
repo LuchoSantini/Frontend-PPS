@@ -1,15 +1,16 @@
 body.light {
-    background-color: white;
-    color: black;
-  }
-  
-  body.dark {
-    background-color: #161616;
-    color: white;
-  }
-  .dark-theme{
-    background-color: #161616;
-    color: white;
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: #161616;
+  color: white;
+}
+
+.dark-theme {
+  background-color: #161616;
+  color: white;
 }
 
 /* App.css */
@@ -26,11 +27,6 @@ html.dark {
 
 
 
-#root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+
 
 /* Asegúrate de que otros estilos globales no interfieran con estos */

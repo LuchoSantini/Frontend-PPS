@@ -1,4 +1,3 @@
-// src/components/Navbar/Navbar.js
 import React, { useContext, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { useMediaQuery, Box } from "@mui/material";
@@ -11,17 +10,15 @@ import CartIcon from "../Cart/CartIcon";
 import { ThemeContext } from "../../context/theme/theme.context";
 
 const Navbar = ({ products }) => {
-  const { theme } = useContext(ThemeContext);
-  const backgroundColor =
-    theme === "dark"
-      ? "#0E1113" // Fondo oscuro semitransparente para el modo oscuro
-      : "#ffff";
+  const { theme, isDarkMode } = useContext(ThemeContext);
+
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState();
   const [placement, setPlacement] = useState("");
   const isMobile = useMediaQuery("(max-width: 632px)");
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+
   console.log(token);
   const showDrawerSearch = () => {
     setOpen(true);
@@ -71,76 +68,45 @@ const Navbar = ({ products }) => {
           width: "100%",
           zIndex: 1000,
           marginTop: 27,
-          backgroundColor: backgroundColor,
+          backgroundColor: isDarkMode ? "#0E1113" : "#ffffff",
         }}
       >
-        {isMobile ? (
-          <div>
-            <div
-              style={{
-                padding: 5,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <SearchOutlined
-                  style={{ fontSize: 30 }}
-                  onClick={showDrawerSearch}
-                />
-              </div>
-              <div>
-                <Link to="/">
-                  <img
-                    style={{ width: 80 }}
-                    src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
-                  />
-                </Link>
-              </div>
-              <div style={{ display: "flex" }}>
-                <UserIcon token={token} handleLogout={handleLogout} />
-                <CartIcon /> {/* Utilizar el CartIcon */}
-              </div>
-            </div>
-          </div>
-        ) : (
+        <Box
+          style={{
+            alignItems: "center",
+            padding: 10,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <Box
             style={{
-              alignItems: "center",
-              padding: 10,
+              fontSize: 30,
+              transition: "all 0.3s ease",
               display: "flex",
-              justifyContent: "space-between",
+              flexDirection: "row",
             }}
           >
-            <Box
-              style={{
-                fontSize: 30,
-                transition: "all 0.3s ease",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <SearchOutlined
-                style={{ fontSize: 30, transition: "all 0.3s ease" }}
-                onClick={showDrawerSearch}
-              />
-            </Box>
-
-            <div>
-              <Link to="/">
-                <img
-                  style={{ width: 80 }}
-                  src="https://dcdn.mitiendanube.com/stores/001/990/290/themes/common/logo-1889664424-1714051930-78818b5f4cbb4833eec760c042855ff01714051930-320-0.webp"
-                />
-              </Link>
-            </div>
-            <div style={{ display: "flex" }}>
-              <UserIcon token={token} handleLogout={handleLogout} />
-              <CartIcon /> {/* Utilizar el CartIcon */}
-            </div>
+            <SearchOutlined
+              style={{ fontSize: 30, transition: "all 0.3s ease" }}
+              onClick={showDrawerSearch}
+            />
           </Box>
-        )}
+          <div>
+            <Link to="/">
+              <img
+                style={{ width: 80 }}
+                src={`${process.env.PUBLIC_URL}/resources/navbaricon-${
+                  isDarkMode ? "dark" : "light"
+                }.png`}
+              />
+            </Link>
+          </div>
+          <div style={{ display: "flex" }}>
+            <UserIcon token={token} handleLogout={handleLogout} />
+            <CartIcon />
+          </div>
+        </Box>
         <ProductSearchDrawer
           title={title}
           placement={placement}

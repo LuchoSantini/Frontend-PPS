@@ -34,7 +34,7 @@ function App() {
   }, []);
 
   return (
-    <div className={`${theme === "dark" && "dark-theme"}`}>
+    <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home products={products} />} />
@@ -77,7 +77,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

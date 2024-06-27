@@ -33,13 +33,13 @@ const ProductDetail = ({ products }) => {
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
+
   const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
   const { theme, isDarkMode } = useContext(ThemeContext);
   const isMobile = useMediaQuery("(max-width: 600px)");
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -94,7 +94,7 @@ const ProductDetail = ({ products }) => {
   const selectedStock = validStocks.find(
     (stock) => stock.colourId === selectedColor
   );
-
+  const selectedSizeName = selectedStock?.stockSizes.find(stockSize => stockSize.sizeId.toString() === selectedSize)?.size?.sizeName || "Size";
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("Please select a size.");
@@ -121,11 +121,13 @@ const ProductDetail = ({ products }) => {
     } else {
       const cartProduct = {
         id: product.id,
+        productId: product.id,
         name: product.description,
         price: product.price,
         color: selectedStock.colour?.colourName,
         colorId: selectedColor,
         sizeId: selectedSize,
+        sizeName:selectedSizeName,
         image: mainImage,
         quantity: quantity,
       };
@@ -161,6 +163,8 @@ const ProductDetail = ({ products }) => {
   const backgroundColor = theme === "dark" ? "rgb(48, 48, 48)" : "white";
   const buttonBackgroundColor =
     theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
+
+  
 
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>

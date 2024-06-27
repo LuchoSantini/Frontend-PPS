@@ -16,9 +16,6 @@ const MercadoPagoAPI = ({ cartItems }) => {
   // console.log(cart);
   //console.log(token);
 
-  initMercadoPago("APP_USR-04c4f42c-5f86-4346-a4d9-e4881c8936d7", {
-    locale: "es-AR",
-  });
 
   useEffect(() => {
     const fetchData = async () => {

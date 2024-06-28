@@ -10,6 +10,7 @@ import OrdersManagement from "./components/Admin/Orders/OrdersManagement";
 import ProductDetail from "./components/Home/Products/ProductMapped/ProductDetail";
 import { ThemeContext } from "./context/theme/theme.context";
 import "./App.css"; // Asegúrate de importar tus estilos CSS
+import FloatingButton from "./components/bot/FloatingButton";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -76,6 +77,7 @@ function App() {
             element={<ProductDetail products={products} loading={loading} />}
           />
         </Routes>
+        <FloatingButton />
       </BrowserRouter>
     </>
   );

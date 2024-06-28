@@ -19,7 +19,7 @@ const MercadoPagoAPI = () => {
   const handlePayment = async () => {
     try {
       if (items && items.length > 0) {
-        const paymentResponse = await postPayment(items);
+        const paymentResponse = await postPayment(items, token);
         setPreferenceId(paymentResponse.data.preferenceId);
       }
     } catch (error) {

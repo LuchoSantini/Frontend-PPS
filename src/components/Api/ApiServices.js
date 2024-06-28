@@ -75,16 +75,13 @@ export const postUser = (values) => {
   return api.post("/api/register", values);
 };
 
-export const postPayment = (cartItems) => {
-  return api.post("/api/MercadoPago/payment", cartItems);
-};
-
-export const postOrderLineApi = (preferenceId, status) => {
-  return api.post("/api/MercadoPago/postOrderLine", preferenceId, status);
-};
-
-export const updateOrderStatus = (preferenceId, status) => {
-  return api.patch("/api/MercadoPago/paymentStatus", preferenceId, status);
+export const postPayment = (cartItems, token) => {
+  // Añade el parámetro token
+  return api.post("/api/MercadoPago/payment", cartItems, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const loginUser = async (credentials) => {

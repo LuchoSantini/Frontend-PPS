@@ -9,7 +9,7 @@ import {
   Subscribe,
   getUserByEmail,
   postOrderLineApi,
-} from "../Api/ApiServices";
+} from "../Api/ApiServices"; // Importa postOrderLineApi
 import ToastifyToShow from "../hooks/Effects/ToastifyToShow";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
@@ -26,6 +26,7 @@ const Home = ({ products }) => {
   const [queryParams, setQueryParams] = useState({});
 
   const location = useLocation();
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const queryParamsObj = {};
@@ -36,10 +37,21 @@ const Home = ({ products }) => {
   }, [location]);
 
   useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUserData(decodedToken);
+    } else {
+      setUserData(null);
+    }
+  }, [token]);
+
+  useEffect(() => {
     const updateOrderStatus = async () => {
       try {
         const res = await api.put(
-          `/api/MercadoPago/paymentStatus?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`
+          `/api/MercadoPago/paymentStatus?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`,
+          null,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setIsSubscribe(res.data.notification);
       } catch (error) {
@@ -50,32 +62,26 @@ const Home = ({ products }) => {
     if (Object.keys(queryParams).length > 0) {
       updateOrderStatus();
     }
-  }, [queryParams]);
+  }, [queryParams, token]); // Añade token como dependencia
 
   useEffect(() => {
-    const postOrderLine = async () => {
+    const postOrderLineApi = async () => {
       try {
-        await api.post(
-          `/api/MercadoPago/postOrderLine?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`
+        const res = await api.post(
+          `/api/MercadoPago/postOrderLine?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`,
+          null,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
+        setIsSubscribe(res.data.notification);
       } catch (error) {
         console.error("Error", error);
       }
     };
 
-    postOrderLine();
-  }, [queryParams]);
-
-  console.log(queryParams);
-
-  useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      setUserData(decodedToken);
-    } else {
-      setUserData(null);
+    if (Object.keys(queryParams).length > 0) {
+      postOrderLineApi();
     }
-  }, [token]);
+  }, [queryParams, token]); // Añade token como dependencia
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -90,7 +96,7 @@ const Home = ({ products }) => {
     if (email) {
       fetchUser();
     }
-  }, [email]);
+  }, [email, token]); // Añade token como dependencia
 
   const handleCloseTag = () => {
     setIsTagVisible(false);
@@ -109,10 +115,10 @@ const Home = ({ products }) => {
       const response = await Subscribe(email);
       console.log("Subscribed successfully", response);
       setIsSubscribe(true);
-      ToastifyToShow({ message: "Te has subscrito!" });
+      ToastifyToShow({ message: "Te has suscrito!" });
     } catch (error) {
       console.error("Error subscribing", error);
-      ToastifyToShow({ message: "Intentalo mas tarde" });
+      ToastifyToShow({ message: "Inténtalo más tarde" });
     }
   };
 
@@ -147,8 +153,8 @@ const Home = ({ products }) => {
         >
           <Popconfirm
             placement="topLeft"
-            description="¿Quieres subscribirte a notificaciones?"
-            okText="Si"
+            description="¿Quieres suscribirte a notificaciones?"
+            okText="Sí"
             cancelText="No"
             onConfirm={handleSubscribe}
           >
@@ -176,7 +182,7 @@ const Home = ({ products }) => {
                   />
                 }
               >
-                Subscribirse a notificaciones
+                Suscribirse a notificaciones
               </Tag>
             </Popover>
           </Popconfirm>

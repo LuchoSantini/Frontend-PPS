@@ -13,13 +13,10 @@ const useFetchDataCSC = () => {
         const sizesResponse = await getSizes();
         const categoriesResponse = await getCategories();
 
-        console.log(coloursResponse.data);
         setColours(coloursResponse.data);
         setSizes(sizesResponse.data);
         setCategories(categoriesResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

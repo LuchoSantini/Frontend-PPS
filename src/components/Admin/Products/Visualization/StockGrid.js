@@ -9,28 +9,36 @@ import {
   TableRow,
   Typography,
   Paper,
+  useMediaQuery,
 } from "@mui/material";
 import { Button } from "antd";
 import StockModal from "../Visualization/StockModal";
 
 const StockGrid = ({ stocks, colours, sizes, handleDeleteStock, formik }) => {
   const [openModal, setOpenModal] = useState(false);
-
+  const isMobile = useMediaQuery("(max-width: 632px)");
   const handleOpenModal = () => {
     setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
   };
 
   console.log(stocks);
   return (
     <Box
-      sx={{
-        width: "120%",
-        maxWidth: "1500px",
-      }}
+      sx={
+        isMobile
+          ? {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+              padding: 2,
+              overflowY: "auto",
+            }
+          : {
+              width: "120%",
+              maxWidth: "1500px",
+            }
+      }
     >
       <Typography
         variant="h4"
@@ -146,7 +154,7 @@ const StockGrid = ({ stocks, colours, sizes, handleDeleteStock, formik }) => {
                           danger
                           onClick={() => handleDeleteStock(index)}
                           style={{
-                            marginRight: "10px",
+                            marginRight: isMobile ? "0" : "10px",
                           }}
                         >
                           X

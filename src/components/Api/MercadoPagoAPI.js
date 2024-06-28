@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import { postPayment } from "./ApiServices";
 import { useSelector } from "react-redux";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 const MercadoPagoAPI = () => {
   initMercadoPago("APP_USR-04c4f42c-5f86-4346-a4d9-e4881c8936d7", {
@@ -14,7 +14,6 @@ const MercadoPagoAPI = () => {
   const [preferenceId, setPreferenceId] = useState(null);
   const { token } = useSelector((state) => state.auth);
   const items = useSelector((state) => state.cart.items);
-  //console.log(items);
 
   const handlePayment = async () => {
     try {
@@ -28,12 +27,25 @@ const MercadoPagoAPI = () => {
     }
   };
 
-  console.log(preferenceId);
-
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "20px",
+      }}
+    >
       {!preferenceId ? (
-        <Button variant="contained" onClick={handlePayment}>
+        <Button
+          variant="contained"
+          sx={{
+            "&:hover": {
+              backgroundColor: "#50C878",
+            },
+            backgroundColor: "#4BB543",
+          }}
+          onClick={handlePayment}
+        >
           Pagar con MercadoPago
         </Button>
       ) : (
@@ -42,7 +54,7 @@ const MercadoPagoAPI = () => {
           customization={{ texts: { valueProp: "smart_option" } }}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

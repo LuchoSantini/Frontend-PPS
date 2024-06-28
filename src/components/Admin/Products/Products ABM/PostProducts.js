@@ -9,6 +9,7 @@ import {
   Typography,
   MenuItem,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import { getCategories, getColours, getSizes } from "../../../Api/ApiServices";
 import { Modal } from "antd";
@@ -21,6 +22,7 @@ const PostProducts = () => {
   const [categories, setCategories] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openModal2, setOpenModal2] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 632px)");
 
   const fetchData = async () => {
     try {
@@ -171,26 +173,47 @@ const PostProducts = () => {
             cancelButtonProps={{ style: { display: "none" } }} // Oculta el botón de cancelar
             onCancel={() => setOpenModal2(false)}
             onOk={() => setOpenModal2(false)}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              top: "7%",
-              left: "-7%",
-            }}
+            style={
+              isMobile
+                ? {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }
+                : {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    top: "7%",
+                    left: "-7%",
+                  }
+            }
           >
             {/* Adaptar este Box a Mobile */}
             <Box
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                top: "50%",
-                left: "50%",
-                width: "770px",
-                maxWidth: 770,
-                maxHeight: 700,
-                overflowY: "auto",
-              }}
+              sx={
+                isMobile
+                  ? {
+                      justifyContent: "center",
+                      display: "flex",
+                      top: "50%",
+                      left: "50%",
+                      width: "300px",
+                      maxWidth: 770,
+                      maxHeight: 700,
+                      overflowY: "auto",
+                    }
+                  : {
+                      justifyContent: "center",
+                      display: "flex",
+                      top: "50%",
+                      left: "50%",
+                      width: "770px",
+                      maxWidth: 770,
+                      maxHeight: 700,
+                      overflowY: "auto",
+                    }
+              }
             >
               <StockGrid
                 stocks={stock}

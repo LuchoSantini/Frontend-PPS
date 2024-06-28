@@ -26,12 +26,10 @@ const EditProductStatus = () => {
     try {
       const productsResponse = await allProducts();
       setProducts(productsResponse.data);
-      console.log(productsResponse.data);
       if (productsResponse.data.length > 0) {
         setSelectedProductId(productsResponse.data[0].id);
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage("Error al cargar los datos");
     }
   };
@@ -71,7 +69,6 @@ const EditProductStatus = () => {
           message: response.data,
         });
       } catch (error) {
-        console.log(error);
         setErrorMessage("Error al editar el estado del producto");
         ToastifyToShow({ message: error.response.data });
       }
@@ -88,7 +85,6 @@ const EditProductStatus = () => {
         status: selectedProduct.status,
       });
     }
-    console.log(selectedProductId);
   }, [selectedProductId, products]);
 
   return (

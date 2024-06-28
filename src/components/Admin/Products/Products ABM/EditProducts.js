@@ -13,6 +13,7 @@ import {
   Typography,
   MenuItem,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import {
   getCategories,
@@ -38,6 +39,7 @@ const EditProducts = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const [stock, setStock] = useState([]);
   const [stockButtonVisibility, setStockButtonVisibility] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 632px)");
 
   const {
     handleAddImage,
@@ -63,7 +65,6 @@ const EditProducts = () => {
       setSizes(sizesResponse.data);
       setCategories(categoriesResponse.data);
     } catch (error) {
-      console.log(error);
       setErrorMessage("Error al cargar los datos");
     }
   };
@@ -160,7 +161,6 @@ const EditProducts = () => {
         ToastifyToShow({ message: "Producto editado correctamente" });
       } catch (error) {
         ToastifyToShow({ message: error.response.data });
-        console.log(error);
       }
     },
   });
@@ -177,8 +177,6 @@ const EditProducts = () => {
       selectedProduct.categories[0].id > 0
         ? selectedProduct.categories[0].id
         : null;
-
-    console.log(selectedProduct.stocks);
 
     const initialValues = {
       id: selectedProduct.id,
@@ -199,7 +197,6 @@ const EditProducts = () => {
         status: (stock.status = true),
       })),
     };
-    console.log(stock);
 
     formik.setValues(initialValues);
   };
@@ -209,8 +206,6 @@ const EditProducts = () => {
     if (formik.values.stocks.length > 1) {
       formik.setFieldValue(`stocks.${index}.status`, false);
     }
-
-    console.log(formik.values.stocks[index].status);
   };
 
   return (
@@ -360,26 +355,47 @@ const EditProducts = () => {
             cancelButtonProps={{ style: { display: "none" } }} // Oculta el botón de cancelar
             onCancel={() => setOpenModal2(false)}
             onOk={() => setOpenModal2(false)}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              top: "7%",
-              left: "-7%",
-            }}
+            style={
+              isMobile
+                ? {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }
+                : {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    top: "7%",
+                    left: "-7%",
+                  }
+            }
           >
             {/* Adaptar este Box a Mobile */}
             <Box
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                top: "50%",
-                left: "50%",
-                width: "770px",
-                maxWidth: 770,
-                maxHeight: 700,
-                overflowY: "auto",
-              }}
+              style={
+                isMobile
+                  ? {
+                      justifyContent: "center",
+                      display: "flex",
+                      top: "50%",
+                      left: "50%",
+                      width: "300px",
+                      maxWidth: 770,
+                      maxHeight: 700,
+                      overflowY: "auto",
+                    }
+                  : {
+                      justifyContent: "center",
+                      display: "flex",
+                      top: "50%",
+                      left: "50%",
+                      width: "770px",
+                      maxWidth: 770,
+                      maxHeight: 700,
+                      overflowY: "auto",
+                    }
+              }
             >
               <StockGrid
                 stocks={formik.values.stocks}

@@ -43,9 +43,10 @@ const StockModal = ({
           <Box
             key={index}
             mb={3}
+            mr={3}
             style={{
-              minWidth: "270px",
-              maxWidth: "270px",
+              minWidth: "170px",
+              maxWidth: "300px",
             }}
           >
             <Typography variant="h6">Color</Typography>
@@ -178,7 +179,7 @@ const StockModal = ({
         handleAddStock();
         setOpenModal(false);
       }}
-      width={350}
+      width={550}
       footer={[
         <Button
           key="cancel"

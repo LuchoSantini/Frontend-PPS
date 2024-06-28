@@ -17,6 +17,7 @@ import {
   postColours,
   postSizes,
 } from "../../../Api/ApiServices";
+import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
 
 const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -55,10 +56,11 @@ const PostColoursSizesCategories = () => {
         const response = await postColours(values);
         setColours([...colours, response.data]);
         formikColours.resetForm();
-        console.log(response.data);
+        ToastifyToShow({ message: response.data });
       } catch (error) {
         console.log(error);
         setErrorMessage(error.message);
+        ToastifyToShow({ message: error.response.data });
       }
     },
   });
@@ -73,9 +75,10 @@ const PostColoursSizesCategories = () => {
         const response = await postSizes(values);
         setSizes([...sizes, response.data]);
         formikSizes.resetForm();
-        console.log(response.data);
+        ToastifyToShow({ message: response.data });
       } catch (error) {
         setErrorMessage(error.message);
+        ToastifyToShow({ message: error.response.data });
       }
     },
   });
@@ -90,10 +93,10 @@ const PostColoursSizesCategories = () => {
         const response = await postCategories(values);
         setCategories([...categories, response.data]);
         formikCategories.resetForm();
-        console.log(response.data);
+        ToastifyToShow({ message: response.data });
       } catch (error) {
-        setErrorMessage(error.message);
         console.log(error);
+        ToastifyToShow({ message: error.response.data });
       }
     },
   });

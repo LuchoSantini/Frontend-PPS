@@ -8,10 +8,13 @@ const useProductsFormik = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [stock, setStock] = useState([]);
   const [stockButtonVisibility, setStockButtonVisibility] = useState(false);
-  const [addImageButtonVisibility, setAddImageButtonVisibility] =
-    useState(false);
-  const [addStockSizeButtonVisibility, setAddStockSizeButtonVisibility] =
-    useState(false);
+  const [addImageButtonVisibility, setAddImageButtonVisibility] = useState(
+    false
+  );
+  const [
+    addStockSizeButtonVisibility,
+    setAddStockSizeButtonVisibility,
+  ] = useState(false);
 
   const productFormValidationScheme = yup.object().shape({
     description: yup.string().required("Ingrese una descripción"),
@@ -74,14 +77,11 @@ const useProductsFormik = () => {
         values.stocks = stock;
 
         const response = await postProduct(values);
-        console.log(response.data);
         ToastifyToShow({ message: response.data });
         formik.resetForm();
       } catch (error) {
-        console.log(error);
         setErrorMessage("Error al agregar un producto");
         ToastifyToShow({ message: error.response.data });
-        console.log(errorMessage);
       }
     },
   });
@@ -130,15 +130,12 @@ const useProductsFormik = () => {
 
       if (isValid && !isIdentical) {
         setStock((prevStock) => [...prevStock, newStock]);
+        ToastifyToShow({ message: "Stock agregado" });
       } else {
-        console.log("No se agregó el stock");
+        ToastifyToShow({ message: "No se agregó el Stock" });
       }
     }
   };
-
-  useEffect(() => {
-    console.log(stock);
-  }, [stock]);
 
   const handleDeleteStock = (index) => {
     setStock((prevStock) => {
@@ -149,7 +146,6 @@ const useProductsFormik = () => {
     if (stock.length < 11) {
       setStockButtonVisibility(false);
     }
-    console.log(stock.length);
   };
 
   const handleAddImage = (index) => {

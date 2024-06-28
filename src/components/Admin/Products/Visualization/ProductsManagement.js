@@ -40,7 +40,7 @@ function ProductsManagement({ loading, products }) {
       key: "status",
     },
     {
-      title: "Color",
+      title: "Colores",
       dataIndex: "colours",
       key: "colours",
     },
@@ -52,9 +52,9 @@ function ProductsManagement({ loading, products }) {
     description: product.description,
     price: product.price,
     genre: product.genre,
-    category: product.category,
+    category: product.categories[0].categoryName,
     status: product.status ? "Disponible" : "No Disponible",
-    //colours: product.colours.map((colour) => colour.colourName).join(", "),
+    colours: product.stocks.map((stock) => stock.colour.colourName).join(", "),
   }));
 
   return (

@@ -74,7 +74,7 @@ const Chatbot = ({ onClose }) => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-          setIsOpen(true);
+          setIsOpen(false);
         }
       });
     });
@@ -105,7 +105,6 @@ const Chatbot = ({ onClose }) => {
             handleEnd={({ steps, values }) => {
               console.log(steps, values);
             }}
-            recognitionEnable={true}
           />
         </ThemeProvider>
       )}

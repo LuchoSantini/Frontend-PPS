@@ -5,6 +5,7 @@ import { Drawer, Button, List, Space } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { removeItem, clearCart } from "../../redux/cartActions";
 import MercadoPagoAPI from "../Api/MercadoPagoAPI";
+import { Box } from "@mui/material";
 
 const CartMenu = ({ open, onClose }) => {
   const items = useSelector((state) => state.cart.items);
@@ -65,13 +66,20 @@ const CartMenu = ({ open, onClose }) => {
           </List.Item>
         )}
       />
-      <Space direction="vertical" style={{ width: "100%" }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
         <Button type="primary" onClick={handleClearCart}>
           Limpiar Carrito
         </Button>
 
         <MercadoPagoAPI cartItems={items} />
-      </Space>
+      </Box>
     </Drawer>
   );
 };

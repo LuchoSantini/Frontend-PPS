@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Subscribe, getUserByEmail } from "../Api/ApiServices";
 import ToastifyToShow from "../hooks/Effects/ToastifyToShow";
 import { jwtDecode } from "jwt-decode";
+import { useLocation } from "react-router-dom";
 
 const Home = ({ products }) => {
   const [isTagVisible, setIsTagVisible] = useState(true);
@@ -17,7 +18,30 @@ const Home = ({ products }) => {
   const email = userData?.email;
   const isMobile = useMediaQuery("(max-width:632px)");
   const { token } = useSelector((state) => state.auth);
+  const [queryParams, setQueryParams] = useState({});
 
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const queryParamsObj = {};
+    params.forEach((value, key) => {
+      queryParamsObj[key] = value;
+    });
+    setQueryParams(queryParamsObj);
+  }, [location]);
+
+  useEffect(() => {
+    const updateOrderStatus = async () => {
+      try {
+        const res = await getUserByEmail(email);
+        setIsSubscribe(res.data.notification);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    };
+  }, [queryParams]);
+
+  console.log(queryParams);
   useEffect(() => {
     if (token) {
       const decodedToken = jwtDecode(token);

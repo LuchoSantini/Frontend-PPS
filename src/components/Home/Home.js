@@ -9,6 +9,7 @@ import { Subscribe, getUserByEmail } from "../Api/ApiServices";
 import ToastifyToShow from "../hooks/Effects/ToastifyToShow";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
+import api from "../Api/Api";
 
 const Home = ({ products }) => {
   const [isTagVisible, setIsTagVisible] = useState(true);
@@ -33,15 +34,20 @@ const Home = ({ products }) => {
   useEffect(() => {
     const updateOrderStatus = async () => {
       try {
-        const res = await getUserByEmail(email);
+        const res = await api.put(`/api/MercadoPago/paymentStatus?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`);
         setIsSubscribe(res.data.notification);
       } catch (error) {
-        console.error("Error fetching user data", error);
+        console.error("Error", error);
       }
     };
+
+    if (Object.keys(queryParams).length > 0) {
+      updateOrderStatus();
+    }
   }, [queryParams]);
 
   console.log(queryParams);
+  
   useEffect(() => {
     if (token) {
       const decodedToken = jwtDecode(token);

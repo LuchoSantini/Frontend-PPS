@@ -5,7 +5,11 @@ import { useMediaQuery } from "@mui/material";
 import { Tag, Popover, Popconfirm } from "antd";
 import { BellOutlined, CloseOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { Subscribe, getUserByEmail } from "../Api/ApiServices";
+import {
+  Subscribe,
+  getUserByEmail,
+  postOrderLineApi,
+} from "../Api/ApiServices";
 import ToastifyToShow from "../hooks/Effects/ToastifyToShow";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
@@ -34,7 +38,9 @@ const Home = ({ products }) => {
   useEffect(() => {
     const updateOrderStatus = async () => {
       try {
-        const res = await api.put(`/api/MercadoPago/paymentStatus?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`);
+        const res = await api.put(
+          `/api/MercadoPago/paymentStatus?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`
+        );
         setIsSubscribe(res.data.notification);
       } catch (error) {
         console.error("Error", error);
@@ -46,8 +52,22 @@ const Home = ({ products }) => {
     }
   }, [queryParams]);
 
+  useEffect(() => {
+    const postOrderLine = async () => {
+      try {
+        await api.post(
+          `/api/MercadoPago/postOrderLine?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`
+        );
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+
+    postOrderLine();
+  }, [queryParams]);
+
   console.log(queryParams);
-  
+
   useEffect(() => {
     if (token) {
       const decodedToken = jwtDecode(token);

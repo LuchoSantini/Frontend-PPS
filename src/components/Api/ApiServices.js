@@ -79,8 +79,12 @@ export const postPayment = (cartItems) => {
   return api.post("/api/MercadoPago/payment", cartItems);
 };
 
+export const postOrderLineApi = (preferenceId, status) => {
+  return api.post("/api/MercadoPago/postOrderLine", preferenceId, status);
+};
+
 export const updateOrderStatus = (preferenceId, status) => {
-  return api.put("/api/MercadoPago/paymentStatus", preferenceId, status);
+  return api.patch("/api/MercadoPago/paymentStatus", preferenceId, status);
 };
 
 export const loginUser = async (credentials) => {

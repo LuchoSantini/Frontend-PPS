@@ -14,11 +14,12 @@ const MercadoPagoAPI = () => {
   const [preferenceId, setPreferenceId] = useState(null);
   const { token } = useSelector((state) => state.auth);
   const items = useSelector((state) => state.cart.items);
-  console.log(items);
+  //console.log(items);
 
   const handlePayment = async () => {
     try {
       if (items && items.length > 0) {
+        //console.log(`Token: ${token}`); // Imprimir el token para depuración
         const paymentResponse = await postPayment(items, token);
         setPreferenceId(paymentResponse.data.preferenceId);
       }

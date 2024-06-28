@@ -65,25 +65,6 @@ const Home = ({ products }) => {
   }, [queryParams, token]); // Añade token como dependencia
 
   useEffect(() => {
-    const postOrderLineApi = async () => {
-      try {
-        const res = await api.post(
-          `/api/MercadoPago/postOrderLine?preferenceId=${queryParams.preference_id}&status=${queryParams.status}`,
-          null,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setIsSubscribe(res.data.notification);
-      } catch (error) {
-        console.error("Error", error);
-      }
-    };
-
-    if (Object.keys(queryParams).length > 0) {
-      postOrderLineApi();
-    }
-  }, [queryParams, token]); // Añade token como dependencia
-
-  useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await getUserByEmail(email);

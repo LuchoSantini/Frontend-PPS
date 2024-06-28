@@ -28,7 +28,7 @@ const CartMenu = ({ open, onClose }) => {
     return Object.values(groupedItems);
   };
   const groupedItems = groupItemsByColorAndSize();
-  console.log(groupedItems);
+  //  console.log(groupedItems);
 
   const handleRemoveItem = (item) => {
     dispatch(removeItem(item)); // Envía el objeto completo del item a eliminar

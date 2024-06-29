@@ -7,6 +7,7 @@ import { BellOutlined, CloseOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import {
   Subscribe,
+  getOrdersApproved,
   getUserByEmail,
   postOrderLineApi,
 } from "../Api/ApiServices"; // Importa postOrderLineApi
@@ -24,8 +25,10 @@ const Home = ({ products }) => {
   const isMobile = useMediaQuery("(max-width:632px)");
   const { token } = useSelector((state) => state.auth);
   const [queryParams, setQueryParams] = useState({});
-
   const location = useLocation();
+
+
+  
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

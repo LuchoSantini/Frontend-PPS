@@ -6,12 +6,15 @@ import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
 import ToggleTheme from "../../context/theme/ToggleTheme";
+import { getOrdersApproved } from "../Api/ApiServices";
 const UserIcon = ({ token, handleLogout }) => {
   const [showModal, setShowModal] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
+  const [orders, setOrders] = useState();
 
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [userData, setUserData] = useState(null);
+
 
   useEffect(() => {
     if (token) {
@@ -21,7 +24,21 @@ const UserIcon = ({ token, handleLogout }) => {
       setUserData(null);
     }
   }, [token]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ordersApproved = await getOrdersApproved(token);
 
+        setOrders(ordersApproved.data); // Asumiendo que la respuesta de la API tiene un campo 'data' con las órdenes aprobadas
+      } catch (error) {
+        console.log("Error fetching approved orders:", error);
+      }
+    };
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
+  console.log(orders)
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -67,6 +84,8 @@ const UserIcon = ({ token, handleLogout }) => {
           showUserProfile={showUserProfile}
           handleClose={handleCloseUserProfile}
           userData={userData}
+          orders={orders}
+
         />
       )}
       {token ? (

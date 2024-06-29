@@ -35,6 +35,13 @@ export const getColours = () => {
 export const getCategories = () => {
   return api.get("api/categories");
 };
+export const getOrdersApproved = (token) =>{
+ return api.get("api/orders/user/approved", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
 
 //MAPPED VARIANTS FOR FILTER
 export const getMSizes = () => {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { useMediaQuery, Box } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import ProductSearchDrawer from "../Admin/Products/Visualization/ProductSearchDr
 import UserIcon from "./UserIcon";
 import CartIcon from "../Cart/CartIcon";
 import { ThemeContext } from "../../context/theme/theme.context";
+import { getOrdersApproved } from "../Api/ApiServices";
 
 const Navbar = ({ products }) => {
   const { theme, isDarkMode } = useContext(ThemeContext);
@@ -30,34 +31,10 @@ const Navbar = ({ products }) => {
     dispatch(logout());
   };
 
+  
   return (
     <>
-      <div
-        style={{
-          display: "block",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          width: "100%",
-          zIndex: 1000,
-          background: "#76949F",
-          alignItems: "center",
-          height: 27,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            textAlign: "center",
-            margin: 0,
-          }}
-        >
-          <p style={{ lineHeight: 0, color: "#fff" }}>20% OFF Codigo: OT2024</p>
-        </div>
-      </div>
+
 
       <div
         style={{
@@ -67,7 +44,6 @@ const Navbar = ({ products }) => {
           top: 0,
           width: "100%",
           zIndex: 1000,
-          marginTop: 27,
           backgroundColor: isDarkMode ? "#0E1113" : "#ffffff",
         }}
       >

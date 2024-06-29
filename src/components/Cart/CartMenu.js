@@ -5,7 +5,7 @@ import { Drawer, Button, List, Space } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { removeItem, clearCart } from "../../redux/cartActions";
 import MercadoPagoAPI from "../Api/MercadoPagoAPI";
-import { Box } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
 const CartMenu = ({ open, onClose }) => {
   const items = useSelector((state) => state.cart.items);
@@ -37,7 +37,16 @@ const CartMenu = ({ open, onClose }) => {
   const handleClearCart = () => {
     dispatch(clearCart());
   };
+  const calculateCartTotal = (items) => {
+    let totalPrice = 0;
+    items.forEach((item) => {
+      totalPrice += item.price * item.quantity;
+    });
+    return totalPrice;
+  };
 
+  // Calcular el precio total del carrito
+  const totalPrice = calculateCartTotal(items);
   return (
     <Drawer
       title="CARRITO"
@@ -60,7 +69,7 @@ const CartMenu = ({ open, onClose }) => {
             ]}
           >
             <List.Item.Meta
-              title={`${item.name} - ${item.color} - Talle ${item.sizeId}`} // Mostrar el tamaño específico
+              title={`${item.name} - ${item.color} - Talle ${item.sizeName}`} // Mostrar el tamaño específico
               description={`Cantidad: ${item.quantity} | Precio: $${item.price}`}
             />
           </List.Item>
@@ -74,11 +83,21 @@ const CartMenu = ({ open, onClose }) => {
           flexDirection: "column",
         }}
       >
-        <Button type="primary" onClick={handleClearCart}>
-          Limpiar Carrito
-        </Button>
+        <Divider />
+        {items.length > 0 ? (
+          <>
+            <div
+              style={{ textAlign: "center", marginBottom: 10, marginTop: 10 }}
+            >
+              <Typography>TOTAL: ${totalPrice.toLocaleString()}</Typography>
+            </div>
+            <Button type="primary" onClick={handleClearCart}>
+              Limpiar Carrito
+            </Button>
 
-        <MercadoPagoAPI cartItems={items} />
+            <MercadoPagoAPI cartItems={items} />
+          </>
+        ) : null}
       </Box>
     </Drawer>
   );

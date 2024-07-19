@@ -11,6 +11,7 @@ import ProductDetail from "./components/Home/Products/ProductMapped/ProductDetai
 import { ThemeContext } from "./context/theme/theme.context";
 import "./App.css"; // Asegúrate de importar tus estilos CSS
 import FloatingButton from "./components/bot/FloatingButton";
+import NotFound from "./routes/NotFound";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -38,6 +39,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+        <Route path="/home" element={<Home products={products} />} />
+
           <Route path="/" element={<Home products={products} />} />
           <Route
             path="/admin"
@@ -63,7 +66,7 @@ function App() {
               </CheckAdmin>
             }
           />
-          <Route path="*" element={<Home products={products} />} />
+          <Route path="*" element={<NotFound />} />
           <Route
             path="/admin/ordenes"
             element={

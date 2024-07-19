@@ -1,7 +1,8 @@
 import { Modal, Button, Tabs, Tag, Avatar, Popconfirm, Table } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Subscribe, UnSubscribe, getUserByEmail } from "../Api/ApiServices";
 import { UserOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const { TabPane } = Tabs;
 
@@ -9,6 +10,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
   const email = userData.email;
   const [isSubscribe, setIsSubscribe] = useState(false);
   const [precioTotal, setPrecioTotal] = useState(0); // Estado para almacenar el precio total de la orden
+  const { token } = useSelector((state) => state.auth);
 
   const handleFetchUser = async () => {
     try {
@@ -20,19 +22,15 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
     }
   };
 
-  const handleSubscribe = async () => {
-    try {
-      const response = await Subscribe(email);
-      console.log("Subscribed successfully", response);
-      setIsSubscribe(true);
-    } catch (error) {
-      console.error("Error subscribing", error);
+  useEffect(() => {
+    if (email) {
+      handleFetchUser();
     }
-  };
+  }, [email]);
 
   const handleUnSubscribe = async () => {
     try {
-      const response = await UnSubscribe(email);
+      const response = await UnSubscribe(email, token);
       console.log("Unsubscribed successfully", response);
       setIsSubscribe(false);
     } catch (error) {
@@ -57,7 +55,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
         total += line.quantity * line.unitPrice;
       });
     }
-    return total;
+    return total.toLocaleString();
   };
 
   const columns = [
@@ -119,7 +117,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
       title: "Precio Total",
       dataIndex: "precioTotal",
       key: "precioTotal",
-      render: (text, record) => <span>{calculatePrecioTotal(record)}</span>,
+      render: (text, record) => <span>${calculatePrecioTotal(record)}</span>,
     },
   ];
   
@@ -128,7 +126,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
     <>
       {showUserProfile && (
         <Modal
-          width={1100}
+          width={1000}
           visible={showUserProfile}
           onCancel={handleClose}
           footer={[
@@ -188,7 +186,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
                 </div>
 
                 <div style={{ textAlign: "left" }}>
-                  {isSubscribe ? (
+                  {!isSubscribe ? (
                     <Popconfirm
                       placement="topLeft"
                       description="¿Quieres desubscribirte a notificaciones?"
@@ -212,6 +210,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
                   dataSource={orders}
                   rowKey={(record) => record.id}
                   pagination={false}
+                  scroll={{x:800}}
                 />
               </div>
             </TabPane>

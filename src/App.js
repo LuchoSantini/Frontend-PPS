@@ -14,7 +14,7 @@ import FloatingButton from "./components/bot/FloatingButton";
 import { useSelector } from "react-redux";
 import Footer from "./components/Home/Footer";
 import { Box } from "@mui/material";
-import { MarginTwoTone } from "@mui/icons-material";
+import NotFound from "./routes/NotFound";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -37,71 +37,63 @@ function App() {
       }
     };
     fetchData();
-  }, []);
+  }, [token]);
 
   return (
-    <Box sx={{ minHeight: "100vh" }}>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/home" element={<Home products={products} />} />
-
-          <Route path="/" element={<Home products={products} />} />
-          <Route
-            path="/admin"
-            element={
-              <CheckAdmin>
-                <Admin />
-              </CheckAdmin>
-            }
-          />
-          <Route
-            path="/admin/productos"
-            element={
-              <CheckAdmin>
-                <ProductsManagement products={products} loading={loading} />
-              </CheckAdmin>
-            }
-          />
-          <Route
-            path="/admin/usuarios"
-            element={
-              <CheckAdmin>
-                <UsersManagement users={users} loading={loading} />
-              </CheckAdmin>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-          <Route
-            path="/admin/ordenes"
-            element={
-              <CheckAdmin>
-                <OrdersManagement />
-              </CheckAdmin>
-            }
-          />
-          <Route
-            path="/product/:id"
-            element={
-              <ProductDetail
-                products={products}
-                loading={loading}
-                tokenUser={token}
-              />
-            }
-          />
-        </Routes>
+        <Box className="main-content">
+          <Routes>
+            <Route path="/home" element={<Home products={products} />} />
+            <Route path="/" element={<Home products={products} />} />
+            <Route
+              path="/admin"
+              element={
+                <CheckAdmin>
+                  <Admin />
+                </CheckAdmin>
+              }
+            />
+            <Route
+              path="/admin/productos"
+              element={
+                <CheckAdmin>
+                  <ProductsManagement products={products} loading={loading} />
+                </CheckAdmin>
+              }
+            />
+            <Route
+              path="/admin/usuarios"
+              element={
+                <CheckAdmin>
+                  <UsersManagement users={users} loading={loading} />
+                </CheckAdmin>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="/admin/ordenes"
+              element={
+                <CheckAdmin>
+                  <OrdersManagement />
+                </CheckAdmin>
+              }
+            />
+            <Route
+              path="/product/:id"
+              element={
+                <ProductDetail
+                  products={products}
+                  loading={loading}
+                  tokenUser={token}
+                />
+              }
+            />
+          </Routes>
+        </Box>
         <FloatingButton />
       </BrowserRouter>
-      <Box
-        sx={{
-          marginBottom: "0px",
-          marginTop: "auto",
-          position: "auto",
-          width: "100%",
-        }}
-      >
-        <Footer />
-      </Box>
+      <Footer />
     </Box>
   );
 }

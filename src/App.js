@@ -43,6 +43,8 @@ function App() {
     <Box sx={{ minHeight: "100vh" }}>
       <BrowserRouter>
         <Routes>
+          <Route path="/home" element={<Home products={products} />} />
+
           <Route path="/" element={<Home products={products} />} />
           <Route
             path="/admin"
@@ -68,7 +70,7 @@ function App() {
               </CheckAdmin>
             }
           />
-          <Route path="*" element={<Home products={products} />} />
+          <Route path="*" element={<NotFound />} />
           <Route
             path="/admin/ordenes"
             element={

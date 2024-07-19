@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -35,7 +35,7 @@ const ProductDetail = ({ products, tokenUser }) => {
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
-
+  const navigate = useNavigate();
   const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
@@ -66,16 +66,19 @@ const ProductDetail = ({ products, tokenUser }) => {
   }, [id]);
 
   useEffect(() => {
-    const validStocks = product?.stocks.filter(
-      (stock) => stock.status !== false
-    );
-    const selectedStock = validStocks?.find(
-      (stock) => stock.colourId === selectedColor
-    );
-    if (selectedStock) {
-      setMainImage(selectedStock.images[0]?.imageURL || "");
+    if (product) { //
+      const validStocks = product.stocks.filter(
+        (stock) => stock.status !== false
+      );
+      const selectedStock = validStocks.find(
+        (stock) => stock.colourId === selectedColor
+      );
+      if (selectedStock) {
+        setMainImage(selectedStock.images[0]?.imageURL || "");
+      }
     }
   }, [selectedColor, product]);
+
 
   if (loading)
     return (
@@ -91,8 +94,11 @@ const ProductDetail = ({ products, tokenUser }) => {
       </div>
     );
 
-  if (!product) return <Typography>Product not found</Typography>;
-
+    if (!loading && !product) {
+      navigate("/producto-no-encontrado");
+      return null;
+    }
+  
   const { description, stocks, categories } = product;
   const validStocks = stocks.filter((stock) => stock.status !== false);
   const selectedStock = validStocks.find(

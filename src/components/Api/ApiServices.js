@@ -1,11 +1,17 @@
 import api from "./Api";
 
-export const Subscribe = (email) => {
-  return api.put("/api/email/subscribe", email);
+export const Subscribe = (email, token) => {
+  return api.put("/api/email/subscribe", email,{
+    headers: { Authorization: `Bearer ${token}`
+    },
+  });
 };
 
-export const UnSubscribe = (email) => {
-  return api.put("/api/email/unsubscribe", email);
+export const UnSubscribe = (email, token) => {
+  return api.put("/api/email/subscribe", email,{
+    headers: { Authorization: `Bearer ${token}`
+    },
+  });
 };
 
 // GET
@@ -96,9 +102,15 @@ export const postCategories = (values, token) => {
   });
 };
 
-export const getUserByEmail = (email) => {
-  return api.get("/api/user", { params: { email } });
+export const getUserByEmail = (email, token) => {
+  return api.get("/api/user", {
+    params: { email },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
+
 
 export const postUser = (values) => {
   return api.post("/api/register", values);

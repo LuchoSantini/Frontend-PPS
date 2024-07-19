@@ -68,7 +68,7 @@ const Home = ({ products }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await getUserByEmail(email);
+        const res = await getUserByEmail(email, token);
         setIsSubscribe(res.data.notification);
       } catch (error) {
         console.error("Error fetching user data", error);
@@ -94,7 +94,7 @@ const Home = ({ products }) => {
 
   const handleSubscribe = async () => {
     try {
-      const response = await Subscribe(email);
+      const response = await Subscribe(email, token);
       console.log("Subscribed successfully", response);
       setIsSubscribe(true);
       ToastifyToShow({ message: "Te has suscrito!" });

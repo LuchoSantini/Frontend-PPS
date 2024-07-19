@@ -43,9 +43,15 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
   // Función para formatear la fecha a dd/mm/aa
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, "0");
+    const day = date
+      .getDate()
+      .toString()
+      .padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString().slice(-2);
+    const year = date
+      .getFullYear()
+      .toString()
+      .slice(-2);
     return `${day}/${month}/${year}`;
   };
 
@@ -78,7 +84,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
       key: "orderLines",
       render: (orderLines) => (
         <ul>
-          {orderLines.map((line, index) => (
+          {orderLines?.map((line, index) => (
             <li key={index}>{line.description}</li>
           ))}
         </ul>
@@ -95,8 +101,8 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
       key: "color",
       render: (orderLines) => (
         <ul>
-          {orderLines.map((line, index) => (
-            <li key={index}>{line.color.colourName}</li>
+          {orderLines?.map((line, index) => (
+            <li key={index}>{line.color?.colourName}</li>
           ))}
         </ul>
       ),
@@ -107,9 +113,9 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
       key: "size",
       render: (orderLines) => (
         <ul>
-          {orderLines.map((line, index) => (
+          {orderLines?.map((line, index) => (
             <li key={index}>
-              {line.size.sizeName} x ({line.quantity})
+              {line.size?.sizeName} x ({line.quantity})
             </li>
           ))}
         </ul>
@@ -122,8 +128,7 @@ function UserProfile({ showUserProfile, handleClose, userData, orders }) {
       render: (text, record) => <span>{calculatePrecioTotal(record)}</span>,
     },
   ];
-  
-  
+
   return (
     <>
       {showUserProfile && (

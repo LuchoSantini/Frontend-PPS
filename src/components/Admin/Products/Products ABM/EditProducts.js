@@ -26,6 +26,7 @@ import useProductsFormik from "../../../hooks/Products/useProductsFormik";
 import { Modal } from "antd";
 import StockGrid from "../Visualization/StockGrid";
 import StockModal from "../Visualization/StockModal";
+import { useSelector } from "react-redux";
 
 const EditProducts = () => {
   const [products, setProducts] = useState([]);
@@ -40,6 +41,7 @@ const EditProducts = () => {
   const [stock, setStock] = useState([]);
   const [stockButtonVisibility, setStockButtonVisibility] = useState(false);
   const isMobile = useMediaQuery("(max-width: 632px)");
+  const { token } = useSelector((state) => state.auth);
 
   const {
     handleAddImage,
@@ -141,7 +143,12 @@ const EditProducts = () => {
 
         const response = await api.put(
           `/api/products/edit/${selectedProductId}`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const updatedProductIndex = products.findIndex(

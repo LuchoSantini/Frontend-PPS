@@ -18,12 +18,14 @@ import {
   postSizes,
 } from "../../../Api/ApiServices";
 import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
+import { useSelector } from "react-redux";
 
 const PostColoursSizesCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [colours, setColours] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const { token } = useSelector((state) => state.auth);
 
   const colourNameValidationScheme = yup.object().shape({
     colourName: yup
@@ -53,7 +55,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: colourNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await postColours(values);
+        const response = await postColours(values, token);
         setColours([...colours, response.data]);
         formikColours.resetForm();
         ToastifyToShow({ message: response.data });
@@ -72,7 +74,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: sizeNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await postSizes(values);
+        const response = await postSizes(values, token);
         setSizes([...sizes, response.data]);
         formikSizes.resetForm();
         ToastifyToShow({ message: response.data });
@@ -90,7 +92,7 @@ const PostColoursSizesCategories = () => {
     validationSchema: categoryNameValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await postCategories(values);
+        const response = await postCategories(values, token);
         setCategories([...categories, response.data]);
         formikCategories.resetForm();
         ToastifyToShow({ message: response.data });

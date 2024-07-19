@@ -3,6 +3,7 @@ import { postProduct } from "../../Api/ApiServices";
 import ToastifyToShow from "../Effects/ToastifyToShow";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useSelector } from "react-redux";
 
 const useProductsFormik = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -15,6 +16,8 @@ const useProductsFormik = () => {
     addStockSizeButtonVisibility,
     setAddStockSizeButtonVisibility,
   ] = useState(false);
+
+  const { token } = useSelector((state) => state.auth);
 
   const productFormValidationScheme = yup.object().shape({
     description: yup.string().required("Ingrese una descripción"),
@@ -76,7 +79,7 @@ const useProductsFormik = () => {
       try {
         values.stocks = stock;
 
-        const response = await postProduct(values);
+        const response = await postProduct(values, token);
         ToastifyToShow({ message: response.data });
         formik.resetForm();
       } catch (error) {

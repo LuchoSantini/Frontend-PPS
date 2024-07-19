@@ -16,7 +16,6 @@ const ProductCard = ({
     navigate(`/product/${description}`);
   };
 
-
   const isNewProduct = (createdDate, newProductDays) => {
     const currentDate = new Date();
     const productDate = new Date(createdDate);
@@ -34,8 +33,15 @@ const ProductCard = ({
         height: "100%",
         maxWidth: "250px",
         borderRadius: 0,
+        marginBottom: "20px",
       }}
-      cover={<img src={image} alt={description} style={{ maxWidth: "100%" }} />}
+      cover={
+        <img
+          src={image}
+          alt={description}
+          style={{ maxWidth: "350px", maxHeight: "350px" }}
+        />
+      }
       extra={
         isNewProduct(createdDate, newProductDays) && (
           <p style={{ backgroundColor: "#76949F", padding: 5, color: "white" }}>
@@ -61,7 +67,9 @@ const ProductCard = ({
             marginTop: 5,
           }}
         >
-          <h4 style={{ margin: 0, maxWidth: "34.1rem", zIndex: 2 }}>{description}</h4>
+          <h4 style={{ margin: 0, maxWidth: "34.1rem", zIndex: 2 }}>
+            {description}
+          </h4>
           <span style={{ color: "ffff", margin: "0px 0" }}>
             ${price.toLocaleString()}
           </span>

@@ -26,8 +26,10 @@ import { ThemeContext } from "../../../../context/theme/theme.context";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useMediaQuery } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
 
-const ProductDetail = ({ products }) => {
+const ProductDetail = ({ products, tokenUser }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,6 +42,8 @@ const ProductDetail = ({ products }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const { theme, isDarkMode } = useContext(ThemeContext);
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const { token } = useSelector((state) => state.auth);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -94,7 +98,11 @@ const ProductDetail = ({ products }) => {
   const selectedStock = validStocks.find(
     (stock) => stock.colourId === selectedColor
   );
-  const selectedSizeName = selectedStock?.stockSizes.find(stockSize => stockSize.sizeId.toString() === selectedSize)?.size?.sizeName || "Size";
+  const selectedSizeName =
+    selectedStock?.stockSizes.find(
+      (stockSize) => stockSize.sizeId.toString() === selectedSize
+    )?.size?.sizeName || "Size";
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("Please select a size.");
@@ -107,33 +115,38 @@ const ProductDetail = ({ products }) => {
         item.colorId === selectedColor &&
         item.sizeId === selectedSize
     );
-
-    if (existingItem) {
-      const updatedQuantity = existingItem.quantity + 1;
-
-      const cartProduct = {
-        ...existingItem,
-        quantity: updatedQuantity,
-      };
-
-      dispatch(addToCart(cartProduct));
-      console.log(cartProduct);
+    if (!token) {
+      ToastifyToShow({
+        message: "Debes Iniciar Sesion",
+        backgroundColour: "#ff6700",
+      });
     } else {
-      const cartProduct = {
-        id: product.id,
-        productId: product.id,
-        name: product.description,
-        price: product.price,
-        color: selectedStock.colour?.colourName,
-        colorId: selectedColor,
-        sizeId: selectedSize,
-        sizeName:selectedSizeName,
-        image: mainImage,
-        quantity: quantity,
-      };
+      if (existingItem) {
+        const updatedQuantity = existingItem.quantity + 1;
 
-      dispatch(addToCart(cartProduct));
-      console.log(cartProduct);
+        const cartProduct = {
+          ...existingItem,
+          quantity: updatedQuantity,
+        };
+
+        dispatch(addToCart(cartProduct));
+        console.log(cartProduct);
+      } else {
+        const cartProduct = {
+          id: product.id,
+          productId: product.id,
+          name: product.description,
+          price: product.price,
+          color: selectedStock.colour?.colourName,
+          colorId: selectedColor,
+          sizeId: selectedSize,
+          sizeName: selectedSizeName,
+          image: mainImage,
+          quantity: quantity,
+        };
+        dispatch(addToCart(cartProduct));
+        console.log(cartProduct);
+      }
     }
   };
 
@@ -163,8 +176,6 @@ const ProductDetail = ({ products }) => {
   const backgroundColor = theme === "dark" ? "rgb(48, 48, 48)" : "white";
   const buttonBackgroundColor =
     theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
-
-  
 
   return (
     <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
@@ -249,7 +260,7 @@ const ProductDetail = ({ products }) => {
           </Typography>
           <Box mt={2}>
             <Chip
-              label="In Stock"
+              label="En Stock"
               variant="outlined"
               sx={{ color: textColor, borderColor: textColor }}
             />
@@ -292,7 +303,7 @@ const ProductDetail = ({ products }) => {
           <Box mt={4}>
             <FormControl component="fieldset">
               <FormLabel component="legend" sx={{ color: textColor }}>
-                Size
+                Talle
               </FormLabel>
               <RadioGroup
                 row
@@ -334,12 +345,12 @@ const ProductDetail = ({ products }) => {
                 },
               }}
             >
-              Add to Cart
+              Agregar al Carrito
             </Button>
           </Box>
           <Box mt={3}>
             <Typography variant="body2" sx={{ color: textColor }}>
-              Categories
+              Categoria
             </Typography>
             <Box mt={2} display="flex">
               {categories.map((category) => (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import ProductMapped from "./Products/ProductMapped/ProductMapped";
-import { useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { Tag, Popover, Popconfirm } from "antd";
 import { BellOutlined, CloseOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import ToastifyToShow from "../hooks/Effects/ToastifyToShow";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
 import api from "../Api/Api";
+import Footer from "./Footer";
 
 const Home = ({ products }) => {
   const [isTagVisible, setIsTagVisible] = useState(true);
@@ -26,9 +27,6 @@ const Home = ({ products }) => {
   const { token } = useSelector((state) => state.auth);
   const [queryParams, setQueryParams] = useState({});
   const location = useLocation();
-
-
-  
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

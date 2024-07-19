@@ -31,11 +31,8 @@ const Navbar = ({ products }) => {
     dispatch(logout());
   };
 
-  
   return (
     <>
-
-
       <div
         style={{
           display: "block",
@@ -79,7 +76,7 @@ const Navbar = ({ products }) => {
             </Link>
           </div>
           <div style={{ display: "flex" }}>
-            <UserIcon token={token} handleLogout={handleLogout} />
+            <UserIcon tokenUser={token} handleLogout={handleLogout} />
             <CartIcon />
           </div>
         </Box>

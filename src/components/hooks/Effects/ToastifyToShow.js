@@ -1,6 +1,7 @@
 import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
-const ToastifyToShow = ({ message }) => {
+const ToastifyToShow = ({ message, backgroundColour }) => {
   Toastify({
     text: message,
     duration: 3000,
@@ -10,7 +11,7 @@ const ToastifyToShow = ({ message }) => {
     position: "left", // `left`, `center` or `right`
     stopOnFocus: true, // Prevents dismissing of toast on hover
     style: {
-      background: "#1565c0",
+      background: backgroundColour ? backgroundColour : "#1565c0",
       fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
       fontWeight: 500,
       fontSize: "0.875rem",
@@ -18,7 +19,7 @@ const ToastifyToShow = ({ message }) => {
       letterSpacing: "0.02857em",
       textTransform: "uppercase",
     },
-    onClick: function () {},
+    onClick: function() {},
   }).showToast();
 
   return null;

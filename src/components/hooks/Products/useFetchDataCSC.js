@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCategories, getColours, getSizes } from "../../Api/ApiServices";
+import { useSelector } from "react-redux";
 
 const useFetchDataCSC = () => {
   const [colours, setColours] = useState([]);

@@ -3,11 +3,12 @@ import { useState } from "react";
 import api from "../../Api/Api";
 import useFetchDataCSC from "./useFetchDataCSC";
 import ToastifyToShow from "../Effects/ToastifyToShow";
+import { useSelector } from "react-redux";
 const useHandleStatusCSC = () => {
   const [selectedColourId, setSelectedColourId] = useState("");
   const [selectedSizeId, setSelectedSizeId] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-
+  const { token } = useSelector((state) => state.auth);
   const {
     colours,
     sizes,
@@ -19,7 +20,15 @@ const useHandleStatusCSC = () => {
 
   const handleStatusColours = async () => {
     try {
-      await api.put(`/api/colours/${selectedColourId}`);
+      await api.put(
+        `/api/colours/${selectedColourId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setColours(colours.filter((colour) => colour.id !== selectedColourId));
       setSelectedColourId("");
       ToastifyToShow({ message: "Cambió el estado" });
@@ -30,7 +39,15 @@ const useHandleStatusCSC = () => {
 
   const handleStatusSizes = async () => {
     try {
-      await api.put(`/api/sizes/${selectedSizeId}`);
+      await api.put(
+        `/api/sizes/${selectedSizeId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setSizes(sizes.filter((size) => size.id !== selectedSizeId));
       setSelectedSizeId("");
       ToastifyToShow({ message: "Cambió el estado" });
@@ -41,7 +58,15 @@ const useHandleStatusCSC = () => {
 
   const handleStatusCategory = async () => {
     try {
-      await api.put(`/api/categories/${selectedCategoryId}`);
+      await api.put(
+        `/api/categories/${selectedCategoryId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setCategories(
         categories.filter((category) => category.id !== selectedCategoryId)
       );

@@ -7,38 +7,39 @@ import React, { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
 import ToggleTheme from "../../context/theme/ToggleTheme";
 import { getOrdersApproved } from "../Api/ApiServices";
-const UserIcon = ({ token, handleLogout }) => {
+import { useSelector } from "react-redux";
+const UserIcon = ({ tokenUser, handleLogout }) => {
   const [showModal, setShowModal] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [orders, setOrders] = useState();
 
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [userData, setUserData] = useState(null);
-
+  const { token } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
+    if (tokenUser) {
+      const decodedToken = jwtDecode(tokenUser);
       setUserData(decodedToken);
     } else {
       setUserData(null);
     }
-  }, [token]);
+  }, [tokenUser]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ordersApproved = await getOrdersApproved(token);
 
-        setOrders(ordersApproved.data); // Asumiendo que la respuesta de la API tiene un campo 'data' con las órdenes aprobadas
+        setOrders(ordersApproved.data);
       } catch (error) {
         console.log("Error fetching approved orders:", error);
       }
     };
-    if (token) {
+    if (tokenUser) {
       fetchData();
     }
-  }, [token]);
-  console.log(orders)
+  }, [tokenUser]);
+  console.log(orders);
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -85,10 +86,9 @@ const UserIcon = ({ token, handleLogout }) => {
           handleClose={handleCloseUserProfile}
           userData={userData}
           orders={orders}
-
         />
       )}
-      {token ? (
+      {tokenUser ? (
         <Dropdown overlay={userMenu} trigger={["click"]}>
           <UserOutlined style={{ fontSize: 30 }} className="buttons-navbar" />
         </Dropdown>

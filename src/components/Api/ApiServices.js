@@ -20,9 +20,14 @@ export const getProductByDescription = (description) => {
   return api.get(`api/products/${description}`);
 };
 
-export const getUsers = () => {
-  return api.get("api/users");
+export const getUsers = (token) => {
+  return api.get("api/users", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
+
 export const getSizes = () => {
   return api.get("api/sizes");
 };
@@ -35,13 +40,13 @@ export const getColours = () => {
 export const getCategories = () => {
   return api.get("api/categories");
 };
-export const getOrdersApproved = (token) =>{
- return api.get("api/orders/user/approved", {
+export const getOrdersApproved = (token) => {
+  return api.get("api/orders/user/approved", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-}
+};
 
 //MAPPED VARIANTS FOR FILTER
 export const getMSizes = () => {
@@ -61,17 +66,34 @@ export const getProductsByFilter = (query) => {
 };
 
 // POST
-export const postProduct = (values) => {
-  return api.post("/api/products", values);
+export const postProduct = (values, token) => {
+  return api.post("/api/products", values, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
-export const postColours = (values) => {
-  return api.post("/api/colours", values);
+
+export const postColours = (values, token) => {
+  return api.post("/api/colours", values, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
-export const postSizes = (values) => {
-  return api.post("/api/sizes", values);
+export const postSizes = (values, token) => {
+  return api.post("/api/sizes", values, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
-export const postCategories = (values) => {
-  return api.post("/api/categories", values);
+export const postCategories = (values, token) => {
+  return api.post("/api/categories", values, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const getUserByEmail = (email) => {

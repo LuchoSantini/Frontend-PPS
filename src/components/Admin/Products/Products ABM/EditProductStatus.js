@@ -16,11 +16,13 @@ import {
   TextField,
 } from "@mui/material";
 import { allProducts } from "../../../Api/ApiServices";
+import { useSelector } from "react-redux";
 
 const EditProductStatus = () => {
   const [products, setProducts] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
+  const { token } = useSelector((state) => state.auth);
 
   const fetchData = async () => {
     try {
@@ -49,9 +51,17 @@ const EditProductStatus = () => {
     validationSchema: statusFormValidationScheme,
     onSubmit: async (values) => {
       try {
-        const response = await api.put(`/api/products/${selectedProductId}`, {
-          status: values.status,
-        });
+        const response = await api.put(
+          `/api/products/${selectedProductId}`,
+          {
+            status: values.status,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         // Actualizar estado local
         const updatedProducts = products.map((product) =>

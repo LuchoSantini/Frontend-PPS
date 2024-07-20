@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
-import { Select, Spin, Tag } from "antd";
+import { Select } from "antd";
 import { getProductsByFilter } from "../../../Api/ApiServices";
 import Filters from "./Filters";
+import Spinner from "../../../hooks/Effects/Spinner";
 
 function ProductMapped({ isMobile }) {
   const [products, setProducts] = useState([]);
@@ -111,9 +112,10 @@ function ProductMapped({ isMobile }) {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
+            marginTop: "210px",
           }}
         >
-          <Spin size="large" />
+          <Spinner size="large" />
         </div>
       ) : (
         <div
@@ -132,7 +134,6 @@ function ProductMapped({ isMobile }) {
               width: "auto",
             }}
           >
-            
             {products.map((product) => (
               <ProductCard
                 key={product.id}

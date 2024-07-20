@@ -15,19 +15,15 @@ import {
   Hidden,
 } from "@mui/material";
 import Navbar from "../../../Navbar/Navbar";
-import { Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../../redux/cartActions";
-import {
-  getProductByDescription,
-  getProductById,
-} from "../../../Api/ApiServices";
+import { getProductByDescription } from "../../../Api/ApiServices";
 import { ThemeContext } from "../../../../context/theme/theme.context";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useMediaQuery } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
 import ToastifyToShow from "../../../hooks/Effects/ToastifyToShow";
+import Spinner from "../../../hooks/Effects/Spinner";
 
 const ProductDetail = ({ products, tokenUser }) => {
   const { id } = useParams();
@@ -66,7 +62,8 @@ const ProductDetail = ({ products, tokenUser }) => {
   }, [id]);
 
   useEffect(() => {
-    if (product) { //
+    if (product) {
+      //
       const validStocks = product.stocks.filter(
         (stock) => stock.status !== false
       );
@@ -79,7 +76,6 @@ const ProductDetail = ({ products, tokenUser }) => {
     }
   }, [selectedColor, product]);
 
-
   if (loading)
     return (
       <div
@@ -88,17 +84,18 @@ const ProductDetail = ({ products, tokenUser }) => {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
+          marginTop: "400px",
         }}
       >
-        <Spin size="large" />
+        <Spinner size="large" />
       </div>
     );
 
-    if (!loading && !product) {
-      navigate("/producto-no-encontrado");
-      return null;
-    }
-  
+  if (!loading && !product) {
+    navigate("/producto-no-encontrado");
+    return null;
+  }
+
   const { description, stocks, categories } = product;
   const validStocks = stocks.filter((stock) => stock.status !== false);
   const selectedStock = validStocks.find(

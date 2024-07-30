@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { loginUser, postUser } from "../../components/Api/ApiServices";
+import ToastifyToShow from "../../components/hooks/Effects/ToastifyToShow";
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -11,8 +12,16 @@ export const login = createAsyncThunk(
       const { token } = response;
       Cookies.set("token", token);
       window.location.reload();
+
+      ToastifyToShow({
+        message: "Sesión iniciada",
+      });
       return token;
     } catch (error) {
+      ToastifyToShow({
+        message: "Correo o contraseña incorrectos",
+        backgroundColour: "#ff6700",
+      });
       return rejectWithValue(error);
     }
   }
@@ -21,6 +30,9 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async () => {
   Cookies.remove("token");
   window.location.reload();
+  ToastifyToShow({
+    message: "Se ha cerrado la sesión",
+  });
 });
 
 const authSlice = createSlice({

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Container, Typography, Link, IconButton } from "@mui/material";
 import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+import { ThemeContext } from "../../context/theme/theme.context";
 
 const Footer = () => {
+  const { theme, isDarkMode } = useContext(ThemeContext);
+
   return (
     <Box
       sx={{
@@ -10,10 +13,12 @@ const Footer = () => {
         px: 2,
         mt: "30px",
         mb: 0,
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
+        backgroundColor: isDarkMode ? "#0E1113" : "#eeeeee",
+
+        // backgroundColor: (theme) =>
+        //   theme.palette.mode === "light"
+        //     ? theme.palette.grey[200]
+        //     : theme.palette.grey[800],
       }}
       component="footer"
     >
@@ -25,7 +30,7 @@ const Footer = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color={isDarkMode ? "#ffffff" : "#0E1113"}>
           {"© 2024 RSS Store. Todos los derechos reservados."}
         </Typography>
         <Box>

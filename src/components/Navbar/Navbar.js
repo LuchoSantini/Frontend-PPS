@@ -9,6 +9,7 @@ import UserIcon from "./UserIcon";
 import CartIcon from "../Cart/CartIcon";
 import { ThemeContext } from "../../context/theme/theme.context";
 import { getOrdersApproved } from "../Api/ApiServices";
+import ToggleTheme from "../../context/theme/ToggleTheme";
 
 const Navbar = ({ products }) => {
   const { theme, isDarkMode } = useContext(ThemeContext);
@@ -41,7 +42,7 @@ const Navbar = ({ products }) => {
           top: 0,
           width: "100%",
           zIndex: 1000,
-          backgroundColor: isDarkMode ? "#0E1113" : "#ffffff",
+          backgroundColor: isDarkMode ? "#0E1113" : "#fafafa",
         }}
       >
         <Box
@@ -64,6 +65,7 @@ const Navbar = ({ products }) => {
               style={{ fontSize: 30, transition: "all 0.3s ease" }}
               onClick={showDrawerSearch}
             />
+            <ToggleTheme />
           </Box>
           <div>
             <Link to="/">
@@ -75,10 +77,10 @@ const Navbar = ({ products }) => {
               />
             </Link>
           </div>
-          <div style={{ display: "flex" }}>
+          <Box sx={{ display: "flex" }}>
             <UserIcon tokenUser={token} handleLogout={handleLogout} />
             <CartIcon />
-          </div>
+          </Box>
         </Box>
         <ProductSearchDrawer
           title={title}

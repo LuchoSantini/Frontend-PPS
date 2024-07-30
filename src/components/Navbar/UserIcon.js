@@ -61,7 +61,7 @@ const UserIcon = ({ tokenUser, handleLogout }) => {
 
   const userMenu = (
     <Menu style={{ alignItems: "center" }}>
-      <ToggleTheme />
+      {/* <ToggleTheme /> */}
       <Menu.Item key="1" onClick={handleOpenUserProfile}>
         <div>{userData && <a style={{ color: "black" }}>Mi perfil</a>}</div>
       </Menu.Item>

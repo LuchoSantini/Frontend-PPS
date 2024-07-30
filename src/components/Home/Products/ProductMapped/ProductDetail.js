@@ -181,7 +181,12 @@ const ProductDetail = ({ products, tokenUser }) => {
     theme === "dark" ? "rgb(118, 148, 159)" : "rgb(118, 148, 159)";
 
   return (
-    <Box maxWidth="lg" mx="auto" py={6} sx={{ minHeight: "90vh" }}>
+    <Box
+      maxWidth="lg"
+      mx={isMobile ? "20px" : "auto"}
+      py={6}
+      sx={{ minHeight: "90vh" }}
+    >
       <Navbar products={products} />
       <Grid container spacing={6} marginTop={"20px"}>
         <Grid item xs={12} md={6}>

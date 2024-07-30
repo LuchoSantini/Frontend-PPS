@@ -5,7 +5,7 @@ const ToastifyToShow = ({ message, backgroundColour }) => {
   Toastify({
     text: message,
     duration: 3000,
-    destination: "http://localhost:3000",
+    destination: null,
     newWindow: true,
     gravity: "top", // `top` or `bottom`
     position: "left", // `left`, `center` or `right`

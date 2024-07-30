@@ -3,19 +3,20 @@ import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import { postPayment } from "./ApiServices";
 import { useSelector } from "react-redux";
 import { Box, Button } from "@mui/material";
+import Spinner from "../hooks/Effects/Spinner";
 
 const MercadoPagoAPI = () => {
   initMercadoPago("APP_USR-04c4f42c-5f86-4346-a4d9-e4881c8936d7", {
     locale: "es-AR",
   });
-  // Test: APP_USR-04c4f42c-5f86-4346-a4d9-e4881c8936d7
-  // Prod: APP_USR-24ea6241-dd0d-4186-9121-9ef6fa946bba
 
   const [preferenceId, setPreferenceId] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { token } = useSelector((state) => state.auth);
   const items = useSelector((state) => state.cart.items);
 
   const handlePayment = async () => {
+    setLoading(true); // Iniciar la carga
     try {
       if (items && items.length > 0) {
         //console.log(`Token: ${token}`); // Imprimir el token para depuración
@@ -24,6 +25,8 @@ const MercadoPagoAPI = () => {
       }
     } catch (error) {
       console.error("Error fetching payment preference:", error);
+    } finally {
+      setLoading(false); // Finalizar la carga
     }
   };
 
@@ -35,7 +38,9 @@ const MercadoPagoAPI = () => {
         marginTop: "20px",
       }}
     >
-      {!preferenceId ? (
+      {loading ? (
+        <Spinner />
+      ) : !preferenceId ? (
         <Button
           variant="contained"
           sx={{
